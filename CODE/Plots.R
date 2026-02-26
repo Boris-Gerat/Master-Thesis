@@ -6,6 +6,8 @@ library(tidyr)
 library(ggplot2)
 library(scales)
 library(readxl)
+library(lubridate)
+library(xts)
 ###### LOAD DATA
 con <- dbConnect(
   RPostgres::Postgres(),
@@ -448,16 +450,22 @@ data_risk <- data_risk %>%
 
 risk_long <- data_risk %>%
   pivot_longer(
-    cols = c(STLFSI, NFCI, KCFSI),
+    cols = c(STLFSI, NFCI, KCFSI, VIX),
     names_to = "Index",
     values_to = "Value"
   )
 
 risk_cols <- c(
-  "STLFSI" = "#1F77B4",   # Lighter professional blue
+  "STLFSI" = "#1F77B4",   # Quant Blue
   "NFCI"   = "#C9A227",   # Muted Gold
-  "KCFSI"  = "#58508D"    # Dark Indigo
+  "KCFSI"  = "#58508D",   # Indigo
+  "VIX"    = "#A60628"    # Deep Professional Red
 )
+
+risk_long <- risk_long %>%
+  group_by(Index) %>%
+  mutate(Value = scale(Value)) %>%
+  ungroup()
 
 p_risk <- ggplot(risk_long, aes(x = Time, y = Value, color = Index)) +
   geom_line(linewidth = 1.2, na.rm = TRUE) +
@@ -467,12 +475,12 @@ p_risk <- ggplot(risk_long, aes(x = Time, y = Value, color = Index)) +
     date_labels = "%Y",
     expand = expansion(mult = c(0.01, 0.01))
   ) +
-  labs(
-    title = "Federal Reserve Financial Stress Indexes",
-    x = NULL,
-    y = "Index Value",
-    color = NULL
-  ) +
+ labs(
+  title = "Financial Stress Indicators and Market Volatility (Standardized)",
+  x = NULL,
+  y = "Standardized Index (Z-Score)",
+  color = NULL
+  )+
   theme_minimal(base_size = 13) +
   theme(
     plot.background  = element_rect(fill = "white", color = NA),
@@ -497,3 +505,135 @@ print(p_risk)
 
 ######## SENTIMENT BENCHMARK
 #######
+
+# -----------------------------
+# 1) Load + clean dates
+# -----------------------------
+shapiro_raw <- read_excel(
+  "/Users/borisgerat/Documents/Projects/MA_Thesis/DATA_MAIN_MA.xlsx",
+  sheet = "Shapiro"
+)
+
+# ensure Date class
+shapiro_raw$date <- as.Date(shapiro_raw$date)
+
+shapiro_xts <- xts(shapiro_raw$NSI_Shapiro, order.by = shapiro_raw$date)
+
+# quarterly mean
+shapiro_q <- apply.quarterly(shapiro_xts, function(z) mean(z, na.rm = TRUE))
+colnames(shapiro_q) <- "Shapiro_NSI"
+
+
+epui <- read_excel("/Users/borisgerat/Documents/Projects/MA_Thesis/DATA_MAIN_MA.xlsx",
+                   sheet = "Sentiment_Benchmark")
+
+# parse Time safely (handles Excel serial too)
+if (inherits(epui$Time, "numeric")) {
+  epui$Time <- as.Date(epui$Time, origin = "1899-12-30")
+} else {
+  epui$Time <- as.Date(epui$Time)
+}
+
+epui <- epui %>% filter(!is.na(Time))
+
+epu_q <- xts(epui$EPUI, order.by = epui$Time)
+colnames(epu_q) <- "EPUI"
+
+# -----------------------------
+# 2) Merge + start from 1995
+# -----------------------------
+
+# move index to quarter end consistently
+index(shapiro_q) <- as.Date(as.yearqtr(index(shapiro_q)), frac = 1)
+index(epu_q)     <- as.Date(as.yearqtr(index(epu_q)), frac = 1)
+
+sent_q <- merge(shapiro_q, epu_q, join = "inner")
+sent_q <- sent_q[index(sent_q) >= as.Date("1995-01-01")]
+# (optional but often smart for comparing levels)
+# sent_q <- scale(sent_q)  # uncomment if you want z-scores
+
+# Standardize (column-wise z-score)
+sent_q_std <- scale(sent_q)
+
+# Convert back to xts (scale() drops xts class)
+sent_q_std <- xts(
+  sent_q_std,
+  order.by = index(sent_q)
+)
+
+colnames(sent_q_std) <- colnames(sent_q)
+
+
+sent_q_std_adj <- sent_q_std
+sent_q_std_adj[,"EPUI"] <- -1 * sent_q_std_adj[,"EPUI"]   # <--- flip EPUI
+# If you prefer flipping Shapiro instead, do:
+# sent_q_std_adj[,"Shapiro_NSI"] <- -1 * sent_q_std_adj[,"Shapiro_NSI"]
+
+sent_df <- data.frame(
+  Time = index(sent_q_std_adj),
+  Shapiro_NSI = as.numeric(sent_q_std_adj$Shapiro_NSI),
+  EPUI = as.numeric(sent_q_std_adj$EPUI)
+)
+
+sent_long <- sent_df %>%
+  pivot_longer(
+    cols = c(Shapiro_NSI, EPUI),
+    names_to = "Series",
+    values_to = "Value"
+  ) %>%
+  mutate(
+    Series = factor(Series, levels = c("Shapiro_NSI", "EPUI")),
+    Series = recode(Series,
+      "Shapiro_NSI" = "Shapiro NSI (z)",
+      "EPUI"        = "EPUI (z, flipped)"
+    )
+  )
+
+# Your risk palette family
+risk_cols <- c(
+  "STLFSI" = "#1F77B4",
+  "NFCI"   = "#C9A227",
+  "KCFSI"  = "#58508D",
+  "VIX"    = "#A60628"
+)
+
+# Colors that match the *final legend labels* above
+sent_cols <- c(
+  "Shapiro NSI (z)"      = unname(risk_cols["KCFSI"]),  # Indigo
+  "EPUI (z, flipped)"    = unname(risk_cols["NFCI"])    # Gold
+)
+
+p_sent <- ggplot(sent_long, aes(x = Time, y = Value, color = Series)) +
+  geom_line(linewidth = 1.25, na.rm = TRUE) +
+  scale_color_manual(values = sent_cols) +
+  scale_x_date(
+    date_breaks = "2 years",
+    date_labels = "%Y",
+    expand = expansion(mult = c(0.01, 0.01))
+  ) +
+  labs(
+    title = "Sentiment Benchmarks (Standardized, Quarterly)",
+    x = NULL,
+    y = "Z-Score",
+    color = NULL
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    plot.background  = element_rect(fill = "white", color = NA),
+    panel.background = element_rect(fill = "white", color = NA),
+    panel.grid.major.x = element_line(color = "grey85"),
+    panel.grid.major.y = element_line(color = "grey88"),
+    panel.grid.minor   = element_blank(),
+    axis.text  = element_text(color = "black"),
+    plot.title = element_text(face = "bold", size = 18, hjust = 0.5),
+
+    # Legend visible + clean
+    legend.position = "top",
+    legend.justification = "left",
+    legend.background = element_blank(),
+    legend.key = element_blank(),
+    legend.text = element_text(size = 12)
+  ) +
+  guides(color = guide_legend(override.aes = list(linewidth = 2.2)))
+
+print(p_sent)
