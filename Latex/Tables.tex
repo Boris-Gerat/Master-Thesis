@@ -1,0 +1,137 @@
+\documentclass[10pt]{article}
+\usepackage[margin=2cm]{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{caption}
+\usepackage{parskip}
+\usepackage{multirow}
+
+\definecolor{redneg}{HTML}{A60628}
+\definecolor{greenpos}{HTML}{2CA02C}
+\definecolor{rowgray}{HTML}{F5F5F5}
+
+\captionsetup{font=small, skip=4pt}
+\renewcommand{\arraystretch}{1.3}
+
+\title{\textbf{EM-PPCA Sentiment Index}\\[3pt]
+       \normalsize VADER Inputs $\cdot$ 1995 Q1 -- 2025 Q4 $\cdot$ Quarterly}
+\date{}
+
+\begin{document}
+\maketitle
+\vspace{-1em}
+
+% ── Model Configuration ───────────────────────────────────────────
+\section*{Model Configuration}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{ll}
+\toprule
+\textbf{Parameter}   & \textbf{Value} \\
+\midrule
+\rowcolor{rowgray}
+Method               & Probabilistic PCA (PPCA) via EM \\
+Factors              & 1 \\
+\rowcolor{rowgray}
+Centre / Scale       & Yes / Yes \\
+Max iter / Threshold & 1{,}000 \;/\; $10^{-5}$ \\
+\rowcolor{rowgray}
+Output               & Z-scored ($\mu=0,\ \sigma=1$) \\
+Seed                 & 42 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\bigskip
+
+% ── Factor Results ────────────────────────────────────────────────
+\section*{Factor Results --- Sentiment Index - VADER}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{lrcccc}
+\toprule
+\textbf{Variable}
+  & \textbf{Loading}
+  & \textbf{$\lambda$}
+  & \textbf{Var.\%}
+  & \textbf{$R^{2}$}
+  & \textbf{Missing} \\
+\midrule
+
+% Row 1 WHITE — multirow anchors here
+gdelt\_avgTone
+  & \textcolor{redneg}{$-$0.641}
+  & \multirow{5}{*}{1.670}
+  & \multirow{5}{*}{33.40\%}
+  & \multirow{5}{*}{0.344}
+  & \multirow{5}{*}{3.09\%} \\
+
+% Row 2 grey
+\rowcolor{rowgray}
+fed\_minutes\_vader  & \textcolor{greenpos}{$+$0.599} &&&& \\
+
+% Row 3 white
+gov\_vader           & $+$0.051 &&&& \\
+
+% Row 4 grey
+\rowcolor{rowgray}
+fed\_speech\_vader   & \textcolor{redneg}{$-$0.474} &&&& \\
+
+% Row 5 white
+sec\_vader           & $+$0.052 &&&& \\
+
+\bottomrule
+\end{tabular}
+\caption*{\footnotesize\itshape
+  \textcolor{redneg}{Red} = negative loading\quad
+  \textcolor{greenpos}{Green} = positive loading\quad
+  Sign flipped post-estimation.}
+\end{table}
+
+% ── Add further factors below ─────────────────────────────────────
+
+
+\section*{Factor Results --- PC1 (FinBERT)}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{lrcccc}
+\toprule
+\textbf{Variable}
+  & \textbf{Loading}
+  & \textbf{$\lambda$}
+  & \textbf{Var.\%}
+  & \textbf{$R^{2}$}
+  & \textbf{Missing} \\
+\midrule
+
+gdelt\_avgTone
+  & \textcolor{redneg}{$-$0.608}
+  & \multirow{5}{*}{1.731}
+  & \multirow{5}{*}{34.63\%}
+  & \multirow{5}{*}{0.356}
+  & \multirow{5}{*}{3.09\%} \\
+
+\rowcolor{rowgray}
+fed\_minutes\_finbert & \textcolor{greenpos}{$+$0.338} &&&& \\
+
+gov\_finbert          & \textcolor{greenpos}{$+$0.310} &&&& \\
+
+\rowcolor{rowgray}
+fed\_speech\_finbert  & \textcolor{redneg}{$-$0.441}   &&&& \\
+
+sec\_finbert          & \textcolor{greenpos}{$+$0.475} &&&& \\
+
+\bottomrule
+\end{tabular}
+\caption*{\footnotesize\itshape
+  \textcolor{redneg}{Red} = negative loading\quad
+  \textcolor{greenpos}{Green} = positive loading\quad
+  Sign flipped post-estimation.}
+\end{table}
+
+\end{document}

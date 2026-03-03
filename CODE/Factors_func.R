@@ -1,82 +1,267 @@
-pca_risk_index <- function(df,
-                           vars = NULL,
-                           date_col = NULL,
-                           n_factors = 1,
-                           method = c("ppca", "svd", "svdImpute", "bpca", "nipals"),
-                           center = TRUE,
-                           scale = TRUE,
-                           plot_factor = TRUE,
-                           factor_name = "RISK_INDEX",
-                           z_score = TRUE) {
-  method <- match.arg(method)
-  if (!requireNamespace("pcaMethods", quietly = TRUE))
-    stop("Install pcaMethods via BiocManager::install('pcaMethods')")
-  if (!requireNamespace("ggplot2", quietly = TRUE))
-    stop("Install ggplot2")
+# =============================================================================
+# pca_risk_index — Robust EM / Probabilistic PCA Risk Index
+# =============================================================================
+# Dependencies : pcaMethods (Bioconductor), ggplot2
+# Author notes : All fixes from review incorporated + new robustness layer
+# =============================================================================
 
-  # --------------------------
-  # Variable selection
-  # --------------------------
+pca_risk_index <- function(
+    df,
+    vars            = NULL,
+    date_col        = NULL,
+    n_factors       = 1,
+    method          = c("ppca", "svd", "svdImpute", "bpca", "nipals"),
+
+    # Pre-processing
+    center          = TRUE,
+    scale           = TRUE,
+    impute_pre      = FALSE,        # mean-impute BEFORE ppca (use cautiously)
+
+    # EM tuning (ppca / bpca / nipals only)
+    max_iter        = 1000,
+    conv_threshold  = 1e-5,
+    seed            = 42,
+
+    # Sign convention
+    flip_sign       = TRUE,         # orient PC1 so majority loadings are +ve
+
+    # Output
+    z_score         = TRUE,
+    plot_factor     = TRUE,
+    factor_name     = "RISK_INDEX",
+    plot_color      = NULL          # override hex color
+) {
+
+  # ============================================================
+  # 0. Package checks
+  # ============================================================
+  if (!requireNamespace("pcaMethods", quietly = TRUE))
+    stop("Install pcaMethods: BiocManager::install('pcaMethods')")
+  if (!requireNamespace("ggplot2", quietly = TRUE))
+    stop("Install ggplot2: install.packages('ggplot2')")
+
+  method <- match.arg(method)
+
+  # ============================================================
+  # 1. Variable selection & basic validation
+  # ============================================================
   if (is.null(vars)) {
-    X_df <- df[, vapply(df, is.numeric, logical(1)), drop = FALSE]
+    X_df <- df[, vapply(df, is.numeric, logical(1L)), drop = FALSE]
   } else {
+    missing_vars <- setdiff(vars, names(df))
+    if (length(missing_vars))
+      stop("Variables not found in df: ", paste(missing_vars, collapse = ", "))
     X_df <- df[, vars, drop = FALSE]
   }
+
+  if (ncol(X_df) == 0L)
+    stop("No numeric columns found / selected.")
+  if (nrow(X_df) < 3L)
+    stop("At least 3 rows are required.")
+
+  # Remove zero-variance columns (degenerate for any PCA variant)
+  col_sds_raw <- apply(X_df, 2, sd, na.rm = TRUE)
+  zero_var    <- col_sds_raw == 0 | is.na(col_sds_raw)
+  if (any(zero_var)) {
+    warning("Dropping zero-variance columns: ",
+            paste(names(X_df)[zero_var], collapse = ", "))
+    X_df <- X_df[, !zero_var, drop = FALSE]
+  }
+  if (ncol(X_df) == 0L)
+    stop("All columns have zero variance after filtering.")
+
   X <- as.matrix(X_df)
 
-  # --------------------------
-  # Standardization
-  # --------------------------
-  if (center)
-    X <- sweep(X, 2, colMeans(X, na.rm = TRUE), "-")
-  if (scale) {
-    sds <- apply(X, 2, sd, na.rm = TRUE)
-    sds[sds == 0 | is.na(sds)] <- 1
-    X <- sweep(X, 2, sds, "/")
+  # ============================================================
+  # 2. n_factors validation
+  #    PPCA requires nPcs < ncol (needs residual dims for noise var σ²)
+  #    SVD-based methods allow nPcs == min(n,p)
+  # ============================================================
+  ppca_methods <- c("ppca", "bpca", "nipals")
+  max_factors  <- if (method %in% ppca_methods) {
+    min(nrow(X), ncol(X)) - 1L
+  } else {
+    min(nrow(X), ncol(X))
   }
 
-  # --------------------------
-  # PCA / PPCA
-  # --------------------------
-  fit <- pcaMethods::pca(X,
-                         method = method,
-                         nPcs = n_factors,
-                         center = FALSE,
-                         scale = "none")
+  if (n_factors < 1L)
+    stop("n_factors must be >= 1.")
+  if (n_factors > max_factors)
+    stop(sprintf(
+      "n_factors (%d) exceeds maximum allowed for method '%s' (%d). Reduce n_factors.",
+      n_factors, method, max_factors))
 
-  L <- pcaMethods::loadings(fit)
-  S <- pcaMethods::scores(fit)
+  # ============================================================
+  # 3. Missing data handling
+  #
+  #  Strategy:
+  #    - ppca / bpca / nipals: EM handles missingness internally.
+  #      We do NOT impute beforehand (avoids double-imputation bias).
+  #      Centering/scaling uses observed values (na.rm=TRUE) — this is the
+  #      best available approximation pre-EM; EM then re-estimates.
+  #    - svd / svdImpute: require complete data; apply mean imputation if
+  #      impute_pre = TRUE, otherwise error on missingness.
+  # ============================================================
+  has_na <- anyNA(X)
 
-  # Correct explained variance
-  eigenvals  <- fit@sDev^2
-  total_var  <- sum(apply(X, 2, var, na.rm = TRUE))
-  explained_var <- eigenvals / total_var
+  if (has_na) {
+    na_frac <- mean(is.na(X))
+    message(sprintf("Missing data detected: %.1f%% of cells.", na_frac * 100))
 
-  # FIX: force column names safely
+    if (method %in% c("svd", "svdImpute")) {
+      if (!impute_pre)
+        stop(paste0(
+          "Method '", method, "' requires complete data. ",
+          "Set impute_pre = TRUE for column-mean imputation, ",
+          "or switch to method = 'ppca' which handles NAs via EM."
+        ))
+      # Mean-impute column-wise
+      for (j in seq_len(ncol(X))) {
+        nas <- is.na(X[, j])
+        if (any(nas)) X[nas, j] <- mean(X[, j], na.rm = TRUE)
+      }
+      message("Applied column-mean imputation for method '", method, "'.")
+    }
+    # For ppca / bpca / nipals: pass X with NAs directly to pcaMethods
+  }
+
+  # ============================================================
+  # 4. Centering & scaling
+  #    Store params for downstream inversion / interpretation
+  # ============================================================
+  col_means <- colMeans(X, na.rm = TRUE)
+  col_sds   <- apply(X, 2, sd, na.rm = TRUE)
+  col_sds[col_sds == 0 | is.na(col_sds)] <- 1  # safety (already filtered above)
+
+  X_scaled <- X
+  if (center) X_scaled <- sweep(X_scaled, 2, col_means, "-")
+  if (scale)  X_scaled <- sweep(X_scaled, 2, col_sds,   "/")
+
+  # ============================================================
+  # 5. Run PCA / PPCA
+  #    Pass EM tuning params where supported; set seed for reproducibility
+  # ============================================================
+  set.seed(seed)
+
+  fit <- tryCatch(
+    pcaMethods::pca(
+      X_scaled,
+      method    = method,
+      nPcs      = n_factors,
+      center    = FALSE,   # already done above
+      scale     = "none",  # already done above
+      # pcaMethods accepts these for iterative methods:
+      maxIterations = max_iter,
+      threshold     = conv_threshold
+    ),
+    error = function(e)
+      stop("pcaMethods::pca() failed: ", conditionMessage(e))
+  )
+
+  # ============================================================
+  # 6. Convergence check (EM methods expose iteration metadata)
+  # ============================================================
+  if (method %in% ppca_methods) {
+    # pcaMethods stores iteration count in fit@scores slot metadata or via R2
+    # R2cum: cumulative R² per PC; if final R2 is NA or negative, flag it
+    r2 <- tryCatch(fit@R2, error = function(e) NULL)
+    if (!is.null(r2) && any(is.na(r2) | r2 < 0)) {
+      warning(
+        "EM convergence may be suspect: R² contains NA or negative values. ",
+        "Consider increasing max_iter (currently ", max_iter, ") or ",
+        "reducing n_factors."
+      )
+    }
+    # Noise variance σ²: extremely small or zero suggests degenerate solution
+    sigma2 <- tryCatch(fit@sDev[length(fit@sDev)]^2, error = function(e) NULL)
+    if (!is.null(sigma2) && sigma2 < .Machine$double.eps * 100) {
+      warning(
+        "Estimated noise variance (σ²) is effectively zero. ",
+        "The PPCA solution may be degenerate — check for near-collinear inputs."
+      )
+    }
+  }
+
+  # ============================================================
+  # 7. Extract loadings & scores; verify row alignment
+  # ============================================================
+  L <- pcaMethods::loadings(fit)   # p × nPcs
+  S <- pcaMethods::scores(fit)     # n × nPcs
+
+  if (nrow(S) != nrow(df))
+    stop(sprintf(
+      paste0("PCA scores have %d rows but input data has %d rows. ",
+             "Method '%s' may have dropped rows with excessive NAs. ",
+             "Inspect missingness or switch to method = 'ppca'."),
+      nrow(S), nrow(df), method
+    ))
+
   colnames(L) <- paste0("PC", seq_len(n_factors))
   colnames(S) <- paste0("PC", seq_len(n_factors))
 
-  loadings_df <- data.frame(variable = rownames(L), L, row.names = NULL)
-  scores_df   <- data.frame(S)
+  # ============================================================
+  # 8. Sign convention — orient so majority of PC1 loadings are positive
+  #    Ensures risk index is consistently directional across runs
+  # ============================================================
+  if (flip_sign) {
+    for (k in seq_len(n_factors)) {
+      if (sum(L[, k] < 0) > sum(L[, k] >= 0)) {
+        L[, k] <- -L[, k]
+        S[, k] <- -S[, k]
+        message(sprintf("PC%d sign flipped: majority of loadings were negative.", k))
+      }
+    }
+  }
 
-  # --------------------------
-  # Attach dates
-  # --------------------------
+  # ============================================================
+  # 9. Explained variance
+  #    Use only columns that passed the variance filter
+  # ============================================================
+  eigenvals     <- fit@sDev^2
+  total_var     <- sum(apply(X_scaled, 2, var, na.rm = TRUE))
+  total_var     <- max(total_var, .Machine$double.eps)  # avoid /0
+  explained_var <- eigenvals / total_var
+
+  explained_df <- data.frame(
+    factor        = paste0("PC", seq_len(n_factors)),
+    eigenvalue    = eigenvals[seq_len(n_factors)],
+    explained_var = explained_var[seq_len(n_factors)],
+    cumulative    = cumsum(explained_var[seq_len(n_factors)])
+  )
+
+  # ============================================================
+  # 10. Build scores data.frame; attach dates
+  # ============================================================
+  scores_df   <- as.data.frame(S)
+  loadings_df <- data.frame(variable = rownames(L), as.data.frame(L),
+                             row.names = NULL)
+
   if (!is.null(date_col)) {
+    if (!date_col %in% names(df))
+      stop("date_col '", date_col, "' not found in df.")
     scores_df[[date_col]] <- df[[date_col]]
   }
 
-  # --------------------------
-  # Z-score if desired
-  # --------------------------
+  # ============================================================
+  # 11. Z-score all PC columns (applied AFTER sign convention)
+  #     Note: explained_var reflects pre-z-score structure intentionally
+  # ============================================================
   if (z_score) {
-    scores_df$PC1 <- as.numeric(scale(scores_df$PC1))
+    pc_cols <- paste0("PC", seq_len(n_factors))
+    scores_df[pc_cols] <- lapply(scores_df[pc_cols], function(col) {
+      s <- sd(col, na.rm = TRUE)
+      if (is.na(s) || s < .Machine$double.eps) {
+        warning("A PC score column has near-zero variance after EM; z-scoring skipped for that column.")
+        return(col)
+      }
+      as.numeric(scale(col))
+    })
   }
 
-  # --------------------------
-  # Quant Color Scheme
-  # --------------------------
-  quant_cols <- c(
+  # ============================================================
+  # 12. Plot
+  # ============================================================
+  quant_palette <- c(
     STLFSI     = "#1F77B4",
     NFCI       = "#C9A227",
     KCFSI      = "#58508D",
@@ -86,39 +271,88 @@ pca_risk_index <- function(df,
     RISK_INDEX = "#1F77B4"
   )
 
-  # FIX: resolve color using factor_name, fall back to default blue
-  plot_color <- ifelse(factor_name %in% names(quant_cols),
-                       quant_cols[factor_name],
-                       "#1F77B4")
+  line_color <- if (!is.null(plot_color)) {
+    plot_color
+  } else if (factor_name %in% names(quant_palette)) {
+    quant_palette[[factor_name]]
+  } else {
+    "#1F77B4"
+  }
 
-  # --------------------------
-  # Plot
-  # --------------------------
+  # NBER recession bands
+  recessions <- data.frame(
+    start = as.Date(c(
+      "1945-02-01", "1948-11-01", "1953-07-01", "1957-08-01",
+      "1960-04-01", "1969-12-01", "1973-11-01", "1980-01-01",
+      "1981-07-01", "1990-07-01", "2001-03-01", "2007-12-01",
+      "2020-02-01"
+    )),
+    end = as.Date(c(
+      "1945-10-01", "1949-10-01", "1954-05-01", "1958-04-01",
+      "1961-02-01", "1970-11-01", "1975-03-01", "1980-07-01",
+      "1982-11-01", "1991-03-01", "2001-11-01", "2009-06-01",
+      "2020-04-01"
+    ))
+  )
+
+  p <- NULL
   if (plot_factor && !is.null(date_col)) {
-    # FIX: use .data[[]] instead of deprecated aes_string()
-    # FIX: use linewidth instead of deprecated size
-    p <- ggplot2::ggplot(scores_df,
-                         ggplot2::aes(x = .data[[date_col]], y = PC1)) +
-      ggplot2::geom_line(color = plot_color, linewidth = 1) +
+
+    date_min   <- min(scores_df[[date_col]], na.rm = TRUE)
+    date_max   <- max(scores_df[[date_col]], na.rm = TRUE)
+    rec_clipped <- recessions[recessions$end >= date_min & recessions$start <= date_max, ]
+    rec_clipped$start <- pmax(rec_clipped$start, date_min)
+    rec_clipped$end   <- pmin(rec_clipped$end,   date_max)
+
+    p <- ggplot2::ggplot(
+      scores_df,
+      ggplot2::aes(x = .data[[date_col]], y = PC1)
+    ) +
+      ggplot2::geom_rect(
+        data        = rec_clipped,
+        inherit.aes = FALSE,
+        ggplot2::aes(xmin = start, xmax = end, ymin = -Inf, ymax = Inf),
+        fill  = "grey70",
+        alpha = 0.6
+      ) +
+      ggplot2::geom_hline(yintercept = 0, linetype = "dashed",
+                          color = "grey60", linewidth = 0.5) +
+      ggplot2::geom_line(color = line_color, linewidth = 1) +
       ggplot2::theme_minimal(base_size = 13) +
-      ggplot2::labs(title = paste("Latent Factor:", factor_name),
-                    y = "Factor (Z-scored)",
-                    x = NULL) +
+      ggplot2::labs(
+        title    = paste("Latent Factor:", factor_name),
+        subtitle = sprintf(
+          "Method: %s | PC1 explains %.1f%% of variance | seed = %d",
+          toupper(method),
+          explained_df$explained_var[1] * 100,
+          seed
+        ),
+        y = if (z_score) "Factor Score (Z-scored)" else "Factor Score",
+        x = NULL
+      ) +
       ggplot2::theme(
         plot.title       = ggplot2::element_text(face = "bold"),
+        plot.subtitle    = ggplot2::element_text(color = "grey40", size = 10),
         panel.grid.minor = ggplot2::element_blank()
       )
     print(p)
   }
 
-  return(list(
-    model    = fit,
-    loadings = loadings_df,
-    scores   = scores_df,
-    explained = data.frame(
-      factor        = paste0("PC", seq_len(n_factors)),
-      eigenvalue    = eigenvals[seq_len(n_factors)],
-      explained_var = explained_var[seq_len(n_factors)]
-    )
-  ))
+  # ============================================================
+  # 13. Return
+  # ============================================================
+  return(invisible(list(
+    model         = fit,
+    loadings      = loadings_df,
+    scores        = scores_df,
+    explained     = explained_df,
+    center_params = list(means = col_means, sds = col_sds),
+    dropped_cols  = names(X_df)[zero_var],   # audit trail
+    convergence   = list(
+      r2     = tryCatch(fit@R2,   error = function(e) NULL),
+      method = method,
+      seed   = seed
+    ),
+    plot = p
+  )))
 }
