@@ -113,3 +113,11 @@ df_with_index <- df_use %>%
     fit$scores %>% select(PC1) %>% rename(SENTIMENT_INDEX = PC1)
   )
 
+##########
+########## Custom time series index
+##########
+
+
+
+
+
