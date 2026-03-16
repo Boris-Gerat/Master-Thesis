@@ -113,9 +113,21 @@ df_with_index <- df_use %>%
     fit$scores %>% select(PC1) %>% rename(SENTIMENT_INDEX = PC1)
   )
 
+
+##########
+########## FRED-QD - First factor
+##########
+
+fred_qd <- read.csv("https://www.stlouisfed.org/-/media/project/frbstl/stlouisfed/research/fred-md/quarterly/2025-12-qd.csv?sc_lang=en&hash=F600D06D11DD86C8C7D9337E52C0436E")
+summary(fred_qd)
+head(fred_qd)
+
+
 ##########
 ########## Custom time series index
 ##########
+
+excel_data <- read_excel(path ="/Users/borisgerat/Documents/Projects/MA_Thesis/DATA_MAIN_MA.xlsx")
 
 
 
