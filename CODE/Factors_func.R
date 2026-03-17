@@ -1,8 +1,11 @@
 # =============================================================================
 # pca_risk_index — Robust EM / Probabilistic PCA Risk Index
 # =============================================================================
-# Dependencies : pcaMethods (Bioconductor), ggplot2
+# Dependencies : pcaMethods (Bioconductor), ggplot2, tseries
 # Author notes : All fixes from review incorporated + new robustness layer
+#                + stationarity checking and automatic differencing (v3)
+#                  fix: diff loop now always diffs the original series by d
+#                  to avoid cumulative length drift
 # =============================================================================
 
 pca_risk_index <- function(
@@ -16,6 +19,12 @@ pca_risk_index <- function(
     center          = TRUE,
     scale           = TRUE,
     impute_pre      = FALSE,        # mean-impute BEFORE ppca (use cautiously)
+
+    # Stationarity
+    stationarity_check = TRUE,      # run ADF test on each column
+    adf_pval        = 0.05,         # significance level for ADF
+    max_diff        = 2L,           # maximum differencing order attempted
+    diff_pad        = "na",         # how to pad lost obs: "na" or "zero"
 
     # EM tuning (ppca / bpca / nipals only)
     max_iter        = 1000,
@@ -39,6 +48,8 @@ pca_risk_index <- function(
     stop("Install pcaMethods: BiocManager::install('pcaMethods')")
   if (!requireNamespace("ggplot2", quietly = TRUE))
     stop("Install ggplot2: install.packages('ggplot2')")
+  if (stationarity_check && !requireNamespace("tseries", quietly = TRUE))
+    stop("Install tseries for ADF tests: install.packages('tseries')")
 
   method <- match.arg(method)
 
@@ -70,10 +81,115 @@ pca_risk_index <- function(
   if (ncol(X_df) == 0L)
     stop("All columns have zero variance after filtering.")
 
+  # ============================================================
+  # 2. Stationarity check + automatic differencing
+  #
+  #  Strategy:
+  #    - Run ADF (augmented Dickey-Fuller) on each column using observed
+  #      (non-missing) values.
+  #    - If unit root is not rejected at adf_pval, difference the column
+  #      and retest. Repeat up to max_diff times.
+  #    - IMPORTANT: always diff the *original* series by order d in a single
+  #      diff(..., differences = d) call. This guarantees output length is
+  #      always n - d and padding is exactly d rows — avoids the cumulative
+  #      length drift that occurs when iteratively diffing an already-
+  #      differenced series and padding d NAs each iteration.
+  #    - Pad the d leading NAs introduced by differencing with NA or zero
+  #      depending on diff_pad — NA is recommended so that ppca EM handles
+  #      them correctly; "zero" is provided for svd-based methods.
+  #    - Record differencing orders applied for the audit trail.
+  #    - ADF is run with automatic lag selection (tseries default: k chosen
+  #      by Akaike via the Schwert rule).
+  #    - Columns that are still non-stationary after max_diff differences
+  #      receive a warning but are kept — the analyst should inspect them.
+  # ============================================================
+  diff_orders <- setNames(integer(ncol(X_df)), names(X_df))  # audit trail
+
+  .adf_stationary <- function(x, pval) {
+    # Returns TRUE if ADF rejects the unit root null at pval
+    obs <- x[!is.na(x)]
+    if (length(obs) < 10L) {
+      warning("Too few observations for ADF test; assuming stationary.")
+      return(TRUE)
+    }
+    tryCatch({
+      result <- tseries::adf.test(obs, alternative = "stationary")
+      result$p.value < pval
+    }, error = function(e) {
+      warning("ADF test failed for a column (", conditionMessage(e),
+              "); assuming stationary.")
+      TRUE
+    })
+  }
+
+  if (stationarity_check) {
+    message("\n--- Stationarity screening (ADF, p < ", adf_pval, ") ---")
+
+    for (col in names(X_df)) {
+      x_orig     <- X_df[[col]]   # keep original for clean re-diff each iteration
+      d          <- 0L
+      x          <- x_orig
+      stationary <- .adf_stationary(x, adf_pval)
+
+      while (!stationary && d < max_diff) {
+        d <- d + 1L
+
+        # Always diff the ORIGINAL series by current order d in one call.
+        # Output length = n - d; pad = exactly d rows. No length drift.
+        x_diff <- diff(x_orig, differences = d)
+
+        x <- if (diff_pad == "na") {
+          c(rep(NA_real_, d), x_diff)
+        } else {
+          c(rep(0, d), x_diff)
+        }
+
+        stationary <- .adf_stationary(x, adf_pval)
+      }
+
+      if (!stationary) {
+        warning(sprintf(
+          "Column '%s' is still non-stationary after %d difference(s). Kept as-is.",
+          col, d
+        ))
+      }
+
+      if (d > 0L) {
+        message(sprintf(
+          "  %-30s differenced %d time(s) — now %s",
+          col, d,
+          if (stationary) "stationary" else "NON-STATIONARY (kept)"
+        ))
+        X_df[[col]]      <- x
+        diff_orders[col] <- d
+      } else {
+        message(sprintf("  %-30s stationary (d = 0)", col))
+      }
+    }
+
+    n_diffed <- sum(diff_orders > 0L)
+    message(sprintf(
+      "--- %d / %d column(s) required differencing ---\n",
+      n_diffed, ncol(X_df)
+    ))
+
+    # After differencing, re-check for zero-variance (diff of constant = 0)
+    col_sds_post <- apply(X_df, 2, sd, na.rm = TRUE)
+    new_zero     <- col_sds_post == 0 | is.na(col_sds_post)
+    if (any(new_zero)) {
+      warning("Dropping columns with zero variance after differencing: ",
+              paste(names(X_df)[new_zero], collapse = ", "))
+      diff_orders <- diff_orders[!new_zero]
+      X_df        <- X_df[, !new_zero, drop = FALSE]
+    }
+    if (ncol(X_df) == 0L)
+      stop("All columns have zero variance after differencing.")
+  }
+
   X <- as.matrix(X_df)
 
   # ============================================================
-  # 2. n_factors validation
+  # 3. n_factors validation
   #    PPCA requires nPcs < ncol (needs residual dims for noise var σ²)
   #    SVD-based methods allow nPcs == min(n,p)
   # ============================================================
@@ -92,7 +208,7 @@ pca_risk_index <- function(
       n_factors, method, max_factors))
 
   # ============================================================
-  # 3. Missing data handling
+  # 4. Missing data handling
   #
   #  Strategy:
   #    - ppca / bpca / nipals: EM handles missingness internally.
@@ -126,7 +242,7 @@ pca_risk_index <- function(
   }
 
   # ============================================================
-  # 4. Centering & scaling
+  # 5. Centering & scaling
   #    Store params for downstream inversion / interpretation
   # ============================================================
   col_means <- colMeans(X, na.rm = TRUE)
@@ -138,7 +254,7 @@ pca_risk_index <- function(
   if (scale)  X_scaled <- sweep(X_scaled, 2, col_sds,   "/")
 
   # ============================================================
-  # 5. Run PCA / PPCA
+  # 6. Run PCA / PPCA
   #    Pass EM tuning params where supported; set seed for reproducibility
   # ============================================================
   set.seed(seed)
@@ -159,11 +275,9 @@ pca_risk_index <- function(
   )
 
   # ============================================================
-  # 6. Convergence check (EM methods expose iteration metadata)
+  # 7. Convergence check (EM methods expose iteration metadata)
   # ============================================================
   if (method %in% ppca_methods) {
-    # pcaMethods stores iteration count in fit@scores slot metadata or via R2
-    # R2cum: cumulative R² per PC; if final R2 is NA or negative, flag it
     r2 <- tryCatch(fit@R2, error = function(e) NULL)
     if (!is.null(r2) && any(is.na(r2) | r2 < 0)) {
       warning(
@@ -172,7 +286,6 @@ pca_risk_index <- function(
         "reducing n_factors."
       )
     }
-    # Noise variance σ²: extremely small or zero suggests degenerate solution
     sigma2 <- tryCatch(fit@sDev[length(fit@sDev)]^2, error = function(e) NULL)
     if (!is.null(sigma2) && sigma2 < .Machine$double.eps * 100) {
       warning(
@@ -183,7 +296,7 @@ pca_risk_index <- function(
   }
 
   # ============================================================
-  # 7. Extract loadings & scores; verify row alignment
+  # 8. Extract loadings & scores; verify row alignment
   # ============================================================
   L <- pcaMethods::loadings(fit)   # p × nPcs
   S <- pcaMethods::scores(fit)     # n × nPcs
@@ -200,7 +313,7 @@ pca_risk_index <- function(
   colnames(S) <- paste0("PC", seq_len(n_factors))
 
   # ============================================================
-  # 8. Sign convention — orient so majority of PC1 loadings are positive
+  # 9. Sign convention — orient so majority of PC1 loadings are positive
   #    Ensures risk index is consistently directional across runs
   # ============================================================
   if (flip_sign) {
@@ -214,7 +327,7 @@ pca_risk_index <- function(
   }
 
   # ============================================================
-  # 9. Explained variance
+  # 10. Explained variance
   #    Use only columns that passed the variance filter
   # ============================================================
   eigenvals     <- fit@sDev^2
@@ -230,7 +343,7 @@ pca_risk_index <- function(
   )
 
   # ============================================================
-  # 10. Build scores data.frame; attach dates
+  # 11. Build scores data.frame; attach dates
   # ============================================================
   scores_df   <- as.data.frame(S)
   loadings_df <- data.frame(variable = rownames(L), as.data.frame(L),
@@ -243,7 +356,7 @@ pca_risk_index <- function(
   }
 
   # ============================================================
-  # 11. Z-score all PC columns (applied AFTER sign convention)
+  # 12. Z-score all PC columns (applied AFTER sign convention)
   #     Note: explained_var reflects pre-z-score structure intentionally
   # ============================================================
   if (z_score) {
@@ -259,7 +372,7 @@ pca_risk_index <- function(
   }
 
   # ============================================================
-  # 12. Plot
+  # 13. Plot
   # ============================================================
   quant_palette <- c(
     STLFSI     = "#1F77B4",
@@ -298,8 +411,8 @@ pca_risk_index <- function(
   p <- NULL
   if (plot_factor && !is.null(date_col)) {
 
-    date_min   <- min(scores_df[[date_col]], na.rm = TRUE)
-    date_max   <- max(scores_df[[date_col]], na.rm = TRUE)
+    date_min    <- min(scores_df[[date_col]], na.rm = TRUE)
+    date_max    <- max(scores_df[[date_col]], na.rm = TRUE)
     rec_clipped <- recessions[recessions$end >= date_min & recessions$start <= date_max, ]
     rec_clipped$start <- pmax(rec_clipped$start, date_min)
     rec_clipped$end   <- pmin(rec_clipped$end,   date_max)
@@ -339,7 +452,7 @@ pca_risk_index <- function(
   }
 
   # ============================================================
-  # 13. Return
+  # 14. Return
   # ============================================================
   return(invisible(list(
     model         = fit,
@@ -348,6 +461,7 @@ pca_risk_index <- function(
     explained     = explained_df,
     center_params = list(means = col_means, sds = col_sds),
     dropped_cols  = names(X_df)[zero_var],   # audit trail
+    diff_orders   = diff_orders,             # named int vec: d per column
     convergence   = list(
       r2     = tryCatch(fit@R2,   error = function(e) NULL),
       method = method,
