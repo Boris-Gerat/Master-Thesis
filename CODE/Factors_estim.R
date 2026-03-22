@@ -395,3 +395,51 @@ print(head(custom_mix_index$scores))
 
 
 
+########## Banking
+
+banking_sector_data <- read_excel("/Users/borisgerat/Documents/Projects/MA_Thesis/DATA_MAIN_MA.xlsx", sheet ="FDIC")
+
+colnames(banking_sector_data)
+banking_vars <- c("WholeSaleFunding","LiquidityBuffer", "CapitalCushion", "ComInduLoans")
+
+banking_sector_window <- banking_sector_data %>% mutate(time = as.yearqtr(Quarter)) %>% 
+	filter(time >= as.yearqtr("1997 Q1"),
+	       time <= as.yearqtr("2025 Q2"))
+
+banking_factor <- pca_risk_index(
+df                 = banking_sector_window,
+vars               = banking_vars,
+date_col           = "time",
+n_factors          = 1,
+method             = "ppca",
+center             = TRUE,
+scale              = TRUE,
+impute_pre         = FALSE,
+stationarity_check = TRUE,
+adf_pval           = 0.05,
+max_diff           = 2L,
+diff_pad           = "zero",
+max_iter           = 1000,
+conv_threshold     = 1e-5,
+seed               = 42,
+flip_sign          = FALSE,
+z_score            = TRUE,
+plot_factor        = TRUE,
+factor_name        = "Banking Factor"
+)
+
+print(banking_factor$convergence)
+print(banking_factor$explained)
+print(banking_factor$loadings)
+print(banking_factor$diff_orders)
+print(head(banking_factor$scores))
+
+
+########## Shadow Banking
+
+
+
+
+
+
+
