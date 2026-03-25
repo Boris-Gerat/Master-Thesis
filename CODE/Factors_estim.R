@@ -437,6 +437,46 @@ print(head(banking_factor$scores))
 
 ########## Shadow Banking
 
+shadow_sector_data <- read_excel("/Users/borisgerat/Documents/Projects/MA_Thesis/DATA_MAIN_MA.xlsx", sheet ="Shadow")
+
+colnames(shadow_sector_data)
+shadow_variables <- c("WholeSaleFunding","LiquidityBuffer", "CapitalCushion", "TotalLoans")
+
+shadow_variables_filtered <- shadow_sector_data %>% mutate(time = as.yearqtr(Quarter)) %>% 
+	filter(time >= as.yearqtr("1997 Q1"), time <= as.yearqtr("2025 Q2"))
+
+
+shadow_factor <- pca_risk_index(
+df                 = shadow_variables_filtered,
+vars               = shadow_variables,
+date_col           = "time",
+n_factors          = 1,
+method             = "ppca",
+center             = TRUE,
+scale              = TRUE,
+impute_pre         = FALSE,
+stationarity_check = TRUE,
+adf_pval           = 0.05,
+max_diff           = 2L,
+diff_pad           = "zero",
+max_iter           = 1000,
+conv_threshold     = 1e-5,
+seed               = 42,
+flip_sign          = FALSE,
+z_score            = TRUE,
+plot_factor        = TRUE,
+factor_name        = " Shadowbanking Factor"
+)
+
+print(shadow_factor$convergence)
+print(shadow_factor$explained)
+print(shadow_factor$loadings)
+print(shadow_factor$diff_orders)
+print(head(shadow_factor$scores))
+
+
+
+########## Hedge Fund
 
 
 
