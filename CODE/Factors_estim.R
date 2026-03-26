@@ -8,6 +8,7 @@ library(pcaMethods)
 library(ggplot2)
 library(tseries)   
 library(lubridate)
+library(purrr)
 
 con <- dbConnect(
   RPostgres::Postgres(),
@@ -23,8 +24,8 @@ data$Quarter <- as.yearqtr(data$Quarter, format = "%Y Q%q")
 
 df_use <- data %>%
   filter(
-    Quarter >= as.yearqtr("1995 Q1"),
-    Quarter <= as.yearqtr("2025 Q4")
+    Quarter >= as.yearqtr("1997 Q1"),
+    Quarter <= as.yearqtr("2024 Q4")
   ) %>%
   mutate(Date = as.Date(Quarter)) %>%
   arrange(Date)
@@ -123,18 +124,6 @@ df_with_index_finbert <- df_use %>%
     fit_finbert$scores %>% select(PC1) %>% rename(SENTIMENT_INDEX_FINBERT = PC1)
   )
 
-##########
-########## FRED-QD - First factor
-##########
-
-fred_qd_raw <- read.csv("/Users/borisgerat/Documents/Projects/SDF_AssetPricing/FRED_QD_1.csv")
-fred_qd_time <- fred_qd_raw %>%
-  mutate(sasdate = as.Date(sasdate)) %>%
-  mutate(sasdate = floor_date(sasdate, "quarter")) %>%
-  filter(sasdate >= as.Date("1997-01-01"),
-         sasdate <= as.Date("2025-04-01"))
-
-head(fred_qd_time)
 
 ##########
 ########## Custom time series index
@@ -145,7 +134,7 @@ excel_data$time <- as.yearqtr(excel_data$time, format = "%Y Q%q")
 
 excel_data_time <- excel_data %>% filter(
 					 time >= as.yearqtr("1997 Q1"),
-					 time <= as.yearqtr("2025 Q2"))
+					 time <= as.yearqtr("2024 Q4"))
 
 
 
@@ -404,7 +393,7 @@ banking_vars <- c("WholeSaleFunding","LiquidityBuffer", "CapitalCushion", "ComIn
 
 banking_sector_window <- banking_sector_data %>% mutate(time = as.yearqtr(Quarter)) %>% 
 	filter(time >= as.yearqtr("1997 Q1"),
-	       time <= as.yearqtr("2025 Q2"))
+	       time <= as.yearqtr("2024 Q4"))
 
 banking_factor <- pca_risk_index(
 df                 = banking_sector_window,
@@ -443,7 +432,7 @@ colnames(shadow_sector_data)
 shadow_variables <- c("WholeSaleFunding","LiquidityBuffer", "CapitalCushion", "TotalLoans")
 
 shadow_variables_filtered <- shadow_sector_data %>% mutate(time = as.yearqtr(Quarter)) %>% 
-	filter(time >= as.yearqtr("1997 Q1"), time <= as.yearqtr("2025 Q2"))
+	filter(time >= as.yearqtr("1997 Q1"), time <= as.yearqtr("2024 Q4"))
 
 
 shadow_factor <- pca_risk_index(
@@ -478,7 +467,80 @@ print(head(shadow_factor$scores))
 
 ########## Hedge Fund
 
+hedge_data <- read_excel("/Users/borisgerat/Documents/Projects/MA_Thesis/DATA_MAIN_MA.xlsx", sheet ="Hedge")
 
+hedge_vars <- c("WholeSaleFunding","LiquidityBuffer", "CapitalCushion", "TotalLoans")
+
+colnames(hedge_data)
+hedge_data_filtered <- hedge_data %>% mutate(time = as.yearqtr(Quarter))  %>% 
+	filter(time <= as.yearqtr("2024 Q4"))
+
+hedge_factor <- pca_risk_index(
+df                 = hedge_data_filtered, 
+vars               = hedge_vars,
+date_col           = "time",
+n_factors          = 1,
+method             = "ppca",
+center             = TRUE,
+scale              = TRUE,
+impute_pre         = FALSE,
+stationarity_check = TRUE,
+adf_pval           = 0.05,
+max_diff           = 2L,
+diff_pad           = "zero",
+max_iter           = 1000,
+conv_threshold     = 1e-5,
+seed               = 42,
+flip_sign          = FALSE,
+z_score            = TRUE,
+plot_factor        = TRUE,
+factor_name        = "Hedge Funds Factor"
+)
+
+print(hedge_factor$convergence)
+print(hedge_factor$explained)
+print(hedge_factor$loadings)
+print(hedge_factor$diff_orders)
+print(head(hedge_factor$scores))
+
+
+##########
+########## Risk Index DataFrame
+##########
+
+FedRiskIndicies <- read_excel("/Users/borisgerat/Documents/Projects/MA_Thesis/DATA_MAIN_MA.xlsx", sheet ="FED_RISK")
+
+FedRiskIndicies_filtered <- FedRiskIndicies %>% mutate(time = as.yearqtr(Time)) %>% 
+	filter(time >= as.yearqtr("1997 Q1"),
+	time <= as.yearqtr("2024 Q4"))
+
+Shapiro <- read_excel("/Users/borisgerat/Documents/Projects/MA_Thesis/DATA_MAIN_MA.xlsx", sheet ="Shapiro")
+
+shapiro_quart <- Shapiro %>% mutate(time= as.yearqtr(date)) %>% 
+	group_by(time) %>% 
+	summarise(across(where(is.numeric), mean, na.rm= TRUE), .groups= "drop")  %>% 
+	filter(time >= as.yearqtr("1997 Q1"),
+	time <= as.yearqtr("2024 Q4"))
+
+# CombinedRiskDataframe <- FedRiskIndicies_filtered %>% 
+
+fit_vader$scores   <- fit_vader$scores   %>% rename(time = Date)
+fit_finbert$scores <- fit_finbert$scores %>% rename(time = Date) 
+
+to_date <- function(df) {
+  df %>% mutate(time = as.Date(time))
+}
+
+CombinedRiskDataframe <- list(
+  FedRiskIndicies_filtered,
+  shapiro_quart,
+  custom_risk_index$scores     %>% rename(CUSTOM_INDEX   = PC1),
+  custom_mix_index$scores      %>% rename(CUSTOM_MIX     = PC1),
+  fit_vader$scores             %>% rename(SENTIMENT_VADER   = PC1),
+  fit_finbert$scores           %>% rename(SENTIMENT_FINBERT = PC1)
+) %>%
+  map(to_date) %>%
+  reduce(left_join, by = "time")
 
 
 
