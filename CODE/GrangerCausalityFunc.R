@@ -68,6 +68,35 @@ granger_risk_analysis <- function(risk_df, sector_ts, max_lag = 4, sector_name =
 }
 
 
-result <- granger_risk_analysis(CombinedRiskDataframe, shadow_factor$scores$PC1, sector_name = "Banking")
-colnames(result)[2:3] <- c("Risk -> Banking", "Banking -> Risk")
-result
+
+
+
+
+##############
+############## ESTIMATION
+##############
+
+ResultBankingGranger <- granger_risk_analysis(CombinedRiskDataframe, banking_factor$scores$PC1,
+					      sector_name = "Banking Factor")
+colnames(ResultBankingGranger)[2:3] <- c("Risk -> Banking Factor", "Banking Factor -> Risk")
+ResultBankingGranger
+
+##############  SHADOWBANKING 
+
+ResultShadowbankingGranger <- granger_risk_analysis(CombinedRiskDataframe, shadow_factor$scores$PC1,
+					      sector_name = "Shadowbanking Factor")
+colnames(ResultShadowbankingGranger)[2:3] <- c("Risk -> Shadowbanking Factor", "Shadowbanking Factor -> Risk")
+ResultShadowbankingGranger
+
+############## HEDGEFUNDS
+
+ResultHedgefundGranger <- granger_risk_analysis(CombinedRiskDataframe, hedge_factor$scores$PC1,
+					      sector_name = "Hedgefund Factor")
+colnames(ResultHedgefundGranger)[2:3] <- c("Risk -> Hedgefund Factor", "Hedgefund Factor -> Risk")
+ResultHedgefundGranger
+
+
+
+
+
+
