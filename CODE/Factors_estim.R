@@ -294,19 +294,8 @@ df_risk_index_parts <- credit_stress_factor$scores %>%
   left_join(funding_stress_factor$scores %>% select(time, PC1) %>% rename(FUNDING_STRESS = PC1), by = "time") %>%
   left_join(market_stress_factor$scores %>% select(time, PC1) %>% rename(MARKET_STRESS = PC1), by = "time")
 
-df_risk_index_parts_FRED <- credit_stress_factor$scores %>% 
-  rename(CREDIT_STRESS = PC1) %>%
-  left_join(policy_stress_factor$scores %>% select(time, PC1) %>% rename(POLICY_STRESS = PC1), by = "time") %>%
-  left_join(funding_stress_factor$scores %>% select(time, PC1) %>% rename(FUNDING_STRESS = PC1), by = "time") %>%
-  left_join(market_stress_factor$scores %>% select(time, PC1) %>% rename(MARKET_STRESS = PC1), by = "time")  %>% 
-  left_join(fred_qd_time  %>% select(sasdate, PC1)  %>% rename(FRED_1 = PC1) ,by =c("time" = "sasdate"))
-tail(df_risk_index_parts_FRED)
 
 df_risk_index_parts <- df_risk_index_parts %>%
-mutate(across(c(CREDIT_STRESS, POLICY_STRESS, FUNDING_STRESS, MARKET_STRESS), 
-	~ pmin(pmax(., -3), 3)))
-
-df_risk_index_parts_FRED <- df_risk_index_parts_FRED %>%
 mutate(across(c(CREDIT_STRESS, POLICY_STRESS, FUNDING_STRESS, MARKET_STRESS), 
 	~ pmin(pmax(., -3), 3)))
 
@@ -531,17 +520,67 @@ to_date <- function(df) {
   df %>% mutate(time = as.Date(time))
 }
 
+
+##########
+########## Shadow Rate
+##########
+
+parse_time_col <- function(x) {
+  sapply(x, function(val) {
+    num <- suppressWarnings(as.numeric(val))
+    if (!is.na(num) && nchar(trimws(as.character(val))) == 6) {
+      as.Date(paste0(as.character(as.integer(num)), "01"), format = "%Y%m%d")
+    } else {
+      as.Date(as.character(val), format = "%m/%d/%y")
+    }
+  }) |> as.Date(origin = "1970-01-01")
+}
+
+shadowRate_raw <- read_excel(
+  "/Users/borisgerat/Documents/Projects/MA_Thesis/DATA_MAIN_MA.xlsx",
+  sheet = "ShadowRate",
+  col_types = "text"
+)
+
+parse_time_col <- function(x) {
+  sapply(x, function(val) {
+    num <- suppressWarnings(as.numeric(val))
+    if (!is.na(num) && nchar(trimws(val)) == 6) {
+      # YYYYMM format
+      as.Date(paste0(val, "01"), format = "%Y%m%d")
+    } else if (!is.na(num)) {
+      # Excel serial date
+      as.Date(as.integer(num), origin = "1899-12-30")
+    } else {
+      as.Date(val, format = "%m/%d/%y")
+    }
+  }) |> as.Date(origin = "1970-01-01")
+}
+
+shadowRate <- shadowRate_raw %>%
+  mutate(
+    Time_parsed = parse_time_col(Time),
+    Shadow      = as.numeric(Shadow),
+    time        = as.yearqtr(Time_parsed)
+  ) %>%
+  arrange(time) %>%
+  group_by(time) %>%
+  summarise(across(where(is.numeric), mean, na.rm = TRUE), .groups = "drop") %>%
+  filter(
+    time >= as.yearqtr("1997 Q1"),
+    time <= as.yearqtr("2024 Q4")
+  )
+
 CombinedRiskDataframe <- list(
   FedRiskIndicies_filtered,
   shapiro_quart,
-  custom_risk_index$scores     %>% rename(CUSTOM_INDEX   = PC1),
-  custom_mix_index$scores      %>% rename(CUSTOM_MIX     = PC1),
+  custom_risk_index$scores     %>% rename(CUSTOM_INDEX      = PC1),
+  custom_mix_index$scores      %>% rename(CUSTOM_MIX        = PC1),
   fit_vader$scores             %>% rename(SENTIMENT_VADER   = PC1),
-  fit_finbert$scores           %>% rename(SENTIMENT_FINBERT = PC1)
+  fit_finbert$scores           %>% rename(SENTIMENT_FINBERT = PC1),
+  shadowRate                   %>% select(time, Shadow)
 ) %>%
   map(to_date) %>%
   reduce(left_join, by = "time")
 
-
-
-
+colnames(CombinedRiskDataframe)
