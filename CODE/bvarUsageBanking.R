@@ -97,7 +97,7 @@ for (risk_idx in RISK_INDICES) {
 
       sign_restr     = NULL,
       run_cholesky   = TRUE,
-      cholesky_order = c("Shadow", risk_idx,
+      cholesky_order = c(risk_idx, "Shadow", 
                          "Bank_WholeSaleFunding", "Bank_LiquidityBuffer",
                          "Bank_CapitalCushion", "Bank_CILoans"),
 
@@ -188,62 +188,3 @@ for (risk_idx in names(all_cor_tables)) {
 
 dev.off()
 
-# -----------------------------------------------------------------------------
-# 4. SAVE TABLES PDF
-# -----------------------------------------------------------------------------
-cat("Saving tables PDF...\n")
-
-pdf("~/Documents/Projects/Ma_Thesis/CODE/bvar_tables.pdf",
-    width = 14, height = 8, onefile = TRUE)
-
-for (risk_idx in names(all_cor_tables)) {
-
-  cor_mat <- all_cor_tables[[risk_idx]]
-  n       <- nrow(cor_mat)
-
-  # Clean row/col names for display
-  clean_names <- function(nm) {
-    nm <- sub("_dlog$", " (Δlog)", nm)
-    nm <- sub("_diff$", " (Δ)",   nm)
-    nm <- sub("_lvl$",  " (lvl)", nm)
-    nm <- gsub("_", " ", nm)
-    nm
-  }
-  rownames(cor_mat) <- clean_names(rownames(cor_mat))
-  colnames(cor_mat) <- clean_names(colnames(cor_mat))
-
-  # Build display dataframe
-  display_df <- as.data.frame(cor_mat)
-  display_df <- cbind(Variable = rownames(display_df), display_df)
-  rownames(display_df) <- NULL
-
-  # Title
-  title_label <- sprintf(
-    "Residual Correlation Matrix — %s%s",
-    risk_idx,
-    ifelse(risk_idx %in% FLIP_INDICES, " [flipped]", "")
-  )
-
-  # Draw table
-  grid.newpage()
-  grid.text(title_label,
-            x = 0.5, y = 0.95,
-            gp = gpar(fontsize = 13, fontface = "bold"))
-  grid.text("Reduced-form residual correlations (Cholesky BVAR, p=3, 1997Q2-2024Q4)",
-            x = 0.5, y = 0.90,
-            gp = gpar(fontsize = 9, col = "grey40"))
-
-  tbl <- tableGrob(display_df, rows = NULL,
-                   theme = ttheme_minimal(base_size = 8))
-  tbl$vp <- viewport(y = 0.45, height = 0.8)
-  grid.draw(tbl)
-}
-
-dev.off()
-cat("  -> bvar_tables.pdf saved\n")
-
-cat("\n===== DONE =====\n")
-cat(sprintf("Models estimated : %d / %d\n",
-            length(all_cor_tables), length(RISK_INDICES)))
-cat(sprintf("Plots PDF        : bvar_plots.pdf\n"))
-cat(sprintf("Tables PDF       : bvar_tables.pdf\n"))
