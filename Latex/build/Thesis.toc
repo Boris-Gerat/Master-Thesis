@@ -1,0 +1,14 @@
+\contentsline {chapter}{Introduction}{5}{chapter*.5}%
+\contentsline {chapter}{\numberline {1}Data and Methodology}{6}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Data}{6}{section.1.1}%
+\contentsline {subsection}{\numberline {1.1.1}Financial Sector Variables}{6}{subsection.1.1.1}%
+\contentsline {subsection}{\numberline {1.1.2}Monetary Policy Variable}{9}{subsection.1.1.2}%
+\contentsline {subsection}{\numberline {1.1.3}Benchmark Risk Indicies}{9}{subsection.1.1.3}%
+\contentsline {section}{\numberline {1.2}Methodology}{9}{section.1.2}%
+\contentsline {subsection}{\numberline {1.2.1}Factor Models}{9}{subsection.1.2.1}%
+\contentsline {subsubsection}{EMPCA}{9}{section*.6}%
+\contentsline {subsubsection}{NIPALS}{10}{section*.7}%
+\contentsline {subsection}{\numberline {1.2.2}Granger Causality}{10}{subsection.1.2.2}%
+\contentsline {subsection}{\numberline {1.2.3}Bayesian VAR}{10}{subsection.1.2.3}%
+\contentsline {chapter}{\numberline {2}Results}{11}{chapter.2}%
+\contentsline {chapter}{Conclusion}{12}{chapter*.8}%

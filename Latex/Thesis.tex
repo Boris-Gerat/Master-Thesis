@@ -1,0 +1,203 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage[hidelinks]{hyperref}
+\usepackage{natbib}
+\usepackage{float}
+\bibliographystyle{chicago}
+
+\begin{document}
+
+\begin{titlepage}
+\centering
+{\Large CHARLES UNIVERSITY}\\
+\vspace{1em}
+{\large Faculty of Social Sciences}\\
+\vspace{2em}
+{\LARGE \textbf{Risk Channels in Monetary Policy}}\\
+\vspace{1em}
+{\large A Quantitative Economics Approach}\\
+\vfill
+Master's Thesis
+\vspace{2em}
+
+Author: Boris Gerát\\
+Supervisor: [Your Supervisor]\\
+Year of Defence: 2026
+\end{titlepage}
+
+\chapter*{Declaration}
+I hereby declare that I have completed this thesis independently using only the listed sources.
+
+\vspace{2em}
+In Prague, [date]\\
+Boris Gerát
+
+\chapter*{Abstract}
+[Write abstract here]
+
+\chapter*{Keywords}
+Risk, Monetary policy, BVAR, Financial sector
+
+\tableofcontents
+\newpage
+
+\chapter*{Introduction}
+\addcontentsline{toc}{chapter}{Introduction}
+[Write introduction here]
+
+\chapter{Data and Methodology}
+This chapter presents the data sources and empirical methodology used in the analysis. 
+\section{Data}
+
+Data is an essential part of this empirically based thesis. The work leverages time series from multiple
+sources, and because of this, I divide this section into multiple parts. Each subsection addresses a
+specific component of the dataset in relation to the corresponding data source used in that part of
+the analysis. I begin with sectoral-level variables, then proceed to off-the-shelf risk indices, and
+finally to self-collected data used for constructing custom risk indices.
+
+\subsection{Financial Sector Variables}
+
+The main objective when selecting sectoral-level variables was to identify a set of variables that
+would be comparable across all sectors. This initially proved difficult due to fragmented data
+sources, mismatched time windows, and differences in reporting frequencies across the three
+subsectors.
+
+The banking sector did not pose a significant issue in this regard, as it is one of the most
+regulated and well-documented sectors. As the primary data source for the banking sector, I use data
+from the Federal Deposit Insurance Corporation (FDIC), which provides a rich and easily accessible
+database of balance sheet information for the banking system. Data for this sector was collected
+first, and the broader availability of variables guided the design and selection of variables for
+the remaining sectors. While this subsector imposed the fewest constraints on the scope of the
+research, the final variable set still had to be reduced to ensure comparability with the other two
+sectors.
+
+For the shadow banking subsector, I use the Z.1 Financial Accounts of the United States, which, to
+my knowledge, represent one of the most comprehensive sources for this segment of the financial
+system. Specifically, I use the component labeled ``Other financial busenises,'' denoted in L.132 which is constructed by subtracting the
+banking and hedge fund subsectors (reported separately) from the broader financial accounts. This
+aggregate captures the activity and balance sheet conditions of entities such as money market
+funds, mutual funds, holding companies, and issuers of asset-backed securities. Initially, I
+intended to provide two perspectives on the shadow banking sector: one based on the aggregate
+``Other'' category and another focusing on its largest component, money market funds. However,
+disaggregated data for specific entities were not sufficiently aligned with the structure of the
+banking sector data. As a result, I focus exclusively on the aggregate representation. An important
+implication of using this source is that the analysis is restricted to quarterly frequency, as the
+Z.1 Financial Accounts are published only on a quarterly basis.
+
+The final subsector considered is the hedge fund sector. The regulatory framework governing the
+reporting of this subsector is relatively recent, and the data can be found in releases associated
+with the H.8 financial accounts. The structure of reporting and the available variables are similar
+to those in the Z.1 accounts. However, due to the recent introduction of these reporting standards,
+data for hedge funds begin only in 2012 Q4. This represents a substantial limitation compared to the
+banking and shadow banking sectors, which are available from 1997 Q1. Restricting all sectors to the
+shorter hedge fund sample would significantly reduce the scope of the analysis. Therefore, I retain
+the 1997 Q1 -- 2024 Q4 window for the banking and shadow banking sectors, while reporting hedge fund
+results starting from 2012 Q4. Comparisons involving the hedge fund sector must therefore be
+interpreted with caution, as earlier episodes such as the dot-com bubble or the global financial
+crisis are not captured in its sample.
+\begin{table}[H]  % forces placement HERE
+\centering
+\renewcommand{\arraystretch}{2.8} % vertical spacing
+\begin{tabular}{l|c} % second column centered
+\hline
+\textbf{Variable} & \textbf{Fraction} \\
+\hline
+Wholesale Funding & $\dfrac{\text{Brokered Deposits + Other Borrowed Money}}{\text{Total Assets}}$ \\
+\hline
+Liquidity Buffer  & $\dfrac{\text{Cash + Treasuries}}{\text{Total Assets}}$ \\
+\hline
+Capital Cushion   & $\dfrac{\text{Total Equity}}{\text{Total Assets}}$ \\
+\hline
+Number of Loans  & -- \\
+\hline
+\end{tabular}
+\caption{This constructed balance sheet ratios are used in the main BVAR analysis and serve as the basis for observing impulse response function reactions to increases in risk, which are discussed later in the study.}
+\end{table}
+
+In Table~1.1, the variables that were consistently collected across all subsectors are presented.
+The number and variety of these variables allow me to construct ratio-based measures that combine
+multiple balance sheet components through their interactions. This transformation reduces the
+dimensionality of the system, which is particularly important given the relatively short time
+dimension of the dataset used in the BVAR model.
+
+Wholesale funding captures the extent to which a given subsector relies on market-based financing
+and access to capital markets. The liquidity buffer reflects the share of balance sheet resources
+allocated to highly liquid assets, providing a measure of short-term resilience to funding shocks.
+The capital cushion serves as a proxy for leverage, indicating the degree of risk-taking behavior
+within the subsector. The number of loans as they are as it carries
+substantial informational content on its own and directly captures credit provision dynamics.
+
+This broader set of variables is designed to capture the overall behavior of each subsector when
+subject to monetary policy and risk shocks. At the same time, the selection enables internal
+consistency checks and robustness in the analysis of impulse response functions. For instance,
+changes in leverage should be accompanied by corresponding movements in wholesale funding, which
+provides an additional layer of validation for the identified transmission mechanisms.
+
+\subsection{Monetary Policy Variable}
+For the role of the main monetary policy variable, I considered multiple candidates and approaches.
+However, for the final analysis, I choose to use the shadow rate proposed by Wu and Xia (2016).
+This measure provides a more accurate representation of the stance of monetary policy when the
+effective federal funds rate is constrained by the zero lower bound.
+
+During the Global Financial Crisis, monetary policy became highly accommodative and relied on
+non-standard tools such as quantitative easing alongside conventional rate setting. These measures
+are not fully captured by the standard effective federal funds rate, as nominal interest rates are
+bounded at zero and cannot reflect additional monetary accommodation. The Wu and Xia shadow rate
+addresses this limitation by allowing for negative values, thereby capturing the implicit policy
+stance under unconventional monetary policy. At the same time, it closely tracks the effective
+federal funds rate during periods away from the lower bound, ensuring consistency across regimes.
+
+This methodology is particularly useful during and immediately after the 2008 financial crisis.
+However, once the shadow rate converges back to the official effective federal funds rate in more
+stable periods, the difference between the two becomes negligible. As the shadow rate series is not
+available after 2023, and re-estimating the model for a relatively short extension of the sample is
+not essential for the purposes of this analysis, I replace the missing observations with the
+effective federal funds rate. Given the close co-movement of the two series outside of the
+zero-lower-bound period, this substitution does not materially affect the results.
+
+Initially, I also considered the methodology of Romer and Romer (2004), which isolates unexpected
+monetary policy shocks by removing the anticipated component of policy changes. This approach is
+useful in settings where expectations may bias the estimated effects of monetary policy, for
+example through the so-called price puzzle. However, given the lower frequency of the data used in
+this analysis, such issues are less pronounced. In this context, the shadow rate approach provides a
+more suitable measure of the overall stance of monetary policy and is therefore preferred.
+
+\subsection{Benchmark Risk Indicies}
+
+
+\section{Methodology}
+\subsection{Factor Models}
+\subsubsection{EMPCA}
+\[
+    \min_{W,Z} \; \lVert X - WZ \rVert_F^2
+\]
+\subsubsection{NIPALS}
+\[
+    X \approx tp^\top
+\]
+\subsection{Granger Causality}
+\[
+    y_t = \alpha + \sum \phi_i y_{t-i} + \sum \beta_j x_{t-j} + \varepsilon_t
+\]
+\subsection{Bayesian VAR}
+\[
+    y_t = A_1 y_{t-1} + \dots + A_p y_{t-p} + \varepsilon_t
+\]
+
+\chapter{Results}
+[Add later]
+
+\chapter*{Conclusion}
+\addcontentsline{toc}{chapter}{Conclusion}
+[Write conclusion]
+
+\end{document}
