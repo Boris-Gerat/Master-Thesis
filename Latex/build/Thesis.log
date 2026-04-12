@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.4.4)  5 APR 2026 18:41
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.4.4)  5 APR 2026 23:24
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -307,34 +307,53 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \float@box=\box55
 \@float@everytoks=\toks27
 \@floatcapt=\box56
+) (/usr/local/texlive/2026/texmf-dist/tex/latex/tools/tabularx.sty
+Package: tabularx 2023/12/11 v2.12a `tabularx' package (DPC)
+ (/usr/local/texlive/2026/texmf-dist/tex/latex/tools/array.sty
+Package: array 2025/09/25 v2.6n Tabular extension package (FMi)
+\col@sep=\dimen185
+\ar@mcellbox=\box57
+\extrarowheight=\dimen186
+\NC@list=\toks28
+\extratabsurround=\skip57
+\backup@length=\skip58
+\ar@cellbox=\box58
 )
-LaTeX Font Info:    Trying to load font information for T1+lmr on input line 17.
+\TX@col@width=\dimen187
+\TX@old@table=\dimen188
+\TX@old@col=\dimen189
+\TX@target=\dimen190
+\TX@delta=\dimen191
+\TX@cols=\count317
+\TX@ftn=\toks29
+)
+LaTeX Font Info:    Trying to load font information for T1+lmr on input line 18.
  (/usr/local/texlive/2026/texmf-dist/tex/latex/lm/t1lmr.fd
 File: t1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 ) (/usr/local/texlive/2026/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count317
+\l__color_backend_stack_int=\count318
 ) (build/Thesis.aux)
 \openout1 = `Thesis.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -372,24 +391,24 @@ LaTeX Font Info:    ... okay on input line 17.
 
 (/usr/local/texlive/2026/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count318
-\scratchdimen=\dimen185
-\scratchbox=\box57
-\nofMPsegments=\count319
-\nofMParguments=\count320
-\everyMPshowfont=\toks28
-\MPscratchCnt=\count321
-\MPscratchDim=\dimen186
-\MPnumerator=\count322
-\makeMPintoPDFobject=\count323
-\everyMPtoPDFconversion=\toks29
+\scratchcounter=\count319
+\scratchdimen=\dimen192
+\scratchbox=\box59
+\nofMPsegments=\count320
+\nofMParguments=\count321
+\everyMPshowfont=\toks30
+\MPscratchCnt=\count322
+\MPscratchDim=\dimen193
+\MPnumerator=\count323
+\makeMPintoPDFobject=\count324
+\everyMPtoPDFconversion=\toks31
 ) (/usr/local/texlive/2026/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
  (/usr/local/texlive/2026/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
-Package hyperref Info: Link coloring OFF on input line 17.
+Package hyperref Info: Link coloring OFF on input line 18.
  (build/Thesis.out) (build/Thesis.out)
 \@outlinefile=\write3
 \openout3 = `Thesis.out'.
@@ -400,7 +419,7 @@ Package hyperref Info: Link coloring OFF on input line 17.
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.44 \chapter
+l.45 \chapter
              *{Abstract} [1
 
 ] [2
@@ -453,12 +472,82 @@ Chapter 1.
 pdfTeX warning (ext4): destination with the same identifier (name{table.1.1}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.150 
-      ] [9{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}] [10{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}]
-Chapter 2.
-[11
+l.151 
+      ]
+Overfull \hbox (6.45691pt too wide) in paragraph at lines 220--220
+[]|\T1/lmr/bx/n/12 Abbreviation| 
+ []
 
-] [12
+
+Underfull \hbox (badness 2384) in paragraph at lines 220--220
+[]|\T1/lmr/m/n/12 Composite in-dex con-structed
+ []
+
+
+Underfull \hbox (badness 1270) in paragraph at lines 220--220
+\T1/lmr/m/n/12 ables, in-clud-ing in-ter-est rate
+ []
+
+
+Underfull \hbox (badness 5119) in paragraph at lines 220--220
+\T1/lmr/m/n/12 spreads, volatil-ity mea-sures,
+ []
+
+
+Underfull \hbox (badness 5302) in paragraph at lines 220--220
+[]|\T1/lmr/m/n/12 Chicago Fed Na-tional Fi-nan-cial
+ []
+
+
+Underfull \hbox (badness 2027) in paragraph at lines 220--220
+\T1/lmr/m/n/12 fi-nan-cial in-di-ca-tors cap-tur-ing
+ []
+
+
+Underfull \hbox (badness 1057) in paragraph at lines 220--220
+[]|\T1/lmr/m/n/12 Market-based mea-sure of ex-
+ []
+
+
+Underfull \hbox (badness 3792) in paragraph at lines 220--220
+[]|\T1/lmr/m/n/12 News-based in-dex mea-sur-ing
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 220--220
+[]|\T1/lmr/m/n/12 Text-based sen-ti-ment in-dex
+ []
+
+[9] [10
+pdfTeX warning (ext4): destination with the same identifier (name{table.1.2}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.231 
+      ] [11] [12
+pdfTeX warning (ext4): destination with the same identifier (name{table.1.3}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.309 
+      ]
+<pics/plot.pdf, id=141, 578.16pt x 361.35pt>
+File: pics/plot.pdf Graphic file (type pdf)
+<use pics/plot.pdf>
+Package pdftex.def Info: pics/plot.pdf  used on input line 312.
+(pdftex.def)             Requested size: 452.9679pt x 283.10349pt.
+ [13
+pdfTeX warning (ext4): destination with the same identifier (name{figure.1.1}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.338 
+       <./pics/plot.pdf>] [14] [15{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}] [16]
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 487.
+ (/usr/local/texlive/2026/texmf-dist/tex/latex/lm/t1lmtt.fd
+File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+) [17] [18] [19]
+Chapter 2.
+[20
+
+] [21
 
 ] (build/Thesis.aux)
  ***********
@@ -466,21 +555,21 @@ LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
  ***********
 Package rerunfilecheck Info: File `Thesis.out' has not changed.
-(rerunfilecheck)             Checksum: E767D5E96C3895B6244C28FEF38DA38C;1579.
+(rerunfilecheck)             Checksum: 8FB74CA889C38E89BA46B5A7B9E486F1;2239.
  ) 
 Here is how much of TeX's memory you used:
- 11055 strings out of 467525
- 166383 string characters out of 5418983
- 581380 words of memory out of 5000000
- 39777 multiletter control sequences out of 15000+600000
- 677056 words of font info for 70 fonts, out of 8000000 for 9000
+ 11296 strings out of 467525
+ 170111 string characters out of 5418983
+ 589141 words of memory out of 5000000
+ 39966 multiletter control sequences out of 15000+600000
+ 688889 words of font info for 74 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,15n,79p,354b,489s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmex10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmmi12.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmmi8.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmr12.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmr17.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmr8.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmsy8.pfb>
-Output written on build/Thesis.pdf (13 pages, 148054 bytes).
+ 75i,15n,79p,654b,489s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmex10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmmi12.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmmi8.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmr12.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmr17.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmr8.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmri10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmri12.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmsy8.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmtt12.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on build/Thesis.pdf (22 pages, 266341 bytes).
 PDF statistics:
- 191 PDF objects out of 1000 (max. 8388607)
- 155 compressed objects within 2 object streams
- 32 named destinations out of 1000 (max. 500000)
- 97 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 307 PDF objects out of 1000 (max. 8388607)
+ 249 compressed objects within 3 object streams
+ 71 named destinations out of 1000 (max. 500000)
+ 118 words of extra memory for PDF output out of 10000 (max. 10000000)
 

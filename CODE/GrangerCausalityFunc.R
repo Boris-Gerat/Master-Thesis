@@ -95,6 +95,15 @@ ResultHedgefundGranger <- granger_risk_analysis(CombinedRiskDataframe, hedge_fac
 colnames(ResultHedgefundGranger)[2:3] <- c("Risk -> Hedgefund Factor", "Hedgefund Factor -> Risk")
 ResultHedgefundGranger
 
+############## ShadowSmall 
+
+ShadowBankingSmallGranger <- granger_risk_analysis(CombinedRiskDataframe, shadow_factor_small$scores$PC1,
+					      sector_name = "Shadow bankin small factor")
+colnames(ShadowBankingSmallGranger)[2:3] <- c("Risk -> Shadow bankin small factor", "Shadow small Factor -> Risk")
+ShadowBankingSmallGranger
+
+
+
 
 
 
