@@ -83,9 +83,9 @@ ResultBankingGranger
 
 ##############  SHADOWBANKING 
 
-ResultShadowbankingGranger <- granger_risk_analysis(CombinedRiskDataframe, shadow_factor$scores$PC1,
-					      sector_name = "Shadowbanking Factor")
-colnames(ResultShadowbankingGranger)[2:3] <- c("Risk -> Shadowbanking Factor", "Shadowbanking Factor -> Risk")
+ResultShadowbankingGranger <- granger_risk_analysis(CombinedRiskDataframe, shadow_factor_broad$scores$PC1,
+					      sector_name = "Shadowbanking Factor Broad")
+colnames(ResultShadowbankingGranger)[2:3] <- c("Risk -> Shadowbanking Factor Broad", "Shadowbanking Factor Broad -> Risk")
 ResultShadowbankingGranger
 
 ############## HEDGEFUNDS
@@ -98,8 +98,8 @@ ResultHedgefundGranger
 ############## ShadowSmall 
 
 ShadowBankingSmallGranger <- granger_risk_analysis(CombinedRiskDataframe, shadow_factor_small$scores$PC1,
-					      sector_name = "Shadow bankin small factor")
-colnames(ShadowBankingSmallGranger)[2:3] <- c("Risk -> Shadow bankin small factor", "Shadow small Factor -> Risk")
+					      sector_name = "Shadow banking Factor Small")
+colnames(ShadowBankingSmallGranger)[2:3] <- c("Risk -> Shadow banking Factor Small", "Shadow Factor small -> Risk")
 ShadowBankingSmallGranger
 
 

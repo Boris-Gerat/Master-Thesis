@@ -1,18 +1,22 @@
 \documentclass[12pt,a4paper]{report}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage{lmodern}
-\usepackage{geometry}
-\geometry{margin=1in}
+\usepackage[a4paper, top=1.2cm, bottom=1.2cm, left=1.2cm, right=1.2cm]{geometry}
 \usepackage{setspace}
 \onehalfspacing
 \usepackage{amsmath, amssymb}
 \usepackage{graphicx}
 \usepackage{booktabs}
-\usepackage[hidelinks]{hyperref}
-\usepackage{natbib}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{xcolor}
 \usepackage{float}
 \usepackage{tabularx}
+\usepackage{adjustbox}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{caption}
+\usepackage[hidelinks]{hyperref}
+\usepackage{natbib}
+
 \bibliographystyle{chicago}
 
 \begin{document}
@@ -630,9 +634,156 @@ driven by the relatively short time series and the use of Minnesota-type priors,
 substantial shrinkage and reduce the range of admissible parameter configurations.
 
 \chapter{Results}
-[Add later]
+In this chapter, I present the results of this thesis across all models and estimations. I begin with the risk indices and their dynamics, documenting how each measure evolves over the sample period. This is followed by the results from the Bayesian vector autoregressions and an analysis of risk shock propagation across the economy.
 
-\chapter*{Conclusion}
+\section{Custom risk index dynamics}
+In this subsection, I take a closer look at the performance of the custom risk indices relative to the included benchmarks. The results are presented primarily through graphical analysis and a correlation table. Overall, this part of the thesis sheds light on both the benefits and difficulties of constructing indices from scratch, as well as the tradeoffs involved in incorporating sentiment proxies.
+
+\begin{figure}[H]
+    \centering
+    \fbox{\makebox[0.91\textwidth]{%
+        \includegraphics[width=0.92\textwidth, trim=0 0 0 0, clip]{pics/fig_own_indices.pdf}}}
+    \vspace{0.3em}
+    \fbox{\makebox[0.905\textwidth]{%
+        \includegraphics[width=0.92\textwidth, trim=0 0 0 0, clip]{pics/fig_reference_indices.pdf}}}
+    \caption{INSERT CAPTION HERE.}
+    \label{fig:risk_indices}
+\end{figure}
+
+The estimated custom sentiment indices and their benchmark counterparts are presented in Figure 2.1. The upper panel displays the dynamics of the custom risk indices estimated using the VADER and FinBERT models, while the lower panel shows the reference benchmark indices.
+
+The behaviour of both custom indices is markedly volatile throughout the estimated sample. Focusing specifically on the VADER sentiment index, the series does not reliably spike during major recessions in the way one would expect from a well-performing risk indicator. The index fails to respond consistently to the dot-com bubble and the Global Financial Crisis, and only during the COVID-19 pandemic does it move in the expected direction, correctly declining in line with the NBER recession definition.
+
+The FinBERT sentiment index, by contrast, exhibits considerably better performance. It displays lower overall volatility and more consistent countercyclical behaviour, correctly capturing all three major recession episodes. The most pronounced responses are observed during the dot-com bubble and the Global Financial Crisis, during which the index declines sharply and persistently, suggesting that FinBERT's domain-specific financial language training translates into more economically meaningful sentiment extraction.
+
+Cross-checking these results against the benchmark risk indices reveals that the reference series exhibit substantially lower volatility during non-recessionary periods, which is a desirable property for a risk indicator. The Shapiro News Sentiment Index is notably less volatile and less reactionary compared to the Economic Policy Uncertainty Index, yet both indices appear to detect signals broadly consistent with those captured by the custom FinBERT index, lending some external validity to the latter's construction.
+\begin{figure}[H]
+    \centering
+    \fbox{\makebox[0.91\textwidth]{%
+        \includegraphics[width=0.92\textwidth, trim=0 0 0 0, clip]{pics/fig_own_ts_indices.pdf}}}
+    \vspace{0.3em}
+    \fbox{\makebox[0.905\textwidth]{%
+        \includegraphics[width=0.92\textwidth, trim=0 0 0 0, clip]{pics/fig_ref_ts_indices.pdf}}}
+    \caption{INSERT CAPTION HERE.}
+    \label{fig:risk_indices_ts}
+\end{figure}
+
+The results for the time series-based risk indices are presented in Figure 2.2. A broadly similar dynamic emerges as with the sentiment-based indices discussed above. The main recessionary signal appears to be captured, however both custom indices exhibit a tendency to absorb excess noise during tranquil periods. A particularly important finding in this section is that the inclusion of sentiment appears to stabilise the custom time series-based index, rendering it more comparable to the reference benchmark indices.
+
+More specifically, the incorporation of sentiment into the composite index enhances its responsiveness around major economic events, amplifying spikes in a way that the purely time series-based index does not. This is most evident during the dot-com bubble, where the sentiment-augmented index reaches notably higher levels compared to the benchmark indices, a plausible and economically meaningful signal that the reference indices fail to fully capture. This represents perhaps the most distinctive contribution of the sentiment component to the overall index dynamics.
+
+Furthermore, sentiment inclusion appears to stabilise the post-crisis recovery path following the Global Financial Crisis. Unlike the classic time series index, which remains depressed for an extended period, the sentiment-augmented version converges more smoothly toward baseline levels, bringing its behaviour closer in line with the reference indices. This suggests that sentiment carries forward-looking information that helps the index recover in a more timely and economically coherent manner.
+
+During the COVID-19 pandemic, both custom indices, with and without sentiment, decline considerably more sharply than the benchmark indices. This points to a potential limitation of the constructed indices, namely an oversensitivity to acute crisis episodes, which may warrant further investigation in the robustness analysis.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth, trim=0 0 0 0, clip]{pics/fig_correlation_matrix.pdf}
+    \caption{INSERT CAPTION HERE.}
+    \label{fig:risk_index}
+\end{figure}
+Figure 2.3 presents a correlation matrix of all risk indices used in this analysis. As expected, the time-series-based risk indices exhibit higher correlations with the Fed benchmark indices compared to the sentiment-based ones. Among the sentiment indices, the Shapiro news sentiment index and the custom FinBERT index appear negatively correlated with the broader risk indices, while the custom VADER sentiment index shows no meaningful correlation with any of the other indices. The EPU index, due to its construction methodology, displays a slight positive correlation with the main Fed risk indices but little relationship with the custom risk indices, suggesting it captures a different type of uncertainty signal, one that appears more aligned with the Shapiro news index than with the financial stress measures.
+
+Interestingly, the three indices most correlated with the Fed shadow rate are the EPU index (negatively), the custom mixed index, and the Shapiro news index. This is a noteworthy finding, as all three carry sentiment-related information, potentially highlighting the role of sentiment dynamics in the transmission of monetary policy shocks.
+
+The following subsection presents results from Granger causality tests, which shed further light on the predictive capacity of the risk indices beyond graphical representations and simple correlation analysis.
+
+\section{Granger Causality Results}
+
+In this subsection, I present the results from Granger causality analysis, which sheds light on the relationships between risk indices and subsectors of the financial sector. This analysis allows the study to examine not only the predictive power of risk indices for subsectors, but also the reverse relationship, as well as the lag length relevant for predictive power. All results from the Granger causality analysis are presented in Table 2.1 below.
+
+\begin{table}[H]
+\centering
+\footnotesize
+
+\caption{Granger Causality Results Across Financial Sectors}
+\label{tab:granger_causality}
+
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l l c c c l}
+\toprule
+\textbf{Sector} & \textbf{Risk Index} & \textbf{Risk $\rightarrow$ Factor} & \textbf{Factor $\rightarrow$ Risk} & \textbf{Lags} & \textbf{Causality Direction} \\
+\midrule
+
+\multirow{11}{*}{\textbf{Banking}}
+ & STLFSI            & $p{=}0.0000$~*** & $p{=}0.9477$~n.s. & 4 & STLFSI $\rightarrow$ Banking \\
+ & NFCI              & $p{=}0.0000$~*** & $p{=}0.9148$~n.s. & 4 & NFCI $\rightarrow$ Banking \\
+ & KCFSI             & $p{=}0.0000$~*** & $p{=}0.9677$~n.s. & 4 & KCFSI $\rightarrow$ Banking \\
+ & VIX               & $p{=}0.0000$~*** & $p{=}0.9237$~n.s. & 4 & VIX $\rightarrow$ Banking \\
+ & EPUI              & $p{=}0.0004$~*** & $p{=}0.2411$~n.s. & 4 & EPUI $\rightarrow$ Banking \\
+ & Custom Index      & $p{=}0.0004$~*** & $p{=}0.7594$~n.s. & 4 & Custom Index $\rightarrow$ Banking \\
+ & Custom Mix        & $p{=}0.0172$~**  & $p{=}0.2398$~n.s. & 4 & Custom Mix $\rightarrow$ Banking \\
+ & NSI (Shapiro)     & $p{=}0.0895$~*   & $p{=}0.0987$~*    & 4 & No causality \\
+ & Sentiment FinBERT & $p{=}0.2202$~n.s.& $p{=}0.1919$~n.s. & 4 & No causality \\
+ & Sentiment VADER   & $p{=}0.2767$~n.s.& $p{=}0.2213$~n.s. & 4 & No causality \\
+ & Shadow Rate       & $p{=}0.6486$~n.s.& $p{=}0.4902$~n.s. & 4 & No causality \\
+
+\midrule
+
+\multirow{11}{*}{\textbf{\begin{tabular}[c]{@{}l@{}}Shadow Banking\\(Small)\end{tabular}}}
+ & NFCI              & $p{=}0.7110$~n.s.& $p{=}0.0003$~***  & 4 & Shadow Small $\rightarrow$ NFCI \\
+ & Custom Index      & $p{=}0.0153$~**  & $p{=}0.0019$~***  & 4 & Bidirectional \\
+ & STLFSI            & $p{=}0.7120$~n.s.& $p{=}0.0021$~***  & 4 & Shadow Small $\rightarrow$ STLFSI \\
+ & KCFSI             & $p{=}0.3644$~n.s.& $p{=}0.0045$~***  & 4 & Shadow Small $\rightarrow$ KCFSI \\
+ & Custom Mix        & $p{=}0.1301$~n.s.& $p{=}0.0116$~**   & 4 & Shadow Small $\rightarrow$ Custom Mix \\
+ & NSI (Shapiro)     & $p{=}0.0325$~**  & $p{=}0.2018$~n.s. & 4 & NSI $\rightarrow$ Shadow Small \\
+ & Sentiment VADER   & $p{=}0.0955$~*   & $p{=}0.7962$~n.s. & 4 & No causality \\
+ & EPUI              & $p{=}0.1394$~n.s.& $p{=}0.4509$~n.s. & 4 & No causality \\
+ & VIX               & $p{=}0.7368$~n.s.& $p{=}0.1453$~n.s. & 4 & No causality \\
+ & Sentiment FinBERT & $p{=}0.8220$~n.s.& $p{=}0.2069$~n.s. & 4 & No causality \\
+ & Shadow Rate       & $p{=}0.2317$~n.s.& $p{=}0.4786$~n.s. & 4 & No causality \\
+
+\midrule
+
+\multirow{11}{*}{\textbf{\begin{tabular}[c]{@{}l@{}}Shadow Banking\\(Broad)\end{tabular}}}
+ & NSI (Shapiro)     & $p{=}0.1769$~n.s.& $p{=}0.0000$~***  & 4 & Shadow Broad $\rightarrow$ NSI \\
+ & Sentiment FinBERT & $p{=}0.9165$~n.s.& $p{=}0.0000$~***  & 4 & Shadow Broad $\rightarrow$ FinBERT \\
+ & Custom Mix        & $p{=}0.8181$~n.s.& $p{=}0.0001$~***  & 4 & Shadow Broad $\rightarrow$ Custom Mix \\
+ & NFCI              & $p{=}0.5936$~n.s.& $p{=}0.0015$~***  & 4 & Shadow Broad $\rightarrow$ NFCI \\
+ & STLFSI            & $p{=}0.4723$~n.s.& $p{=}0.0071$~***  & 4 & Shadow Broad $\rightarrow$ STLFSI \\
+ & KCFSI             & $p{=}0.5409$~n.s.& $p{=}0.0225$~**   & 4 & Shadow Broad $\rightarrow$ KCFSI \\
+ & EPUI              & $p{=}0.0438$~**  & $p{=}0.0334$~**   & 4 & Bidirectional \\
+ & Custom Index      & $p{=}0.3497$~n.s.& $p{=}0.0424$~**   & 4 & Shadow Broad $\rightarrow$ Custom Index \\
+ & Sentiment VADER   & $p{=}0.0555$~*   & $p{=}0.6876$~n.s. & 4 & No causality \\
+ & VIX               & $p{=}0.6093$~n.s.& $p{=}0.2896$~n.s. & 4 & No causality \\
+ & Shadow Rate       & $p{=}0.4932$~n.s.& $p{=}0.6206$~n.s. & 4 & No causality \\
+
+\midrule
+
+\multirow{11}{*}{\textbf{Hedge Fund}}
+ & NSI (Shapiro)     & $p{=}0.2374$~n.s.& $p{=}0.0167$~**   & 4 & Hedge Fund $\rightarrow$ NSI \\
+ & Sentiment VADER   & $p{=}0.2235$~n.s.& $p{=}0.0704$~*    & 4 & No causality \\
+ & Custom Mix        & $p{=}0.1166$~n.s.& $p{=}0.8107$~n.s. & 4 & No causality \\
+ & Sentiment FinBERT & $p{=}0.1538$~n.s.& $p{=}0.7999$~n.s. & 4 & No causality \\
+ & EPUI              & $p{=}0.3193$~n.s.& $p{=}0.9367$~n.s. & 4 & No causality \\
+ & STLFSI            & $p{=}0.4158$~n.s.& $p{=}0.9771$~n.s. & 4 & No causality \\
+ & VIX               & $p{=}0.4302$~n.s.& $p{=}0.9784$~n.s. & 4 & No causality \\
+ & NFCI              & $p{=}0.4339$~n.s.& $p{=}0.8751$~n.s. & 4 & No causality \\
+ & Custom Index      & $p{=}0.4744$~n.s.& $p{=}0.8527$~n.s. & 4 & No causality \\
+ & Shadow Rate       & $p{=}0.5889$~n.s.& $p{=}0.9492$~n.s. & 4 & No causality \\
+ & KCFSI             & $p{=}0.6621$~n.s.& $p{=}0.8231$~n.s. & 4 & No causality \\
+
+\bottomrule
+\addlinespace[2pt]
+\multicolumn{6}{l}{\footnotesize \textit{Notes:} Significance: {***}~$p<0.001$,~{**}~$p<0.05$,~{*}~$p<0.1$,~n.s.~not significant. All tests use 4 lags (BIC-selected).} \\
+\multicolumn{6}{l}{\footnotesize Rows sorted by strength of dominant causality direction within each sector. Shadow Rate = Wu--Xia shadow federal funds rate.} \\
+\end{tabular}
+}
+\end{table}
+
+The inclusion of custom risk indices alongside a broad set of benchmark indices pays off clearly in this subsection of results. The wide range of risk signal carriers exhibits heterogeneous predictive performance across the financial sector subsectors.
+
+The banking sector, which opens the table, behaves as expected: it is predominantly a risk receiver rather than a risk creator or amplifier. Predictive power flows in one direction only, from the risk indices toward the banking sector. The strongest predictive performance comes from the benchmark Fed risk indices FSI, NFCI, and KCFSI. The VIX, a purely market-based index, performs on par with these Fed measures, which further underlines its widespread use in both academia and industry. A notable contribution also comes from EPUI, the only sentiment-based index that performs well in this context, likely reflecting the distinct methodology underlying its construction. Both custom risk indices show strong predictive power toward the banking subsector, with the purely time-series-based index achieving a lower p-value. The custom sentiment indices, however, do not appear capable of predicting banking sector dynamics, and the same holds for the Shapiro news index. The shadow rate itself shows no meaningful predictive power in either direction, and the reverse relationship, in which the banking subsector predicts risk indices, is similarly absent. Only a faint signal appears in relation to the Shapiro news index.
+
+The picture changes drastically when attention shifts to the shadow banking core subsector. The direction of the relationship appears to flip: the shadow banking sector emerges as the driver of predictive power rather than its recipient. This pattern holds most clearly for the classic benchmark Fed indices and for both the custom time-series risk index and the custom mixed index. Notably, the custom time-series risk index exhibits bidirectional predictive power, a property not shared by any of the other risk indices considered. The sentiment-based risk indices do not display a clean relationship with this subsector. The exception is the Shapiro news index, which shows predictive power over the shadow banking core. The shadow rate contributes negligible predictive power in either direction.
+
+Results do not change dramatically when the broader shadow banking factor is examined. The predictive power originating from the subsector becomes even more pronounced and extends to a wider set of risk indices, including the Shapiro news index and the custom FinBERT sentiment index. In this case, the only index displaying bidirectional predictive power is EPUI, though the significance is not strong. The comparison between the core and broad shadow banking factors nonetheless points to a consistent and clear directional shift relative to the banking sector. The shadow rate exhibits essentially the same negligible impact observed for the core subsector.
+
+The table concludes with the hedge fund subsector, where predictive power is considerably weaker overall. Only marginally significant results emerge, and these are concentrated among the sentiment indices, specifically the Shapiro news index and the custom VADER sentiment index. In both cases, the direction of predictive power runs from the hedge fund subsector toward the risk indices rather than the reverse, suggesting that hedge fund dynamics may carry some information content for sentiment-based risk measures, even if the overall signal is modest.
+
+\section{BVAR results}
+
+\chapter{Conclusion}
 \addcontentsline{toc}{chapter}{Conclusion}
 [Write conclusion]
 

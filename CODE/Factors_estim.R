@@ -10,6 +10,9 @@ library(tseries)
 library(lubridate)
 library(purrr)
 
+library(corrplot)
+library(RColorBrewer)
+
 con <- dbConnect(
   RPostgres::Postgres(),
   dbname = "fed_speeches",
@@ -424,7 +427,7 @@ shadow_variables_filtered <- shadow_sector_data %>% mutate(time = as.yearqtr(Qua
 	filter(time >= as.yearqtr("1997 Q1"), time <= as.yearqtr("2024 Q4"))
 
 
-shadow_factor_small <- pca_risk_index(
+shadow_factor_broad <- pca_risk_index(
 df                 = shadow_variables_filtered,
 vars               = shadow_variables,
 date_col           = "time",
@@ -443,14 +446,14 @@ seed               = 42,
 flip_sign          = FALSE,
 z_score            = TRUE,
 plot_factor        = TRUE,
-factor_name        = " Shadowbanking Factor"
+factor_name        = "Shadowbanking Factor Broad"
 )
 
-print(shadow_factor_small$convergence)
-print(shadow_factor_small$explained)
-print(shadow_factor_small$loadings)
-print(shadow_factor_small$diff_orders)
-print(head(shadow_factor_small$scores))
+print(shadow_factor_broad$convergence)
+print(shadow_factor_broad$explained)
+print(shadow_factor_broad$loadings)
+print(shadow_factor_broad$diff_orders)
+print(head(shadow_factor_broad$scores))
 
 
 
@@ -617,7 +620,7 @@ seed               = 42,
 flip_sign          = FALSE,
 z_score            = TRUE,
 plot_factor        = TRUE,
-factor_name        = " Shadowbanking Factor Small"
+factor_name        = "Shadowbanking Factor Small"
 )
 
 print(shadow_factor_small$convergence)
@@ -626,4 +629,58 @@ print(shadow_factor_small$loadings)
 print(shadow_factor_small$diff_orders)
 print(head(shadow_factor_small$scores))
 
+colnames(CombinedRiskDataframe)
 
+CombinedRiskDataframe <- CombinedRiskDataframe %>%
+  mutate(SENTIMENT_VADER = -SENTIMENT_VADER)
+
+
+risk_vars <- CombinedRiskDataframe %>%
+  select(STLFSI, NFCI, KCFSI, VIX, EPUI, NSI_Shapiro, 
+         CUSTOM_INDEX, CUSTOM_MIX, SENTIMENT_VADER, SENTIMENT_FINBERT, Shadow) %>%
+  rename(
+    `STL FSI`       = STLFSI,
+    `NFCI`          = NFCI,
+    `KC FSI`        = KCFSI,
+    `VIX`           = VIX,
+    `EPU Index`     = EPUI,
+    `NSI (Shapiro)` = NSI_Shapiro,
+    `Custom Index`  = CUSTOM_INDEX,
+    `Custom Mix`    = CUSTOM_MIX,
+    `VADER Sent.`   = SENTIMENT_VADER,
+    `FinBERT Sent.` = SENTIMENT_FINBERT,
+    `Fed Shadow Rate` = Shadow
+  )
+
+# Compute correlation matrix (pairwise complete for robustness)
+cor_matrix <- cor(risk_vars, use = "pairwise.complete.obs")
+
+# --- Plot ---
+# Highlight Shadow Rate: bold its row/column label
+n     <- ncol(cor_matrix)
+labels <- colnames(cor_matrix)
+shadow_idx <- which(labels == "Fed Shadow Rate")
+
+# Font styles: bold (2) for Shadow Rate, plain (1) for others
+font_styles <- rep(1, n)
+font_styles[shadow_idx] <- 2
+
+pdf("fig_correlation_matrix.pdf", width = 10, height = 10)
+
+corrplot(
+  cor_matrix,
+  method      = "color",
+  type        = "upper",
+  order       = "hclust",
+  tl.col      = ifelse(labels[hclust(dist(cor_matrix))$order == shadow_idx], "firebrick", "black"),
+  addCoef.col = "black",
+  number.cex  = 0.65,
+  tl.cex      = 0.85,
+  tl.srt      = 45,
+  col         = colorRampPalette(c("#2166AC", "white", "#B2182B"))(200),
+  cl.cex      = 0.75,
+  mar         = c(0, 0, 2, 0),
+  title       = "Correlation Matrix — Risk Indices & Fed Shadow Rate"
+)
+
+dev.off() 

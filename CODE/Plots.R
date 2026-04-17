@@ -8,6 +8,7 @@ library(scales)
 library(readxl)
 library(lubridate)
 library(xts)
+library(tidyverse)
 ###### LOAD DATA
 con <- dbConnect(
   RPostgres::Postgres(),
@@ -637,3 +638,318 @@ p_sent <- ggplot(sent_long, aes(x = Time, y = Value, color = Series)) +
   guides(color = guide_legend(override.aes = list(linewidth = 2.2)))
 
 print(p_sent)
+
+
+
+
+#####
+##### NEW PLOTS
+#####
+
+#NBER recession dates
+recessions <- data.frame(
+  start = as.Date(c("2001-03-01", "2007-12-01", "2020-02-01")),
+  end   = as.Date(c("2001-11-01", "2009-06-01", "2020-04-01"))
+)
+
+# Shared theme
+theme_risk <- theme_minimal(base_size = 12) +
+  theme(
+    legend.position  = "bottom",
+    legend.title     = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_line(color = "grey92"),
+    plot.title       = element_text(face = "bold", size = 13),
+    plot.subtitle    = element_text(color = "grey40", size = 9),
+    axis.title.y     = element_text(size = 10, color = "grey40"),
+    plot.caption     = element_text(color = "grey50", size = 8),
+    legend.text      = element_text(size = 9)
+  )
+
+# Shared recession layer function
+recession_layers <- list(
+  geom_rect(
+    data        = recessions,
+    aes(xmin = start, xmax = end, ymin = -Inf, ymax = Inf),
+    fill        = "grey85",
+    alpha       = 0.5,
+    inherit.aes = FALSE
+  ),
+  geom_text(
+    data = recessions,
+    aes(x = start + (end - start) / 2, y = Inf,
+        label = c("dot-com", "GFC", "COVID")),
+    vjust = 1.5, size = 2.8, color = "grey50",
+    fontface = "italic", inherit.aes = FALSE
+  )
+)
+
+# ── Z-score standardise all four ──────────────────────────────────────────────
+base_df <- CombinedRiskDataframe %>%
+  select(Time, SENTIMENT_VADER, SENTIMENT_FINBERT, NSI_Shapiro, EPUI) %>%
+  mutate(
+    Time = as.Date(Time),
+    across(c(SENTIMENT_VADER, SENTIMENT_FINBERT, NSI_Shapiro, EPUI),
+           ~ as.numeric(scale(.)))
+  )
+
+# ── Plot 1 — Own indices ──────────────────────────────────────────────────────
+own_long <- base_df %>%
+  select(Time, SENTIMENT_VADER, SENTIMENT_FINBERT) %>%
+  pivot_longer(-Time, names_to = "Index", values_to = "Value") %>%
+  mutate(Label = recode(Index,
+    SENTIMENT_VADER   = "VADER Sentiment",
+    SENTIMENT_FINBERT = "FinBERT Sentiment"
+  ))
+
+own_colors <- c(
+  "VADER Sentiment"   = "#1F77B4",   # Quant Blue
+  "FinBERT Sentiment" = "#A60628"    # Deep Red
+)
+
+p_own <- ggplot(own_long, aes(x = Time, y = Value, color = Label)) +
+  recession_layers +
+  geom_line(linewidth = 0.85) +
+  scale_color_manual(values = own_colors) +
+  scale_x_date(date_breaks = "2 years", date_labels = "%Y") +
+  guides(color = guide_legend(override.aes = list(linewidth = 1.3))) +
+  theme_risk +
+  labs(
+    title    = "Own Sentiment-Based Risk Indices",
+    subtitle = "Z-score standardised | Shaded areas = NBER recessions",
+    x        = NULL,
+    y        = "Standardised Value (Z-score)",
+  )
+
+# ── Plot 2 — Reference indices ────────────────────────────────────────────────
+ref_long <- base_df %>%
+  select(Time, NSI_Shapiro, EPUI) %>%
+  pivot_longer(-Time, names_to = "Index", values_to = "Value") %>%
+  mutate(Label = recode(Index,
+    NSI_Shapiro = "NSI (Shapiro)",
+    EPUI        = "EPU Index"
+  ))
+
+
+ref_colors <- c(
+  "NSI (Shapiro)" = "#58508D",
+  "EPU Index"     = "#C9A227"
+)
+
+
+p_ref <- ggplot(ref_long, aes(x = Time, y = Value, color = Label)) +
+  recession_layers +
+  geom_line(linewidth = 0.85) +
+  scale_color_manual(values = ref_colors) +
+  scale_x_date(date_breaks = "2 years", date_labels = "%Y") +
+  guides(color = guide_legend(override.aes = list(linewidth = 1.3))) +
+  theme_risk +
+  labs(
+    title    = "Reference Sentiment-Based Risk Indices",
+    subtitle = "Z-score standardised | Shaded areas = NBER recessions",
+    x        = NULL,
+    y        = "Standardised Value (Z-score)",
+    caption  = ""
+  )
+
+# ── Print ─────────────────────────────────────────────────────────────────────
+p_own
+p_ref
+
+ggsave("fig_own_indices.pdf", 
+       plot   = p_own, 
+       width  = 12, 
+       height = 7, 
+       device = cairo_pdf)
+
+ggsave("fig_reference_indices.pdf", 
+       plot   = p_ref, 
+       width  = 12, 
+       height = 7, 
+       device = cairo_pdf)
+
+
+#####
+##### Time series based PLOTS
+#####
+
+
+
+
+# ── Z-score standardise ───────────────────────────────────────────────────────
+base_df_ts <- CombinedRiskDataframe %>%
+  select(Time, CUSTOM_INDEX, CUSTOM_MIX, STLFSI, NFCI, KCFSI, VIX) %>%
+  mutate(
+    Time = as.Date(Time),
+    across(c(CUSTOM_INDEX, CUSTOM_MIX, STLFSI, NFCI, KCFSI, VIX),
+           ~ as.numeric(scale(.)))
+  )
+
+# ── Plot 1 — Own indices ──────────────────────────────────────────────────────
+own_long_ts <- base_df_ts %>%
+  select(Time, CUSTOM_INDEX, CUSTOM_MIX) %>%
+  pivot_longer(-Time, names_to = "Index", values_to = "Value") %>%
+  mutate(Label = recode(Index,
+    CUSTOM_INDEX = "Custom Risk Index",
+    CUSTOM_MIX   = "Custom Mix Index"
+  ))
+
+own_colors_ts <- c(
+  "Custom Risk Index" = "#1F77B4",   # Quant Blue
+  "Custom Mix Index"  = "#A60628"    # Deep Red
+)
+
+p_own_ts <- ggplot(own_long_ts, aes(x = Time, y = Value, color = Label)) +
+  recession_layers +
+  geom_line(linewidth = 0.85) +
+  scale_color_manual(values = own_colors_ts) +
+  scale_x_date(date_breaks = "2 years", date_labels = "%Y") +
+  guides(color = guide_legend(override.aes = list(linewidth = 1.3))) +
+  theme_risk +
+  labs(
+    title    = "Own Time Series-Based Risk Indices",
+    subtitle = "Z-score standardised | Shaded areas = NBER recessions",
+    x        = NULL,
+    y        = "Standardised Value (Z-score)",
+    caption  = "Source: Author's construction — PCA-based composite risk indices"
+  )
+
+# ── Plot 2 — Reference indices ────────────────────────────────────────────────
+ref_long_ts <- base_df_ts %>%
+  select(Time, STLFSI, NFCI, KCFSI, VIX) %>%
+  pivot_longer(-Time, names_to = "Index", values_to = "Value") %>%
+  mutate(Label = recode(Index,
+    STLFSI = "STL FSI",
+    NFCI   = "NFCI",
+    KCFSI  = "KC FSI",
+    VIX    = "VIX"
+  ))
+
+ref_colors_ts <- c(
+  "STL FSI" = "#1F77B4",   # Quant Blue
+  "NFCI"    = "#C9A227",   # Muted Gold
+  "KC FSI"  = "#58508D",   # Indigo
+  "VIX"     = "#A60628"    # Deep Red
+)
+
+p_ref_ts <- ggplot(ref_long_ts, aes(x = Time, y = Value, color = Label)) +
+  recession_layers +
+  geom_line(linewidth = 0.85) +
+  scale_color_manual(values = ref_colors_ts) +
+  scale_x_date(date_breaks = "2 years", date_labels = "%Y") +
+  guides(color = guide_legend(override.aes = list(linewidth = 1.3))) +
+  theme_risk +
+  labs(
+    title    = "Reference Time Series-Based Risk Indices",
+    subtitle = "Z-score standardised | Shaded areas = NBER recessions",
+    x        = NULL,
+    y        = "Standardised Value (Z-score)",
+    caption  = "Sources: St. Louis Fed — STLFSI; Chicago Fed — NFCI; Kansas City Fed — KCFSI; CBOE — VIX"
+  )
+
+# ── Print ─────────────────────────────────────────────────────────────────────
+p_own_ts
+p_ref_ts
+
+# ── Export ────────────────────────────────────────────────────────────────────
+ggsave("fig_own_ts_indices.pdf",  plot = p_own_ts, width = 12, height = 7, device = cairo_pdf)
+ggsave("fig_ref_ts_indices.pdf",  plot = p_ref_ts, width = 12, height = 7, device = cairo_pdf)
+
+# ZOOOOOOM 
+
+# ── GFC window ────────────────────────────────────────────────────────────────
+gfc_start <- as.Date("2006-01-01")
+gfc_end   <- as.Date("2011-12-31")
+
+# Quarter gridlines for the GFC window
+quarters_gfc <- seq(gfc_start, gfc_end, by = "quarter")
+
+# Custom quarter label function
+quarter_labels <- function(dates) {
+  paste0(format(dates, "%Y"), " ", quarters(dates))
+}
+
+# GFC recession band only
+recession_gfc <- data.frame(
+  start = as.Date("2007-12-01"),
+  end   = as.Date("2009-06-01")
+)
+
+gfc_recession_layers <- list(
+  geom_rect(
+    data        = recession_gfc,
+    aes(xmin = start, xmax = end, ymin = -Inf, ymax = Inf),
+    fill        = "grey85",
+    alpha       = 0.5,
+    inherit.aes = FALSE
+  ),
+  geom_text(
+    data = recession_gfc,
+    aes(x = start + (end - start) / 2, y = Inf, label = "GFC"),
+    vjust = 1.5, size = 3, color = "grey50",
+    fontface = "italic", inherit.aes = FALSE
+  ),
+  geom_vline(
+    xintercept = as.numeric(quarters_gfc),
+    color      = "grey88",
+    linewidth  = 0.3,
+    linetype   = "solid"
+  )
+)
+
+# ── GFC zoom — Own indices ────────────────────────────────────────────────────
+own_gfc <- own_long_ts %>%
+  filter(Time >= gfc_start, Time <= gfc_end)
+
+p_own_gfc <- ggplot(own_gfc, aes(x = Time, y = Value, color = Label)) +
+  gfc_recession_layers +
+  geom_line(linewidth = 0.9) +
+  scale_color_manual(values = own_colors_ts) +
+  scale_x_date(
+    breaks = seq(gfc_start, gfc_end, by = "6 months"),
+    labels = quarter_labels,
+    limits = c(gfc_start, gfc_end)
+  ) +
+  guides(color = guide_legend(override.aes = list(linewidth = 1.3))) +
+  theme_risk +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(
+    title    = "Own Risk Indices — GFC Zoom (2006–2011)",
+    subtitle = "Z-score standardised | Quarterly gridlines | Grey band = NBER recession",
+    x        = NULL,
+    y        = "Standardised Value (Z-score)",
+    caption  = "Source: Author's construction — PCA-based composite risk indices"
+  )
+
+# ── GFC zoom — Reference indices ─────────────────────────────────────────────
+ref_gfc <- ref_long_ts %>%
+  filter(Time >= gfc_start, Time <= gfc_end)
+
+p_ref_gfc <- ggplot(ref_gfc, aes(x = Time, y = Value, color = Label)) +
+  gfc_recession_layers +
+  geom_line(linewidth = 0.9) +
+  scale_color_manual(values = ref_colors_ts) +
+  scale_x_date(
+    breaks = seq(gfc_start, gfc_end, by = "6 months"),
+    labels = quarter_labels,
+    limits = c(gfc_start, gfc_end)
+  ) +
+  guides(color = guide_legend(override.aes = list(linewidth = 1.3))) +
+  theme_risk +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(
+    title    = "Reference Risk Indices — GFC Zoom (2006–2011)",
+    subtitle = "Z-score standardised | Quarterly gridlines | Grey band = NBER recession",
+    x        = NULL,
+    y        = "Standardised Value (Z-score)",
+    caption  = "Sources: St. Louis Fed — STLFSI; Chicago Fed — NFCI; Kansas City Fed — KCFSI; CBOE — VIX"
+  )
+
+# ── Print ─────────────────────────────────────────────────────────────────────
+p_own_gfc
+p_ref_gfc
+
+# ── Export ────────────────────────────────────────────────────────────────────
+ggsave("fig_own_gfc_zoom.pdf", plot = p_own_gfc, width = 12, height = 7, device = cairo_pdf)
+ggsave("fig_ref_gfc_zoom.pdf", plot = p_ref_gfc, width = 12, height = 7, device = cairo_pdf)
+
