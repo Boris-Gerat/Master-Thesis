@@ -1,6 +1,5 @@
 # =============================================================================
 # BVAR Loop — All Risk Indices, Banking Sector
-# Outputs: bvar_plots.pdf, bvar_tables.pdf
 # =============================================================================
 
 setwd("~/Documents/Projects/Ma_Thesis/CODE")
@@ -18,17 +17,27 @@ library(grid)
 # CONFIG
 # -----------------------------------------------------------------------------
 
-# All risk indices to loop over
 RISK_INDICES <- c("STLFSI", "NFCI", "KCFSI", "VIX", "EPUI",
                   "NSI_Shapiro", "CUSTOM_INDEX", "CUSTOM_MIX",
                   "SENTIMENT_VADER", "SENTIMENT_FINBERT")
 
-# These are sentiment indices — higher = MORE positive sentiment = LESS risk
-# So we flip them before passing to the model
 FLIP_INDICES <- c("SENTIMENT_VADER", "SENTIMENT_FINBERT", "NSI_Shapiro")
 
+RISK_DISPLAY_NAMES <- c(
+  "STLFSI"            = "STLFSI",
+  "NFCI"              = "NFCI",
+  "KCFSI"             = "KCFSI",
+  "VIX"               = "VIX",
+  "EPUI"              = "EPUI",
+  "NSI_Shapiro"       = "NSI (Shapiro)",
+  "CUSTOM_INDEX"      = "Custom Index",
+  "CUSTOM_MIX"        = "Custom Mix",
+  "SENTIMENT_VADER"   = "Sentiment VADER",
+  "SENTIMENT_FINBERT" = "Sentiment FinBERT"
+)
+
 # -----------------------------------------------------------------------------
-# 1. PREPARE SECTOR DATA (constant across all models)
+# 1. PREPARE SECTOR DATA
 # -----------------------------------------------------------------------------
 banking_sector_bvar <- banking_sector_window %>%
   select(time, WholeSaleFunding, LiquidityBuffer, CapitalCushion, ComInduLoans) %>%
@@ -40,7 +49,6 @@ banking_sector_bvar <- banking_sector_window %>%
   ) %>%
   mutate(time = as.Date(as.yearqtr(time)))
 
-# Shadow rate (constant across models)
 shadow_df <- CombinedRiskDataframe %>%
   mutate(time = as.Date(time)) %>%
   select(time, Shadow)
@@ -48,28 +56,31 @@ shadow_df <- CombinedRiskDataframe %>%
 # -----------------------------------------------------------------------------
 # 2. LOOP
 # -----------------------------------------------------------------------------
-all_plots_mp_risk  <- list()   # MP -> Risk IRF plots
-all_plots_facet    <- list()   # Risk -> Sector facet plots
-all_cor_tables     <- list()   # Correlation matrices
+all_plots_mp_risk <- list()
+all_plots_facet   <- list()
+all_cor_tables    <- list()
 
 for (risk_idx in RISK_INDICES) {
 
-  cat(sprintf("\n\n========== RUNNING: %s ==========\n", risk_idx))
+  display_name <- RISK_DISPLAY_NAMES[[risk_idx]]
+  cat(sprintf("\n\n========== RUNNING: %s ==========\n", display_name))
 
   # ── 2a. Build risk_mp dataframe ──────────────────────────────────────────
   risk_col <- CombinedRiskDataframe %>%
     mutate(time = as.Date(time)) %>%
     select(time, all_of(risk_idx))
 
-  # Flip sentiment indices (higher sentiment = lower risk, so negate)
   if (risk_idx %in% FLIP_INDICES) {
-    cat(sprintf("  [INFO] Flipping %s (sentiment index)\n", risk_idx))
+    cat(sprintf("  [INFO] Flipping %s (sentiment index)\n", display_name))
     risk_col[[risk_idx]] <- -risk_col[[risk_idx]]
   }
 
+  # Rename column to display name so it appears correctly in plot titles
+  risk_col <- risk_col %>% rename(!!display_name := all_of(risk_idx))
+
   risk_mp_df <- shadow_df %>%
     left_join(risk_col, by = "time") %>%
-    select(time, Shadow, all_of(risk_idx))
+    select(time, Shadow, all_of(display_name))
 
   # ── 2b. Estimate BVAR ────────────────────────────────────────────────────
   result <- tryCatch({
@@ -79,7 +90,7 @@ for (risk_idx in RISK_INDICES) {
       time_col    = "time",
 
       mp_var      = "Shadow",
-      risk_var    = risk_idx,
+      risk_var    = display_name,          # ← display name
       sector_vars = list(
         Banking = c("Bank_WholeSaleFunding", "Bank_LiquidityBuffer",
                     "Bank_CapitalCushion", "Bank_CILoans")
@@ -97,70 +108,75 @@ for (risk_idx in RISK_INDICES) {
 
       sign_restr     = NULL,
       run_cholesky   = TRUE,
-      cholesky_order = c(risk_idx, "Shadow", 
+      cholesky_order = c(display_name, "Shadow",   # ← display name
                          "Bank_WholeSaleFunding", "Bank_LiquidityBuffer",
                          "Bank_CapitalCushion", "Bank_CILoans"),
 
-      plot         = TRUE,   # we collect manually below
-      title_prefix = sprintf("Banking | %s", risk_idx),
+      plot         = TRUE,
+      title_prefix = sprintf("Banking | %s", display_name),
       verbose      = FALSE
     )
   }, error = function(e) {
-    cat(sprintf("  [ERROR] %s failed: %s\n", risk_idx, conditionMessage(e)))
+    cat(sprintf("  [ERROR] %s failed: %s\n", display_name, conditionMessage(e)))
     NULL
   })
 
   if (is.null(result)) next
 
   # ── 2c. Extract plots ─────────────────────────────────────────────────────
-  # Find the actual transformed name for the risk variable
-  risk_transformed <- result$var_map$risk_var   # e.g. "VIX_dlog"
-  mp_transformed   <- result$var_map$mp_var     # e.g. "Shadow_diff"
+  risk_transformed <- result$var_map$risk_var
+  mp_transformed   <- result$var_map$mp_var
 
-  # MP -> Risk plot
   mp_risk_key <- paste0("chol_", mp_transformed, "_to_", risk_transformed)
   p_mp_risk   <- result$plots[[mp_risk_key]]
+  p_facet     <- result$plots[["chol_facet_Banking"]]
 
-  # Risk -> Sector facet
-  p_facet <- result$plots[["chol_facet_Banking"]]
-
-  if (!is.null(p_mp_risk)) all_plots_mp_risk[[risk_idx]]  <- p_mp_risk
-  if (!is.null(p_facet))   all_plots_facet[[risk_idx]]    <- p_facet
+  if (!is.null(p_mp_risk)) all_plots_mp_risk[[risk_idx]] <- p_mp_risk
+  if (!is.null(p_facet))   all_plots_facet[[risk_idx]]   <- p_facet
 
   # ── 2d. Correlation matrix ───────────────────────────────────────────────
   if (!is.null(result$vcov_cholesky)) {
     cor_mat <- round(cov2cor(result$vcov_cholesky), 3)
     all_cor_tables[[risk_idx]] <- cor_mat
-    cat(sprintf("  [OK] %s — correlation matrix extracted\n", risk_idx))
+    cat(sprintf("  [OK] %s — correlation matrix extracted\n", display_name))
   }
 }
 
 # -----------------------------------------------------------------------------
-# 3. SAVE PLOTS PDF
+# 3. SAVE INDIVIDUAL PDFs
 # -----------------------------------------------------------------------------
 
-# Close any open graphics devices first
-graphics.off()
+out_dir <- "~/Documents/Projects/Ma_Thesis/CODE/bvar_plots"
+dir.create(out_dir, showWarnings = FALSE)
 
-# Save plots PDF
-pdf("~/Documents/Projects/Ma_Thesis/CODE/bvar_plots.pdf",
-    width = 12, height = 7, onefile = TRUE)
+for (risk_idx in RISK_INDICES) {
 
-for (risk_idx in names(all_plots_mp_risk)) {
-  grid.newpage()
-  grid.text(
-    sprintf("Risk Index: %s%s", risk_idx,
-            ifelse(risk_idx %in% FLIP_INDICES, "  [FLIPPED — sentiment]", "")),
-    gp = gpar(fontsize = 18, fontface = "bold")
-  )
-  p1 <- all_plots_mp_risk[[risk_idx]]
-  if (!is.null(p1)) print(p1)
-  p2 <- all_plots_facet[[risk_idx]]
-  if (!is.null(p2)) print(p2)
+  p1           <- all_plots_mp_risk[[risk_idx]]
+  p2           <- all_plots_facet[[risk_idx]]
+  display_name <- RISK_DISPLAY_NAMES[[risk_idx]]
+  suffix       <- ifelse(risk_idx %in% FLIP_INDICES, "_flipped", "")
+  file_name    <- gsub("[^A-Za-z0-9_]", "_", display_name)
+
+  # ── PDF 1: Shadow → Risk ──────────────────────────────────────────────────
+  if (!is.null(p1)) {
+    pdf(file.path(out_dir, sprintf("%s%s_shadow_to_risk.pdf", file_name, suffix)),
+        width = 10, height = 5)
+    print(p1)
+    dev.off()
+  }
+
+  # ── PDF 2: Risk → Sector ──────────────────────────────────────────────────
+  if (!is.null(p2)) {
+    pdf(file.path(out_dir, sprintf("%s%s_risk_to_banking.pdf", file_name, suffix)),
+        width = 12, height = 7)
+    print(p2)
+    dev.off()
+  }
+
+  cat(sprintf("  [SAVED] %s\n", display_name))
 }
 
-dev.off()
-
+cat(sprintf("\nDone. Files saved to: %s\n", out_dir))
 # Save tables PDF
 pdf("~/Documents/Projects/Ma_Thesis/CODE/bvar_tables.pdf",
     width = 14, height = 8, onefile = TRUE)

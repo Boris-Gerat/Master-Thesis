@@ -597,12 +597,12 @@ shadow_sector_data_small <- read_excel("/Users/borisgerat/Documents/Projects/MA_
 colnames(shadow_sector_data_small)
 shadow_variables <- c("WholeSaleFunding","LiquidityBuffer", "CapitalCushion", "TotalLoans")
 
-shadow_variables_filtered <- shadow_sector_data_small %>% mutate(time = as.yearqtr(Time)) %>% 
+shadow_variables_filtered_small <- shadow_sector_data_small %>% mutate(time = as.yearqtr(Time)) %>% 
 	filter(time >= as.yearqtr("1997 Q1"), time <= as.yearqtr("2024 Q4"))
 
 shadow_variables_filtered
 shadow_factor_small <- pca_risk_index(
-df                 = shadow_variables_filtered,
+df                 = shadow_variables_filtered_small,
 vars               = shadow_variables,
 date_col           = "time",
 n_factors          = 1,

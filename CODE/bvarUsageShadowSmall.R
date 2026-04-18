@@ -1,9 +1,9 @@
 # -----------------------------------------------------------------------------
-# SHADOW BANKING SECTOR BVAR
+# SHADOW BANKING (CORE) SECTOR BVAR
 # -----------------------------------------------------------------------------
 
-# 1. PREPARE SHADOW SECTOR DATA
-shadow_sector_bvar <- shadow_variables_filtered %>%
+# 1. PREPARE SHADOW CORE SECTOR DATA
+shadow_sector_bvar <- shadow_variables_filtered_small %>%
   select(time, WholeSaleFunding, LiquidityBuffer, CapitalCushion, TotalLoans) %>%
   rename(
     Shadow_WholeSaleFunding = WholeSaleFunding,
@@ -13,39 +13,55 @@ shadow_sector_bvar <- shadow_variables_filtered %>%
   ) %>%
   mutate(time = as.Date(as.yearqtr(time)))
 
-# 2. LOOP — identical to banking, just swap sector_dfs and sector_vars
-all_plots_mp_risk_shadow  <- list()
-all_plots_facet_shadow    <- list()
-all_cor_tables_shadow     <- list()
+# 2. LOOP
+RISK_DISPLAY_NAMES <- c(
+  "STLFSI"            = "STLFSI",
+  "NFCI"              = "NFCI",
+  "KCFSI"             = "KCFSI",
+  "VIX"               = "VIX",
+  "EPUI"              = "EPUI",
+  "NSI_Shapiro"       = "NSI (Shapiro)",
+  "CUSTOM_INDEX"      = "Custom Index",
+  "CUSTOM_MIX"        = "Custom Mix",
+  "SENTIMENT_VADER"   = "Sentiment VADER",
+  "SENTIMENT_FINBERT" = "Sentiment FinBERT"
+)
+
+all_plots_mp_risk_shadow_core  <- list()
+all_plots_facet_shadow_core    <- list()
+all_cor_tables_shadow_core     <- list()
 
 for (risk_idx in RISK_INDICES) {
 
-  cat(sprintf("\n\n========== SHADOW | RUNNING: %s ==========\n", risk_idx))
+  display_name <- RISK_DISPLAY_NAMES[[risk_idx]]
+  cat(sprintf("\n\n========== SHADOW BANKING (CORE) | RUNNING: %s ==========\n", display_name))
 
   risk_col <- CombinedRiskDataframe %>%
     mutate(time = as.Date(time)) %>%
     select(time, all_of(risk_idx))
 
   if (risk_idx %in% FLIP_INDICES) {
-    cat(sprintf("  [INFO] Flipping %s (sentiment index)\n", risk_idx))
+    cat(sprintf("  [INFO] Flipping %s (sentiment index)\n", display_name))
     risk_col[[risk_idx]] <- -risk_col[[risk_idx]]
   }
 
+  risk_col <- risk_col %>% rename(!!display_name := all_of(risk_idx))
+
   risk_mp_df <- shadow_df %>%
     left_join(risk_col, by = "time") %>%
-    select(time, Shadow, all_of(risk_idx))
+    select(time, Shadow, all_of(display_name))
 
   result <- tryCatch({
     bvar_risk_channel(
-      sector_dfs  = list(Shadow = shadow_sector_bvar),
+      sector_dfs  = list(ShadowCore = shadow_sector_bvar),
       risk_mp_df  = risk_mp_df,
       time_col    = "time",
 
       mp_var      = "Shadow",
-      risk_var    = risk_idx,
+      risk_var    = display_name,
       sector_vars = list(
-        Shadow = c("Shadow_WholeSaleFunding", "Shadow_LiquidityBuffer",
-                   "Shadow_CapitalCushion", "Shadow_TotalLoans")
+        ShadowCore = c("Shadow_WholeSaleFunding", "Shadow_LiquidityBuffer",
+                       "Shadow_CapitalCushion", "Shadow_TotalLoans")
       ),
 
       start_date  = "1997-01-01",
@@ -60,16 +76,16 @@ for (risk_idx in RISK_INDICES) {
 
       sign_restr     = NULL,
       run_cholesky   = TRUE,
-      cholesky_order = c (
+      cholesky_order = c(display_name, "Shadow",
                          "Shadow_WholeSaleFunding", "Shadow_LiquidityBuffer",
-                         "Shadow_CapitalCushion", "Shadow_TotalLoans", risk_idx,"Shadow"),
+                         "Shadow_CapitalCushion", "Shadow_TotalLoans"),
 
       plot         = TRUE,
-      title_prefix = sprintf("Shadow | %s", risk_idx),
+      title_prefix = sprintf("Shadow Banking (Core) | %s", display_name),
       verbose      = FALSE
     )
   }, error = function(e) {
-    cat(sprintf("  [ERROR] %s failed: %s\n", risk_idx, conditionMessage(e)))
+    cat(sprintf("  [ERROR] %s failed: %s\n", display_name, conditionMessage(e)))
     NULL
   })
 
@@ -80,44 +96,56 @@ for (risk_idx in RISK_INDICES) {
 
   mp_risk_key <- paste0("chol_", mp_transformed, "_to_", risk_transformed)
   p_mp_risk   <- result$plots[[mp_risk_key]]
-  p_facet     <- result$plots[["chol_facet_Shadow"]]
+  p_facet     <- result$plots[["chol_facet_ShadowCore"]]
 
-  if (!is.null(p_mp_risk)) all_plots_mp_risk_shadow[[risk_idx]] <- p_mp_risk
-  if (!is.null(p_facet))   all_plots_facet_shadow[[risk_idx]]   <- p_facet
+  if (!is.null(p_mp_risk)) all_plots_mp_risk_shadow_core[[risk_idx]] <- p_mp_risk
+  if (!is.null(p_facet))   all_plots_facet_shadow_core[[risk_idx]]   <- p_facet
 
   if (!is.null(result$vcov_cholesky)) {
     cor_mat <- round(cov2cor(result$vcov_cholesky), 3)
-    all_cor_tables_shadow[[risk_idx]] <- cor_mat
-    cat(sprintf("  [OK] %s — correlation matrix extracted\n", risk_idx))
+    all_cor_tables_shadow_core[[risk_idx]] <- cor_mat
+    cat(sprintf("  [OK] %s — correlation matrix extracted\n", display_name))
   }
 }
 
-# 3. SAVE PDFs
-graphics.off()
+# 3. SAVE INDIVIDUAL PDFs
+out_dir_shadow_core <- "~/Documents/Projects/Ma_Thesis/CODE/bvar_plots/shadow_core"
+dir.create(out_dir_shadow_core, showWarnings = FALSE, recursive = TRUE)
 
-cairo_pdf("~/Documents/Projects/Ma_Thesis/CODE/bvar_plots_shadow.pdf",
-          width = 12, height = 7, onefile = TRUE)
+for (risk_idx in RISK_INDICES) {
 
-for (risk_idx in names(all_plots_mp_risk_shadow)) {
-  grid.newpage()
-  grid.text(
-    sprintf("Shadow | Risk Index: %s%s", risk_idx,
-            ifelse(risk_idx %in% FLIP_INDICES, "  [FLIPPED]", "")),
-    gp = gpar(fontsize = 18, fontface = "bold")
-  )
-  p1 <- all_plots_mp_risk_shadow[[risk_idx]]
-  if (!is.null(p1)) print(p1)
-  p2 <- all_plots_facet_shadow[[risk_idx]]
-  if (!is.null(p2)) print(p2)
+  p1           <- all_plots_mp_risk_shadow_core[[risk_idx]]
+  p2           <- all_plots_facet_shadow_core[[risk_idx]]
+  display_name <- RISK_DISPLAY_NAMES[[risk_idx]]
+  suffix       <- ifelse(risk_idx %in% FLIP_INDICES, "_flipped", "")
+  file_name    <- gsub("[^A-Za-z0-9_]", "_", display_name)
+
+  if (!is.null(p1)) {
+    pdf(file.path(out_dir_shadow_core, sprintf("%s%s_shadow_to_risk.pdf", file_name, suffix)),
+        width = 10, height = 5)
+    print(p1)
+    dev.off()
+  }
+
+  if (!is.null(p2)) {
+    pdf(file.path(out_dir_shadow_core, sprintf("%s%s_risk_to_shadow_core.pdf", file_name, suffix)),
+        width = 12, height = 7)
+    print(p2)
+    dev.off()
+  }
+
+  cat(sprintf("  [SAVED] %s\n", display_name))
 }
 
-dev.off()
+cat(sprintf("\nDone. Files saved to: %s\n", out_dir_shadow_core))
 
-cairo_pdf("~/Documents/Projects/Ma_Thesis/CODE/bvar_tables_shadow.pdf",
+# 4. SAVE CORRELATION TABLES PDF
+cairo_pdf("~/Documents/Projects/Ma_Thesis/CODE/bvar_tables_shadow_core.pdf",
           width = 14, height = 8, onefile = TRUE)
 
-for (risk_idx in names(all_cor_tables_shadow)) {
-  cor_mat <- all_cor_tables_shadow[[risk_idx]]
+for (risk_idx in names(all_cor_tables_shadow_core)) {
+  display_name <- RISK_DISPLAY_NAMES[[risk_idx]]
+  cor_mat      <- all_cor_tables_shadow_core[[risk_idx]]
   clean_names <- function(nm) {
     nm <- sub("_dlog$", " (Δlog)", nm)
     nm <- sub("_diff$", " (Δ)", nm)
@@ -129,9 +157,11 @@ for (risk_idx in names(all_cor_tables_shadow)) {
   display_df <- cbind(Variable = rownames(cor_mat), as.data.frame(cor_mat))
   rownames(display_df) <- NULL
   grid.newpage()
-  grid.text(sprintf("Shadow | Residual Correlation Matrix — %s%s", risk_idx,
-                    ifelse(risk_idx %in% FLIP_INDICES, " [flipped]", "")),
-            x = 0.5, y = 0.95, gp = gpar(fontsize = 13, fontface = "bold"))
+  grid.text(
+    sprintf("Shadow Banking (Core) | Residual Correlation Matrix — %s%s",
+            display_name, ifelse(risk_idx %in% FLIP_INDICES, " [flipped]", "")),
+    x = 0.5, y = 0.95, gp = gpar(fontsize = 13, fontface = "bold")
+  )
   grid.text("Reduced-form residual correlations (Cholesky BVAR, p=3, 1997Q2-2024Q4)",
             x = 0.5, y = 0.90, gp = gpar(fontsize = 9, col = "grey40"))
   tbl <- tableGrob(display_df, rows = NULL, theme = ttheme_minimal(base_size = 8))
@@ -141,7 +171,6 @@ for (risk_idx in names(all_cor_tables_shadow)) {
 
 dev.off()
 
-cat("\n===== SHADOW DONE =====\n")
-cat(sprintf("Models estimated : %d / %d\n",
-            length(all_cor_tables_shadow), length(RISK_INDICES)))
-
+cat("\n===== SHADOW BANKING (CORE) DONE =====\n")
+cat(sprintf("Models estimated: %d / %d\n",
+            length(all_cor_tables_shadow_core), length(RISK_INDICES)))

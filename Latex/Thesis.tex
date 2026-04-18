@@ -17,6 +17,10 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{natbib}
 
+\makeatletter
+\setlength{\@fptop}{0pt}
+\makeatother
+
 \bibliographystyle{chicago}
 
 \begin{document}
@@ -783,6 +787,185 @@ The table concludes with the hedge fund subsector, where predictive power is con
 
 \section{BVAR results}
 
+In this section I present results from hierarchical Bayesian vector autoregressions. Due to the number of individual risk indices considered, the full set of results cannot be presented in the main body of the thesis. I have therefore selected only the most representative indices for inclusion here, with the remaining results alongside the residual correlation matrices from each BVAR model displayed in the appendix.
+
+The results are organized by risk index, with each subsection covering one index. Within each subsection, I first present the impulse response function of the risk index to a shadow rate shock, followed by the responses of the sectoral variables across all three financial subsectors. This structure allows the reader to easily grasp the results and compare transmission dynamics across subsectors within a given risk environment.
+
+The inclusion of both established reference indices and custom indices serves an additional purpose as a built-in robustness mechanism. If a genuine relationship exists in the data, it should manifest consistently across multiple risk indices, lending credibility to any pattern that does emerge.
+
+% ── STLFSI ──────────────────────────────────────────────────────────────────
+\clearpage
+\section{STLFSI risk index}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{pics/STLFSI_shadow_to_risk.pdf}
+    \caption{Impulse response of the STLFSI to a shadow rate shock. Shaded bands represent 68\% and 90\% posterior credible intervals. Identification via Cholesky decomposition, $p = 3$ lags.}
+    \label{fig:irf_shadow_to_stlfsi}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/STLFSI_risk_to_banking.pdf}
+    \vspace{0.3em}
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/STLFSI_risk_to_shadow.pdf}
+    \vspace{0.3em}
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/STLFSI_risk_to_shadow_core.pdf}
+    \label{fig:irf_stlfsi_to_sectors_1}
+\end{figure}
+
+\begin{figure}[p]
+    \vspace*{0pt}
+    \centering
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/STLFSI_risk_to_hedge.pdf}
+    \caption{Impulse responses of sectoral variables to a STLFSI shock. Top: Banking sector. Second: Shadow banking sector (broad). Third: Shadow banking sector (core). Bottom: Hedge fund sector. Shaded bands represent 68\% and 90\% posterior credible intervals. Identification via Cholesky decomposition, $p = 3$ lags.}
+    \label{fig:irf_stlfsi_to_sectors_2}
+\end{figure}
+
+% ── VIX ─────────────────────────────────────────────────────────────────────
+\clearpage
+\section{VIX risk index}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{pics/VIX_shadow_to_risk.pdf}
+    \caption{Impulse response of the VIX to a shadow rate shock. Shaded bands represent 68\% and 90\% posterior credible intervals. Identification via Cholesky decomposition, $p = 3$ lags.}
+    \label{fig:irf_shadow_to_vix}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/VIX_risk_to_banking.pdf}
+    \vspace{0.3em}
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/VIX_risk_to_shadow.pdf}
+    \vspace{0.3em}
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/VIX_risk_to_shadow_core.pdf}
+    \label{fig:irf_vix_to_sectors_1}
+\end{figure}
+
+\begin{figure}[p]
+    \vspace*{0pt}
+    \centering
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/VIX_risk_to_hedge.pdf}
+    \caption{Impulse responses of sectoral variables to a VIX shock. Top: Banking sector. Second: Shadow banking sector (broad). Third: Shadow banking sector (core). Bottom: Hedge fund sector. Shaded bands represent 68\% and 90\% posterior credible intervals. Identification via Cholesky decomposition, $p = 3$ lags.}
+    \label{fig:irf_vix_to_sectors_2}
+\end{figure}
+
+% ── NSI (Shapiro) ────────────────────────────────────────────────────────────
+\clearpage
+\section{NSI (Shapiro) risk index}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{pics/NSI__Shapiro__flipped_shadow_to_risk.pdf}
+    \caption{Impulse response of the NSI (Shapiro) to a shadow rate shock. Shaded bands represent 68\% and 90\% posterior credible intervals. Identification via Cholesky decomposition, $p = 3$ lags.}
+    \label{fig:irf_shadow_to_nsi}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/NSI__Shapiro__flipped_risk_to_banking.pdf}
+    \vspace{0.3em}
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/NSI__Shapiro__flipped_risk_to_shadow.pdf}
+    \vspace{0.3em}
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/NSI__Shapiro__flipped_risk_to_shadow_core.pdf}
+    \label{fig:irf_nsi_to_sectors_1}
+\end{figure}
+
+\begin{figure}[p]
+    \vspace*{0pt}
+    \centering
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/NSI__Shapiro__flipped_risk_to_hedge.pdf}
+    \caption{Impulse responses of sectoral variables to a NSI (Shapiro) shock. Top: Banking sector. Second: Shadow banking sector (broad). Third: Shadow banking sector (core). Bottom: Hedge fund sector. Shaded bands represent 68\% and 90\% posterior credible intervals. Identification via Cholesky decomposition, $p = 3$ lags.}
+    \label{fig:irf_nsi_to_sectors_2}
+\end{figure}
+
+% ── Sentiment FinBERT ────────────────────────────────────────────────────────
+\clearpage
+\section{Sentiment FinBERT risk index}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{pics/Sentiment_FinBERT_flipped_shadow_to_risk.pdf}
+    \caption{Impulse response of the Sentiment FinBERT index to a shadow rate shock. Shaded bands represent 68\% and 90\% posterior credible intervals. Identification via Cholesky decomposition, $p = 3$ lags.}
+    \label{fig:irf_shadow_to_finbert}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/Sentiment_FinBERT_flipped_risk_to_banking.pdf}
+    \vspace{0.3em}
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/SENTIMENT_FINBERT_flipped_risk_to_shadow.pdf}
+    \vspace{0.3em}
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/Sentiment_FinBERT_flipped_risk_to_shadow_core.pdf}
+    \label{fig:irf_finbert_to_sectors_1}
+\end{figure}
+
+\begin{figure}[p]
+    \vspace*{0pt}
+    \centering
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/Sentiment_FinBERT_flipped_risk_to_hedge.pdf}
+    \caption{Impulse responses of sectoral variables to a Sentiment FinBERT shock. Top: Banking sector. Second: Shadow banking sector (broad). Third: Shadow banking sector (core). Bottom: Hedge fund sector. Shaded bands represent 68\% and 90\% posterior credible intervals. Identification via Cholesky decomposition, $p = 3$ lags.}
+    \label{fig:irf_finbert_to_sectors_2}
+\end{figure}
+
+% ── Custom Index ─────────────────────────────────────────────────────────────
+\clearpage
+\section{Custom Index}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{pics/Custom_Index_shadow_to_risk.pdf}
+    \caption{Impulse response of the Custom Index to a shadow rate shock. Shaded bands represent 68\% and 90\% posterior credible intervals. Identification via Cholesky decomposition, $p = 3$ lags.}
+    \label{fig:irf_shadow_to_customindex}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/Custom_Index_risk_to_banking.pdf}
+    \vspace{0.3em}
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/CUSTOM_INDEX_risk_to_shadow.pdf}
+    \vspace{0.3em}
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/Custom_Index_risk_to_shadow_core.pdf}
+    \label{fig:irf_customindex_to_sectors_1}
+\end{figure}
+
+\begin{figure}[p]
+    \vspace*{0pt}
+    \centering
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/Custom_Index_risk_to_hedge.pdf}
+    \caption{Impulse responses of sectoral variables to a Custom Index shock. Top: Banking sector. Second: Shadow banking sector (broad). Third: Shadow banking sector (core). Bottom: Hedge fund sector. Shaded bands represent 68\% and 90\% posterior credible intervals. Identification via Cholesky decomposition, $p = 3$ lags.}
+    \label{fig:irf_customindex_to_sectors_2}
+\end{figure}
+
+% ── Custom Mix ───────────────────────────────────────────────────────────────
+\clearpage
+\section{Custom Mix}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{pics/Custom_Mix_shadow_to_risk.pdf}
+    \caption{Impulse response of the Custom Mix index to a shadow rate shock. Shaded bands represent 68\% and 90\% posterior credible intervals. Identification via Cholesky decomposition, $p = 3$ lags.}
+    \label{fig:irf_shadow_to_custommix}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/Custom_Mix_risk_to_banking.pdf}
+    \vspace{0.3em}
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/CUSTOM_MIX_risk_to_shadow.pdf}
+    \vspace{0.3em}
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/Custom_Mix_risk_to_shadow_core.pdf}
+    \label{fig:irf_custommix_to_sectors_1}
+\end{figure}
+
+\begin{figure}[p]
+    \vspace*{0pt}
+    \centering
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/Custom_Mix_risk_to_hedge.pdf}
+    \caption{Impulse responses of sectoral variables to a Custom Mix shock. Top: Banking sector. Second: Shadow banking sector (broad). Third: Shadow banking sector (core). Bottom: Hedge fund sector. Shaded bands represent 68\% and 90\% posterior credible intervals. Identification via Cholesky decomposition, $p = 3$ lags.}
+    \label{fig:irf_custommix_to_sectors_2}
+\end{figure}
 \chapter{Conclusion}
 \addcontentsline{toc}{chapter}{Conclusion}
 [Write conclusion]
