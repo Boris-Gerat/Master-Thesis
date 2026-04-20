@@ -794,8 +794,8 @@ The results are organized by risk index, with each subsection covering one index
 The inclusion of both established reference indices and custom indices serves an additional purpose as a built-in robustness mechanism. If a genuine relationship exists in the data, it should manifest consistently across multiple risk indices, lending credibility to any pattern that does emerge.
 
 % ── STLFSI ──────────────────────────────────────────────────────────────────
-\clearpage
 \section{STLFSI risk index}
+This results section opens with one of the most widely used risk measures produced by the Federal Reserve. Figure 2.4 below presents the impulse response function from the Federal Reserve shadow rate to the STLFSI.
 
 \begin{figure}[H]
     \centering
@@ -803,8 +803,11 @@ The inclusion of both established reference indices and custom indices serves an
     \caption{Impulse response of the STLFSI to a shadow rate shock. Shaded bands represent 68\% and 90\% posterior credible intervals. Identification via Cholesky decomposition, $p = 3$ lags.}
     \label{fig:irf_shadow_to_stlfsi}
 \end{figure}
+When the Cholesky identification is ordered with the risk variable leading the shadow rate, the price puzzle disappears entirely. Under the alternative ordering, where the shadow rate enters the matrix as the leading variable, the price puzzle manifests as an initial negative impulse response of risk following a contractionary monetary policy shock. This negative response is subsequently followed by the dynamics presented in Figure 2.4. Once the ordering is reversed to place risk first, the price puzzle is eliminated: a rise in the shadow interest rate is instead accompanied by an immediate increase in risk, which then gives way to a dip in the third quarter before the effect of the shadow rate dissipates.
 
-\begin{figure}[p]
+The remainder of the transmission mechanism is presented in Figure 2.5 below, which covers all subsectors of the financial sector and their respective impulse response functions.
+
+\begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/STLFSI_risk_to_banking.pdf}
     \vspace{0.3em}
@@ -814,18 +817,26 @@ The inclusion of both established reference indices and custom indices serves an
     \label{fig:irf_stlfsi_to_sectors_1}
 \end{figure}
 
-\begin{figure}[p]
+\begin{figure}[H]
     \vspace*{0pt}
     \centering
     \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/STLFSI_risk_to_hedge.pdf}
     \caption{Impulse responses of sectoral variables to a STLFSI shock. Top: Banking sector. Second: Shadow banking sector (broad). Third: Shadow banking sector (core). Bottom: Hedge fund sector. Shaded bands represent 68\% and 90\% posterior credible intervals. Identification via Cholesky decomposition, $p = 3$ lags.}
     \label{fig:irf_stlfsi_to_sectors_2}
-\end{figure}
+\end{figure} 
+
+In the case of broad shadow banking, the dynamics are entirely different from those observed in the traditional banking sector. Broad shadow banking rapidly attempts to deleverage, with the capital cushion fraction rising as equity accounts for a larger share of the denominator. This is again connected to wholesale funding, which decreases sharply. One behaviour that both subsectors share is a strong preference for holding more liquid assets on the balance sheet. There is a positive spike in liquid assets immediately after the risk shock propagates through the subsector, lasting roughly two quarters, consistent with almost every other shock in this transmission mechanism. With respect to total loans, broad shadow banking shows a decrease and an unwillingness to lend even at higher risk premia, which is the opposite of the response observed in the traditional banking sector.
+
+Turning to the differences between broad and core shadow banking, several distinctions are apparent. Core shadow banking appears to more closely mimic the traditional banking sector in its leverage behaviour. Initially the sector seems to deleverage, but this is subsequently followed by rising wholesale funding and a declining capital cushion. The liquidity buffer responds positively but less strongly than in the banking and broad shadow banking cases. Total loans issued appear negative throughout, showing the largest decline among all subsectors.  
+
+The hedge fund subsector, as expected, does not react strongly to pressure from the risk side. There is a hint of increased leverage and wholesale funding at the outset, but the effect is considerably weaker and less precisely estimated compared to the other sectors. The liquidity buffer shows little discernible increase. The only well-identified reaction is in loans issued, which rises briefly a few quarters after the shock before declining by a roughly equivalent amount.
+
+Overall, each sector displays highly heterogeneous responses to the risk shock. The theoretical explanations for this behaviour are developed further in the discussion section.
+
 
 % ── VIX ─────────────────────────────────────────────────────────────────────
-\clearpage
 \section{VIX risk index}
-
+The VIX index is one of the most widely used non-Fed risk indicators for monitoring the risk channel and capturing broader risk-related dynamics in financial markets. As shown in Figure 2.6, we observe a clear and consistent response following a hike in the shadow rate of the Federal Reserve: the VIX rises sharply in the initial periods and subsequently falls to negative values by the third quarter following the shock. This pattern is in line with theoretical expectations, and its clarity in the estimated impulse responses provides additional support for the validity of the identification strategy and the overall robustness of the results.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.85\textwidth]{pics/VIX_shadow_to_risk.pdf}
@@ -833,6 +844,7 @@ The inclusion of both established reference indices and custom indices serves an
     \label{fig:irf_shadow_to_vix}
 \end{figure}
 
+This response to the shadow rate shock is then tracked as it propagates through the subsector variables. The layout follows the same structure as before, with all sectoral responses presented in Figure 2.7 below.
 \begin{figure}[p]
     \centering
     \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/VIX_risk_to_banking.pdf}
@@ -843,26 +855,38 @@ The inclusion of both established reference indices and custom indices serves an
     \label{fig:irf_vix_to_sectors_1}
 \end{figure}
 
-\begin{figure}[p]
+\begin{figure}[H]
     \vspace*{0pt}
     \centering
     \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/VIX_risk_to_hedge.pdf}
     \caption{Impulse responses of sectoral variables to a VIX shock. Top: Banking sector. Second: Shadow banking sector (broad). Third: Shadow banking sector (core). Bottom: Hedge fund sector. Shaded bands represent 68\% and 90\% posterior credible intervals. Identification via Cholesky decomposition, $p = 3$ lags.}
     \label{fig:irf_vix_to_sectors_2}
-\end{figure}
+\end{figure} 
+
+The VIX index captures the same overall behaviour of the banking sector, with the sector increasing its leverage following the risk shock. This is reflected in both the capital cushion and wholesale funding variables. The capital cushion starts negative, meaning the fraction of total assets in the denominator is increasing, while wholesale funding rises in tandem, reinforcing the relationship. The liquidity buffer increases the most, as was the case previously, with a slight hint of a potential decline after three quarters, possibly reflecting a gradual stabilisation of risk conditions. Loans are again positive, reflecting a greater willingness to lend at higher risk premia.
+
+Broad shadow banking exhibits a strong deleveraging reaction to the risk shock. In this case the reaction of the capital cushion is the strongest, with the equity fraction increasing sharply, which is again connected to a decline in wholesale funding accompanied by very narrow confidence intervals. Both reactions persist for roughly three quarters. Loans appear initially negative and then peak after approximately three months, with this three-quarter peak being more pronounced than in the case of the STLFSI index.
+
+Core shadow banking in this case detects a similar but more blurred relationship compared to the previous specification. The reaction of the capital cushion is ambiguous, with very wide confidence intervals, while wholesale funding hints at a possible increase in borrowing followed by a decrease of roughly equal magnitude. The liquidity buffer reaction is positive but substantially smaller in magnitude compared to the other subsectors, consistent with the earlier results. The number of loans appears to follow a negative impulse response throughout, with a slight peak after three quarters, similarly to the broad shadow banking subsector.
+The hedge fund subsector shows a reaction that appears nearly identical to that observed under the STLFSI risk index, with the only significant and clearly readable response found in issued loans, which spike positively and then revert after three quarters. The early periods of the impulse response function and the wholesale funding variable also hint at a possible increase in leverage.
+
+Overall, the reactions of the subsectors to the VIX index do not differ substantially from those observed under the STLFSI index, which is a encouraging sign for the identification of the risk channel of monetary policy and the visible heterogeneity in subsector responses.
+
 
 % ── NSI (Shapiro) ────────────────────────────────────────────────────────────
-\clearpage
 \section{NSI (Shapiro) risk index}
 
+The Shapiro news sentiment index is the first fully sentiment-based index for which results are presented in this thesis. Its impulse response function is shown in Figure 2.8 below.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.85\textwidth]{pics/NSI__Shapiro__flipped_shadow_to_risk.pdf}
     \caption{Impulse response of the NSI (Shapiro) to a shadow rate shock. Shaded bands represent 68\% and 90\% posterior credible intervals. Identification via Cholesky decomposition, $p = 3$ lags.}
     \label{fig:irf_shadow_to_nsi}
-\end{figure}
+\end{figure} 
 
-\begin{figure}[p]
+The confidence intervals in this impulse response function are wide, but there is a hint of a positive spike that dissipates after two quarters, as the majority of draws are positive in this period, pushing the median of the interval above zero. The responses of the sectoral variables to the sentiment index are shown in Figure 2.9 below.
+
+\begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/NSI__Shapiro__flipped_risk_to_banking.pdf}
     \vspace{0.3em}
@@ -872,7 +896,7 @@ The inclusion of both established reference indices and custom indices serves an
     \label{fig:irf_nsi_to_sectors_1}
 \end{figure}
 
-\begin{figure}[p]
+\begin{figure}[H]
     \vspace*{0pt}
     \centering
     \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/NSI__Shapiro__flipped_risk_to_hedge.pdf}
@@ -880,18 +904,26 @@ The inclusion of both established reference indices and custom indices serves an
     \label{fig:irf_nsi_to_sectors_2}
 \end{figure}
 
+With the difference in construction of the risk index, the results for the banking sector are slightly different from those observed previously. The responses are similar in direction but carry a subtle nuance introduced by the different input source. The capital cushion still decreases, accompanied by a rise in wholesale funding that ends by the third quarter for both fractions. The most notable change can be seen in the reaction of the liquidity buffer, which appears to start positive but then turns negative after three quarters, dipping before returning to the baseline. This may be caused by a different lag structure in the observed shock, with the possibility that the sentiment index better captures the tail end of the shock, or reflects a specific feature of how the shock transmits to the liquidity buffer. Bank loans are positive from the outset, consistent with the two previous indices.
+
+For broad shadow banking, the results are largely consistent with those observed before. The subsector is deleveraging, with the equity fraction increasing on the balance sheet, though in this case wholesale funding drops with some lag. The liquidity buffer shows a clear positive spike lasting nearly four quarters. The behaviour of total loans is more puzzling: they appear to decrease following the shock, then increase before reverting to the baseline. The confidence intervals suggest that the initial impact is negative, with the majority of draws falling below zero.
+
+The sentiment index does not perform as well in explaining the reactions of the core shadow banking subsector. The identification for both the capital cushion and wholesale funding is blurred, with very wide confidence intervals. There is a hint of increasing leverage around the third quarter, suggested by the capital cushion and wholesale funding trends edging slightly above zero, but this remains inconclusive. The only clear, if weak, responses are found in the liquidity buffer and total loans issued. The liquidity buffer increases slightly after the shock but the reaction dissipates quickly, while total loans are negative from the outset and this reaction persists for quite a few periods, only stabilising after approximately five quarters.
+The reaction of the hedge fund subsector is even more ambiguous than before, with only a faint hint of issued loans increasing after the risk shock.
+
+Overall, the sentiment index brings a different perspective to the propagation of the risk shock across subsectors. The relationships are sometimes different compared to those identified using traditional time series based risk indices, and the reasons for these differences will be discussed further in the discussion section.
 % ── Sentiment FinBERT ────────────────────────────────────────────────────────
-\clearpage
 \section{Sentiment FinBERT risk index}
 
+Results fro the Shapiro snemtin index proven ot be quaite simailr ot the tme sereis risk indices, the quastion is how the sentiemnt indcx created fro mscratch can coampre to them. This is answeard in this resutls subsectionwhen the mine snemtiment risk index created with FinBERT famly of modles is presented. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.85\textwidth]{pics/Sentiment_FinBERT_flipped_shadow_to_risk.pdf}
     \caption{Impulse response of the Sentiment FinBERT index to a shadow rate shock. Shaded bands represent 68\% and 90\% posterior credible intervals. Identification via Cholesky decomposition, $p = 3$ lags.}
     \label{fig:irf_shadow_to_finbert}
 \end{figure}
-
-\begin{figure}[p]
+Impulse repsosne funtionc coming fromfed shadwo rate to the finber risk index can be seen in the figure 2.10 In simialr fashion as wit hthe Shaprio senmtiemnt index it is bluredadn the confdience intervals are only hinting on the increase in the thrid quarter. Rest of the sectoral ipluse repsosne fucntion can be seen bellow in the figure 2.11.
+\begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/Sentiment_FinBERT_flipped_risk_to_banking.pdf}
     \vspace{0.3em}
@@ -901,18 +933,20 @@ The inclusion of both established reference indices and custom indices serves an
     \label{fig:irf_finbert_to_sectors_1}
 \end{figure}
 
-\begin{figure}[p]
+\begin{figure}[H]
     \vspace*{0pt}
     \centering
     \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/Sentiment_FinBERT_flipped_risk_to_hedge.pdf}
     \caption{Impulse responses of sectoral variables to a Sentiment FinBERT shock. Top: Banking sector. Second: Shadow banking sector (broad). Third: Shadow banking sector (core). Bottom: Hedge fund sector. Shaded bands represent 68\% and 90\% posterior credible intervals. Identification via Cholesky decomposition, $p = 3$ lags.}
     \label{fig:irf_finbert_to_sectors_2}
-\end{figure}
+\end{figure} 
 
+The specific details of the impulse response functions appear less important here, as the model struggles with identification of the relationships that were confirmed by the three previous risk indices. This lack of continuity with the present risk index can be primarily attributed to the volatility and instability in the index itself. The reader may recall that this is the more stable of the two sentiment indices compared to the VADER-based one. This suggests that in order to clearly leverage the usefulness of the sentiment signal, which was visible in the Shapiro results, the sentiment signal needs to be cleanly extracted and smoothed correctly across different economic regimes. Among the impulse response functions presented, some resemble the signals observed with the previous risk indices, but the majority are blurred versions of those earlier results.
+
+The one notable exception is the hedge fund subsector, which appears to show a clearer initial reaction to the spike in the sentiment index across all sectoral variables.
 % ── Custom Index ─────────────────────────────────────────────────────────────
-\clearpage
 \section{Custom Index}
-
+In this section, I present results for my custom sentiment index, which is purely time series based. It serves as a test of how well this simple two-stage principal component risk index performs relative to the traditional and experimental risk indices.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.85\textwidth]{pics/Custom_Index_shadow_to_risk.pdf}
@@ -920,7 +954,8 @@ The inclusion of both established reference indices and custom indices serves an
     \label{fig:irf_shadow_to_customindex}
 \end{figure}
 
-\begin{figure}[p]
+The impulse response function of the index to the Federal Reserve shadow rate is shown in Figure 2.12 above. There is a classic reaction consistent with what has been observed before, with the index spiking following an increase in the shadow rate and then declining after three to four quarters. The initial identification appears to perform well compared to the previous risk indices, which is an encouraging sign for the validity of the custom index. The remaining sectoral impulse response functions are shown in Figure 2.13 below.
+\begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/Custom_Index_risk_to_banking.pdf}
     \vspace{0.3em}
@@ -930,13 +965,24 @@ The inclusion of both established reference indices and custom indices serves an
     \label{fig:irf_customindex_to_sectors_1}
 \end{figure}
 
-\begin{figure}[p]
+\begin{figure}[H]
     \vspace*{0pt}
     \centering
     \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/Custom_Index_risk_to_hedge.pdf}
     \caption{Impulse responses of sectoral variables to a Custom Index shock. Top: Banking sector. Second: Shadow banking sector (broad). Third: Shadow banking sector (core). Bottom: Hedge fund sector. Shaded bands represent 68\% and 90\% posterior credible intervals. Identification via Cholesky decomposition, $p = 3$ lags.}
     \label{fig:irf_customindex_to_sectors_2}
-\end{figure}
+\end{figure} 
+Based on these results, the two-stage PCA risk index built purely on time series data without sentiment appears to be successful in identifying risk dynamics. This is most visible in the banking subsector and the broad shadow banking subsector.
+k
+Starting with the banking sector, leverage increases and peaks by the third quarter, reflected in both the capital cushion and wholesale funding. This three-quarter timing appears consistently across the impulse response functions and is most likely connected to the reversion of risk following the shock to the Federal Reserve shadow rate. This is most visible in the liquidity buffer and total loans. The liquidity buffer peaks but then falls from the third quarter onward as risk decreases, with the banking sector responding to the decline in risk conditions and liquid assets becoming less necessary as the risk premia they carry diminishes. Total loans show a clean positive spike following the risk shock lasting roughly three quarters. Notably, this is the first instance where we observe a clear and statistically significant reversion in the liquidity buffer after the three-quarter mark. In previous risk indices this reversion was only hinted at through the confidence intervals, and this finding will be discussed further in the next section.
+
+For broad shadow banking, the situation is similar to that observed with the benchmark indices. There is a strong deleveraging effect in the first three quarters accompanied by a decline in wholesale funding. The liquidity buffer remains positive until the third quarter, at which point the effect dissipates. The three-quarter pattern is also visible in total loans issued by the subsector, which spike around the third quarter as risk begins to decline and conditions normalise.
+
+Core shadow banking behaves approximately as before with the benchmark indices. The main issue is that the capital cushion remains ambiguous due to wide confidence intervals. Wholesale funding is increasing, hinting at a rise in leverage that is not clearly visible in the capital cushion. The liquidity buffer is positive and consistent across all risk indices. Total loans appear initially negative, followed by a slight spike around the third quarter, but the overall effect thereafter remains negative and supports the previous results.
+
+For the hedge fund subsector, the narrative is similar to the previous specification. There is a faint hint of an initial increase in leverage, visible in both the capital cushion and wholesale funding. The clearest impulse response function is found in loan issuance, which spikes positively in the first to second quarter and then reverts, indicating potential capitalisation on risk premia.
+
+Overall, these results represent a success for the custom risk index and demonstrate that a simple two-stage PCA approach can capture broad risk dynamics and, in some impulse response functions, possibly trace the complete evolution of risk propagation through the financial system.
 
 % ── Custom Mix ───────────────────────────────────────────────────────────────
 \clearpage

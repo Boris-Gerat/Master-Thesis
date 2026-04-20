@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.4.4)  18 APR 2026 19:04
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.4.4)  21 APR 2026 01:09
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -575,171 +575,167 @@ File: pics/fig_correlation_matrix.pdf Graphic file (type pdf)
 <use pics/fig_correlation_matrix.pdf>
 Package pdftex.def Info: pics/fig_correlation_matrix.pdf  used on input line 685.
 (pdftex.def)             Requested size: 486.88275pt x 486.88617pt.
- [22 <./pics/fig_correlation_matrix.pdf>] [23] [24] [25] [26]
-<pics/STLFSI_shadow_to_risk.pdf, id=400, 722.7pt x 361.35pt>
+ [22 <./pics/fig_correlation_matrix.pdf>] [23] [24] [25]
+<pics/STLFSI_shadow_to_risk.pdf, id=396, 722.7pt x 361.35pt>
 File: pics/STLFSI_shadow_to_risk.pdf Graphic file (type pdf)
 <use pics/STLFSI_shadow_to_risk.pdf>
 Package pdftex.def Info: pics/STLFSI_shadow_to_risk.pdf  used on input line 802.
 (pdftex.def)             Requested size: 449.84145pt x 224.9224pt.
-<pics/STLFSI_risk_to_banking.pdf, id=401, 867.24pt x 505.89pt>
+<pics/STLFSI_risk_to_banking.pdf, id=397, 867.24pt x 505.89pt>
 File: pics/STLFSI_risk_to_banking.pdf Graphic file (type pdf)
 <use pics/STLFSI_risk_to_banking.pdf>
-Package pdftex.def Info: pics/STLFSI_risk_to_banking.pdf  used on input line 809.
+Package pdftex.def Info: pics/STLFSI_risk_to_banking.pdf  used on input line 812.
 (pdftex.def)             Requested size: 426.12906pt x 248.57527pt.
-<pics/STLFSI_risk_to_shadow.pdf, id=402, 867.24pt x 505.89pt>
+<pics/STLFSI_risk_to_shadow.pdf, id=398, 867.24pt x 505.89pt>
 File: pics/STLFSI_risk_to_shadow.pdf Graphic file (type pdf)
 <use pics/STLFSI_risk_to_shadow.pdf>
-Package pdftex.def Info: pics/STLFSI_risk_to_shadow.pdf  used on input line 811.
+Package pdftex.def Info: pics/STLFSI_risk_to_shadow.pdf  used on input line 814.
 (pdftex.def)             Requested size: 426.12906pt x 248.57527pt.
-<pics/STLFSI_risk_to_shadow_core.pdf, id=403, 867.24pt x 505.89pt>
+<pics/STLFSI_risk_to_shadow_core.pdf, id=399, 867.24pt x 505.89pt>
 File: pics/STLFSI_risk_to_shadow_core.pdf Graphic file (type pdf)
 <use pics/STLFSI_risk_to_shadow_core.pdf>
-Package pdftex.def Info: pics/STLFSI_risk_to_shadow_core.pdf  used on input line 813.
+Package pdftex.def Info: pics/STLFSI_risk_to_shadow_core.pdf  used on input line 816.
 (pdftex.def)             Requested size: 426.12906pt x 248.57527pt.
-<pics/STLFSI_risk_to_hedge.pdf, id=404, 867.24pt x 505.89pt>
+ [26 <./pics/STLFSI_shadow_to_risk.pdf>]
+<pics/STLFSI_risk_to_hedge.pdf, id=414, 867.24pt x 505.89pt>
 File: pics/STLFSI_risk_to_hedge.pdf Graphic file (type pdf)
 <use pics/STLFSI_risk_to_hedge.pdf>
-Package pdftex.def Info: pics/STLFSI_risk_to_hedge.pdf  used on input line 820.
+Package pdftex.def Info: pics/STLFSI_risk_to_hedge.pdf  used on input line 823.
 (pdftex.def)             Requested size: 426.12906pt x 248.57527pt.
- [27
-
- <./pics/STLFSI_shadow_to_risk.pdf>] [28 <./pics/STLFSI_risk_to_banking.pdf> <./pics/STLFSI_risk_to_shadow.pdf> <./pics/STLFSI_risk_to_shadow_core.pdf>] [29 <./pics/STLFSI_risk_to_hedge.pdf>]
-<pics/VIX_shadow_to_risk.pdf, id=466, 722.7pt x 361.35pt>
+ [27 <./pics/STLFSI_risk_to_banking.pdf> <./pics/STLFSI_risk_to_shadow.pdf> <./pics/STLFSI_risk_to_shadow_core.pdf>]
+<pics/VIX_shadow_to_risk.pdf, id=448, 722.7pt x 361.35pt>
 File: pics/VIX_shadow_to_risk.pdf Graphic file (type pdf)
 <use pics/VIX_shadow_to_risk.pdf>
-Package pdftex.def Info: pics/VIX_shadow_to_risk.pdf  used on input line 831.
+Package pdftex.def Info: pics/VIX_shadow_to_risk.pdf  used on input line 842.
 (pdftex.def)             Requested size: 449.84145pt x 224.9224pt.
-<pics/VIX_risk_to_banking.pdf, id=467, 867.24pt x 505.89pt>
+ [28 <./pics/STLFSI_risk_to_hedge.pdf>]
+<pics/VIX_risk_to_banking.pdf, id=463, 867.24pt x 505.89pt>
 File: pics/VIX_risk_to_banking.pdf Graphic file (type pdf)
 <use pics/VIX_risk_to_banking.pdf>
-Package pdftex.def Info: pics/VIX_risk_to_banking.pdf  used on input line 838.
+Package pdftex.def Info: pics/VIX_risk_to_banking.pdf  used on input line 850.
 (pdftex.def)             Requested size: 426.12906pt x 248.57527pt.
-<pics/VIX_risk_to_shadow.pdf, id=468, 867.24pt x 505.89pt>
+<pics/VIX_risk_to_shadow.pdf, id=464, 867.24pt x 505.89pt>
 File: pics/VIX_risk_to_shadow.pdf Graphic file (type pdf)
 <use pics/VIX_risk_to_shadow.pdf>
-Package pdftex.def Info: pics/VIX_risk_to_shadow.pdf  used on input line 840.
+Package pdftex.def Info: pics/VIX_risk_to_shadow.pdf  used on input line 852.
 (pdftex.def)             Requested size: 426.12906pt x 248.57527pt.
-<pics/VIX_risk_to_shadow_core.pdf, id=469, 867.24pt x 505.89pt>
+<pics/VIX_risk_to_shadow_core.pdf, id=465, 867.24pt x 505.89pt>
 File: pics/VIX_risk_to_shadow_core.pdf Graphic file (type pdf)
 <use pics/VIX_risk_to_shadow_core.pdf>
-Package pdftex.def Info: pics/VIX_risk_to_shadow_core.pdf  used on input line 842.
+Package pdftex.def Info: pics/VIX_risk_to_shadow_core.pdf  used on input line 854.
 (pdftex.def)             Requested size: 426.12906pt x 248.57527pt.
-<pics/VIX_risk_to_hedge.pdf, id=470, 867.24pt x 505.89pt>
+<pics/VIX_risk_to_hedge.pdf, id=466, 867.24pt x 505.89pt>
 File: pics/VIX_risk_to_hedge.pdf Graphic file (type pdf)
 <use pics/VIX_risk_to_hedge.pdf>
-Package pdftex.def Info: pics/VIX_risk_to_hedge.pdf  used on input line 849.
+Package pdftex.def Info: pics/VIX_risk_to_hedge.pdf  used on input line 861.
 (pdftex.def)             Requested size: 426.12906pt x 248.57527pt.
- [30
-
- <./pics/VIX_shadow_to_risk.pdf>] [31 <./pics/VIX_risk_to_banking.pdf> <./pics/VIX_risk_to_shadow.pdf> <./pics/VIX_risk_to_shadow_core.pdf>] [32 <./pics/VIX_risk_to_hedge.pdf>]
-<pics/NSI__Shapiro__flipped_shadow_to_risk.pdf, id=532, 722.7pt x 361.35pt>
+ [29 <./pics/VIX_shadow_to_risk.pdf>] [30 <./pics/VIX_risk_to_banking.pdf> <./pics/VIX_risk_to_shadow.pdf> <./pics/VIX_risk_to_shadow_core.pdf>] [31 <./pics/VIX_risk_to_hedge.pdf>]
+<pics/NSI__Shapiro__flipped_shadow_to_risk.pdf, id=528, 722.7pt x 361.35pt>
 File: pics/NSI__Shapiro__flipped_shadow_to_risk.pdf Graphic file (type pdf)
 <use pics/NSI__Shapiro__flipped_shadow_to_risk.pdf>
-Package pdftex.def Info: pics/NSI__Shapiro__flipped_shadow_to_risk.pdf  used on input line 860.
+Package pdftex.def Info: pics/NSI__Shapiro__flipped_shadow_to_risk.pdf  used on input line 882.
 (pdftex.def)             Requested size: 449.84145pt x 224.9224pt.
-<pics/NSI__Shapiro__flipped_risk_to_banking.pdf, id=533, 867.24pt x 505.89pt>
+<pics/NSI__Shapiro__flipped_risk_to_banking.pdf, id=529, 867.24pt x 505.89pt>
 File: pics/NSI__Shapiro__flipped_risk_to_banking.pdf Graphic file (type pdf)
 <use pics/NSI__Shapiro__flipped_risk_to_banking.pdf>
-Package pdftex.def Info: pics/NSI__Shapiro__flipped_risk_to_banking.pdf  used on input line 867.
+Package pdftex.def Info: pics/NSI__Shapiro__flipped_risk_to_banking.pdf  used on input line 891.
 (pdftex.def)             Requested size: 426.12906pt x 248.57527pt.
-<pics/NSI__Shapiro__flipped_risk_to_shadow.pdf, id=534, 867.24pt x 505.89pt>
+<pics/NSI__Shapiro__flipped_risk_to_shadow.pdf, id=530, 867.24pt x 505.89pt>
 File: pics/NSI__Shapiro__flipped_risk_to_shadow.pdf Graphic file (type pdf)
 <use pics/NSI__Shapiro__flipped_risk_to_shadow.pdf>
-Package pdftex.def Info: pics/NSI__Shapiro__flipped_risk_to_shadow.pdf  used on input line 869.
+Package pdftex.def Info: pics/NSI__Shapiro__flipped_risk_to_shadow.pdf  used on input line 893.
 (pdftex.def)             Requested size: 426.12906pt x 248.57527pt.
-<pics/NSI__Shapiro__flipped_risk_to_shadow_core.pdf, id=535, 867.24pt x 505.89pt>
+<pics/NSI__Shapiro__flipped_risk_to_shadow_core.pdf, id=531, 867.24pt x 505.89pt>
 File: pics/NSI__Shapiro__flipped_risk_to_shadow_core.pdf Graphic file (type pdf)
 <use pics/NSI__Shapiro__flipped_risk_to_shadow_core.pdf>
-Package pdftex.def Info: pics/NSI__Shapiro__flipped_risk_to_shadow_core.pdf  used on input line 871.
+Package pdftex.def Info: pics/NSI__Shapiro__flipped_risk_to_shadow_core.pdf  used on input line 895.
 (pdftex.def)             Requested size: 426.12906pt x 248.57527pt.
-<pics/NSI__Shapiro__flipped_risk_to_hedge.pdf, id=536, 867.24pt x 505.89pt>
+ [32 <./pics/NSI__Shapiro__flipped_shadow_to_risk.pdf>]
+<pics/NSI__Shapiro__flipped_risk_to_hedge.pdf, id=546, 867.24pt x 505.89pt>
 File: pics/NSI__Shapiro__flipped_risk_to_hedge.pdf Graphic file (type pdf)
 <use pics/NSI__Shapiro__flipped_risk_to_hedge.pdf>
-Package pdftex.def Info: pics/NSI__Shapiro__flipped_risk_to_hedge.pdf  used on input line 878.
+Package pdftex.def Info: pics/NSI__Shapiro__flipped_risk_to_hedge.pdf  used on input line 902.
 (pdftex.def)             Requested size: 426.12906pt x 248.57527pt.
- [33
-
- <./pics/NSI__Shapiro__flipped_shadow_to_risk.pdf>] [34 <./pics/NSI__Shapiro__flipped_risk_to_banking.pdf> <./pics/NSI__Shapiro__flipped_risk_to_shadow.pdf> <./pics/NSI__Shapiro__flipped_risk_to_shadow_core.pdf>] [35 <./pics/NSI__Shapiro__flipped_risk_to_hedge.pdf>]
-<pics/Sentiment_FinBERT_flipped_shadow_to_risk.pdf, id=598, 722.7pt x 361.35pt>
+ [33 <./pics/NSI__Shapiro__flipped_risk_to_banking.pdf> <./pics/NSI__Shapiro__flipped_risk_to_shadow.pdf> <./pics/NSI__Shapiro__flipped_risk_to_shadow_core.pdf>] [34 <./pics/NSI__Shapiro__flipped_risk_to_hedge.pdf>]
+<pics/Sentiment_FinBERT_flipped_shadow_to_risk.pdf, id=594, 722.7pt x 361.35pt>
 File: pics/Sentiment_FinBERT_flipped_shadow_to_risk.pdf Graphic file (type pdf)
 <use pics/Sentiment_FinBERT_flipped_shadow_to_risk.pdf>
-Package pdftex.def Info: pics/Sentiment_FinBERT_flipped_shadow_to_risk.pdf  used on input line 889.
+Package pdftex.def Info: pics/Sentiment_FinBERT_flipped_shadow_to_risk.pdf  used on input line 921.
 (pdftex.def)             Requested size: 449.84145pt x 224.9224pt.
-<pics/Sentiment_FinBERT_flipped_risk_to_banking.pdf, id=599, 867.24pt x 505.89pt>
+<pics/Sentiment_FinBERT_flipped_risk_to_banking.pdf, id=595, 867.24pt x 505.89pt>
 File: pics/Sentiment_FinBERT_flipped_risk_to_banking.pdf Graphic file (type pdf)
 <use pics/Sentiment_FinBERT_flipped_risk_to_banking.pdf>
-Package pdftex.def Info: pics/Sentiment_FinBERT_flipped_risk_to_banking.pdf  used on input line 896.
+Package pdftex.def Info: pics/Sentiment_FinBERT_flipped_risk_to_banking.pdf  used on input line 928.
 (pdftex.def)             Requested size: 426.12906pt x 248.57527pt.
-<pics/SENTIMENT_FINBERT_flipped_risk_to_shadow.pdf, id=600, 867.24pt x 505.89pt>
+<pics/SENTIMENT_FINBERT_flipped_risk_to_shadow.pdf, id=596, 867.24pt x 505.89pt>
 File: pics/SENTIMENT_FINBERT_flipped_risk_to_shadow.pdf Graphic file (type pdf)
 <use pics/SENTIMENT_FINBERT_flipped_risk_to_shadow.pdf>
-Package pdftex.def Info: pics/SENTIMENT_FINBERT_flipped_risk_to_shadow.pdf  used on input line 898.
+Package pdftex.def Info: pics/SENTIMENT_FINBERT_flipped_risk_to_shadow.pdf  used on input line 930.
 (pdftex.def)             Requested size: 426.12906pt x 248.57527pt.
-<pics/Sentiment_FinBERT_flipped_risk_to_shadow_core.pdf, id=601, 867.24pt x 505.89pt>
+<pics/Sentiment_FinBERT_flipped_risk_to_shadow_core.pdf, id=597, 867.24pt x 505.89pt>
 File: pics/Sentiment_FinBERT_flipped_risk_to_shadow_core.pdf Graphic file (type pdf)
 <use pics/Sentiment_FinBERT_flipped_risk_to_shadow_core.pdf>
-Package pdftex.def Info: pics/Sentiment_FinBERT_flipped_risk_to_shadow_core.pdf  used on input line 900.
+Package pdftex.def Info: pics/Sentiment_FinBERT_flipped_risk_to_shadow_core.pdf  used on input line 932.
 (pdftex.def)             Requested size: 426.12906pt x 248.57527pt.
-<pics/Sentiment_FinBERT_flipped_risk_to_hedge.pdf, id=602, 867.24pt x 505.89pt>
+ [35 <./pics/Sentiment_FinBERT_flipped_shadow_to_risk.pdf>]
+<pics/Sentiment_FinBERT_flipped_risk_to_hedge.pdf, id=612, 867.24pt x 505.89pt>
 File: pics/Sentiment_FinBERT_flipped_risk_to_hedge.pdf Graphic file (type pdf)
 <use pics/Sentiment_FinBERT_flipped_risk_to_hedge.pdf>
-Package pdftex.def Info: pics/Sentiment_FinBERT_flipped_risk_to_hedge.pdf  used on input line 907.
+Package pdftex.def Info: pics/Sentiment_FinBERT_flipped_risk_to_hedge.pdf  used on input line 939.
 (pdftex.def)             Requested size: 426.12906pt x 248.57527pt.
- [36
-
- <./pics/Sentiment_FinBERT_flipped_shadow_to_risk.pdf>] [37 <./pics/Sentiment_FinBERT_flipped_risk_to_banking.pdf> <./pics/SENTIMENT_FINBERT_flipped_risk_to_shadow.pdf> <./pics/Sentiment_FinBERT_flipped_risk_to_shadow_core.pdf>] [38 <./pics/Sentiment_FinBERT_flipped_risk_to_hedge.pdf>]
-<pics/Custom_Index_shadow_to_risk.pdf, id=664, 722.7pt x 361.35pt>
+ [36 <./pics/Sentiment_FinBERT_flipped_risk_to_banking.pdf> <./pics/SENTIMENT_FINBERT_flipped_risk_to_shadow.pdf> <./pics/Sentiment_FinBERT_flipped_risk_to_shadow_core.pdf>]
+<pics/Custom_Index_shadow_to_risk.pdf, id=646, 722.7pt x 361.35pt>
 File: pics/Custom_Index_shadow_to_risk.pdf Graphic file (type pdf)
 <use pics/Custom_Index_shadow_to_risk.pdf>
-Package pdftex.def Info: pics/Custom_Index_shadow_to_risk.pdf  used on input line 918.
+Package pdftex.def Info: pics/Custom_Index_shadow_to_risk.pdf  used on input line 952.
 (pdftex.def)             Requested size: 449.84145pt x 224.9224pt.
-<pics/Custom_Index_risk_to_banking.pdf, id=665, 867.24pt x 505.89pt>
+ [37 <./pics/Sentiment_FinBERT_flipped_risk_to_hedge.pdf>]
+<pics/Custom_Index_risk_to_banking.pdf, id=661, 867.24pt x 505.89pt>
 File: pics/Custom_Index_risk_to_banking.pdf Graphic file (type pdf)
 <use pics/Custom_Index_risk_to_banking.pdf>
-Package pdftex.def Info: pics/Custom_Index_risk_to_banking.pdf  used on input line 925.
+Package pdftex.def Info: pics/Custom_Index_risk_to_banking.pdf  used on input line 960.
 (pdftex.def)             Requested size: 426.12906pt x 248.57527pt.
-<pics/CUSTOM_INDEX_risk_to_shadow.pdf, id=666, 867.24pt x 505.89pt>
+<pics/CUSTOM_INDEX_risk_to_shadow.pdf, id=662, 867.24pt x 505.89pt>
 File: pics/CUSTOM_INDEX_risk_to_shadow.pdf Graphic file (type pdf)
 <use pics/CUSTOM_INDEX_risk_to_shadow.pdf>
-Package pdftex.def Info: pics/CUSTOM_INDEX_risk_to_shadow.pdf  used on input line 927.
+Package pdftex.def Info: pics/CUSTOM_INDEX_risk_to_shadow.pdf  used on input line 962.
 (pdftex.def)             Requested size: 426.12906pt x 248.57527pt.
-<pics/Custom_Index_risk_to_shadow_core.pdf, id=667, 867.24pt x 505.89pt>
+<pics/Custom_Index_risk_to_shadow_core.pdf, id=663, 867.24pt x 505.89pt>
 File: pics/Custom_Index_risk_to_shadow_core.pdf Graphic file (type pdf)
 <use pics/Custom_Index_risk_to_shadow_core.pdf>
-Package pdftex.def Info: pics/Custom_Index_risk_to_shadow_core.pdf  used on input line 929.
+Package pdftex.def Info: pics/Custom_Index_risk_to_shadow_core.pdf  used on input line 964.
 (pdftex.def)             Requested size: 426.12906pt x 248.57527pt.
-<pics/Custom_Index_risk_to_hedge.pdf, id=668, 867.24pt x 505.89pt>
+ [38 <./pics/Custom_Index_shadow_to_risk.pdf>]
+<pics/Custom_Index_risk_to_hedge.pdf, id=679, 867.24pt x 505.89pt>
 File: pics/Custom_Index_risk_to_hedge.pdf Graphic file (type pdf)
 <use pics/Custom_Index_risk_to_hedge.pdf>
-Package pdftex.def Info: pics/Custom_Index_risk_to_hedge.pdf  used on input line 936.
+Package pdftex.def Info: pics/Custom_Index_risk_to_hedge.pdf  used on input line 971.
 (pdftex.def)             Requested size: 426.12906pt x 248.57527pt.
- [39
-
- <./pics/Custom_Index_shadow_to_risk.pdf>] [40 <./pics/Custom_Index_risk_to_banking.pdf> <./pics/CUSTOM_INDEX_risk_to_shadow.pdf> <./pics/Custom_Index_risk_to_shadow_core.pdf>] [41 <./pics/Custom_Index_risk_to_hedge.pdf>]
+ [39 <./pics/Custom_Index_risk_to_banking.pdf> <./pics/CUSTOM_INDEX_risk_to_shadow.pdf> <./pics/Custom_Index_risk_to_shadow_core.pdf>] [40 <./pics/Custom_Index_risk_to_hedge.pdf>] [41]
 <pics/Custom_Mix_shadow_to_risk.pdf, id=730, 722.7pt x 361.35pt>
 File: pics/Custom_Mix_shadow_to_risk.pdf Graphic file (type pdf)
 <use pics/Custom_Mix_shadow_to_risk.pdf>
-Package pdftex.def Info: pics/Custom_Mix_shadow_to_risk.pdf  used on input line 947.
+Package pdftex.def Info: pics/Custom_Mix_shadow_to_risk.pdf  used on input line 993.
 (pdftex.def)             Requested size: 449.84145pt x 224.9224pt.
 <pics/Custom_Mix_risk_to_banking.pdf, id=731, 867.24pt x 505.89pt>
 File: pics/Custom_Mix_risk_to_banking.pdf Graphic file (type pdf)
 <use pics/Custom_Mix_risk_to_banking.pdf>
-Package pdftex.def Info: pics/Custom_Mix_risk_to_banking.pdf  used on input line 954.
+Package pdftex.def Info: pics/Custom_Mix_risk_to_banking.pdf  used on input line 1000.
 (pdftex.def)             Requested size: 426.12906pt x 248.57527pt.
 <pics/CUSTOM_MIX_risk_to_shadow.pdf, id=732, 867.24pt x 505.89pt>
 File: pics/CUSTOM_MIX_risk_to_shadow.pdf Graphic file (type pdf)
 <use pics/CUSTOM_MIX_risk_to_shadow.pdf>
-Package pdftex.def Info: pics/CUSTOM_MIX_risk_to_shadow.pdf  used on input line 956.
+Package pdftex.def Info: pics/CUSTOM_MIX_risk_to_shadow.pdf  used on input line 1002.
 (pdftex.def)             Requested size: 426.12906pt x 248.57527pt.
 <pics/Custom_Mix_risk_to_shadow_core.pdf, id=733, 867.24pt x 505.89pt>
 File: pics/Custom_Mix_risk_to_shadow_core.pdf Graphic file (type pdf)
 <use pics/Custom_Mix_risk_to_shadow_core.pdf>
-Package pdftex.def Info: pics/Custom_Mix_risk_to_shadow_core.pdf  used on input line 958.
+Package pdftex.def Info: pics/Custom_Mix_risk_to_shadow_core.pdf  used on input line 1004.
 (pdftex.def)             Requested size: 426.12906pt x 248.57527pt.
 <pics/Custom_Mix_risk_to_hedge.pdf, id=734, 867.24pt x 505.89pt>
 File: pics/Custom_Mix_risk_to_hedge.pdf Graphic file (type pdf)
 <use pics/Custom_Mix_risk_to_hedge.pdf>
-Package pdftex.def Info: pics/Custom_Mix_risk_to_hedge.pdf  used on input line 965.
+Package pdftex.def Info: pics/Custom_Mix_risk_to_hedge.pdf  used on input line 1011.
 (pdftex.def)             Requested size: 426.12906pt x 248.57527pt.
  [42
 
@@ -758,13 +754,13 @@ Package rerunfilecheck Info: File `Thesis.out' has not changed.
 Here is how much of TeX's memory you used:
  14400 strings out of 467525
  234166 string characters out of 5418983
- 674319 words of memory out of 5000000
+ 674320 words of memory out of 5000000
  42981 multiletter control sequences out of 15000+600000
  637965 words of font info for 79 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  75i,17n,117p,1257b,491s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on build/Thesis.pdf (46 pages, 535044 bytes).
+Output written on build/Thesis.pdf (46 pages, 547298 bytes).
 PDF statistics:
  899 PDF objects out of 1000 (max. 8388607)
  714 compressed objects within 8 object streams

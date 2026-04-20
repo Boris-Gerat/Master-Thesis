@@ -21,11 +21,11 @@
 \contentsline {section}{\numberline {2.1}Custom risk index dynamics}{18}{section.2.1}%
 \contentsline {section}{\numberline {2.2}Granger Causality Results}{23}{section.2.2}%
 \contentsline {section}{\numberline {2.3}BVAR results}{25}{section.2.3}%
-\contentsline {section}{\numberline {2.4}STLFSI risk index}{27}{section.2.4}%
-\contentsline {section}{\numberline {2.5}VIX risk index}{30}{section.2.5}%
-\contentsline {section}{\numberline {2.6}NSI (Shapiro) risk index}{33}{section.2.6}%
-\contentsline {section}{\numberline {2.7}Sentiment FinBERT risk index}{36}{section.2.7}%
-\contentsline {section}{\numberline {2.8}Custom Index}{39}{section.2.8}%
+\contentsline {section}{\numberline {2.4}STLFSI risk index}{26}{section.2.4}%
+\contentsline {section}{\numberline {2.5}VIX risk index}{29}{section.2.5}%
+\contentsline {section}{\numberline {2.6}NSI (Shapiro) risk index}{32}{section.2.6}%
+\contentsline {section}{\numberline {2.7}Sentiment FinBERT risk index}{35}{section.2.7}%
+\contentsline {section}{\numberline {2.8}Custom Index}{37}{section.2.8}%
 \contentsline {section}{\numberline {2.9}Custom Mix}{42}{section.2.9}%
 \contentsline {chapter}{\numberline {3}Conclusion}{45}{chapter.3}%
 \contentsline {chapter}{Conclusion}{45}{chapter.3}%
