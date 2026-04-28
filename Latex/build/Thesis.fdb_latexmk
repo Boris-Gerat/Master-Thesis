@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1776726588.39143 "Thesis.tex" "build/Thesis.pdf" "Thesis" 1776726589.82321 0
+["pdflatex"] 1777414142.03818 "Thesis.tex" "build/Thesis.pdf" "Thesis" 1777414143.68278 0
   "/usr/local/texlive/2026/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/local/texlive/2026/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1246382020 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -11,6 +11,7 @@
   "/usr/local/texlive/2026/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm7.tfm" 1246382020 940 228d6584342e91276bf566bcf9716b83 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm" 1136768653 1328 c834bbb027764024c09d3d2bf908b5f0 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm" 1136768653 1324 c910af8c371558dc20f2d7822f66fe64 ""
+  "/usr/local/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmbx8.tfm" 1136768653 1332 1fde11373e221473104d6cc5993f046e ""
   "/usr/local/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmex10.tfm" 1136768653 992 662f679a0b3d2d53c1b94050fdaa3f50 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmmi12.tfm" 1136768653 1524 4414a8315f39513458b80dfc63bff03a ""
   "/usr/local/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmmi6.tfm" 1136768653 1512 f21f83efb36853c0b70002322c1ab3ad ""
@@ -27,6 +28,7 @@
   "/usr/local/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmtt12.tfm" 1136768653 772 9a936b7f5e2ff0557fce0f62822f0bbf ""
   "/usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb" 1248133631 34811 78b52f49e893bcba91bd7581cdc144c0 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb" 1248133631 32080 340ef9bf63678554ee606688e7b5339d ""
+  "/usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb" 1248133631 32166 b0c356b15f19587482a9217ce1d8fa67 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb" 1248133631 30251 6afa5cb1d0204815a708a080681d4674 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb" 1248133631 36299 5f9df58c2139e7edcf37c8fca4bd384d ""
   "/usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb" 1248133631 36741 fa121aac0049305630cf160b86157ee4 ""
@@ -119,10 +121,10 @@
   "/usr/local/texlive/2026/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1775308956 5573038 b99aad5e4898a9034e953632f940512b ""
   "/usr/local/texlive/2026/texmf-var/web2c/pdftex/pdflatex.fmt" 1775308872 3636773 0b38b7d0bb6768df0efcb5dd854c9934 ""
   "/usr/local/texlive/2026/texmf.cnf" 1774209515 577 648cd9f92f9c0eac486f4c71c85cfbbe ""
-  "Thesis.tex" 1776726586.1601 74291 f1adaeb0cca6748b0d4ae3de94a1f725 ""
-  "build/Thesis.aux" 1776726589.65881 15504 1e0732eb80b6c7e1d77e67cd39d3c7a1 "pdflatex"
-  "build/Thesis.out" 1776726589.6668 3726 807f4e79dab4e83ff71a172eff213b27 "pdflatex"
-  "build/Thesis.toc" 1776726589.67162 2451 0d3af63a6d6c1f99f5a5da1bc115f524 "pdflatex"
+  "Thesis.tex" 1777414139.91783 147337 719cffc9698d0360951f815217b7f61e ""
+  "build/Thesis.aux" 1777414143.54466 23130 1e57ea472fd1e0e9fcc2927943b83b08 "pdflatex"
+  "build/Thesis.out" 1777414143.54849 5245 80a97aea8e399f8de111381e811d525c "pdflatex"
+  "build/Thesis.toc" 1777414143.5489 3161 bf0ef06396d068783d023efe009518bd "pdflatex"
   "pics/CUSTOM_INDEX_risk_to_shadow.pdf" 1776530356.45373 7078 84a94075b6b74e4ac9ae5233ba2cde53 ""
   "pics/CUSTOM_MIX_risk_to_shadow.pdf" 1776530356.65107 7140 49252473c6a700f511800c16ddf439e4 ""
   "pics/Custom_Index_risk_to_banking.pdf" 1776523175.84966 7158 68d4a0e33df65c34722396e53d99ab62 ""
