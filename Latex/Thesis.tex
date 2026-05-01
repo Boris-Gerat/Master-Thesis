@@ -62,6 +62,8 @@ and contracting wholesale funding under the same conditions. The hedge fund sect
 shows weak and imprecisely identified responses, consistent with its idiosyncratic
 and strategy-driven nature.
 
+
+
 Beyond documenting sectoral heterogeneity, the thesis introduces three custom risk indices that extend the traditional Financial Stress Index methodology. The first is a hierarchical principal component index constructed from time-series data, the second is a sentiment-based index built from a large corpus of institutional and news text using the FinBERT language model, and the third is a composite index combining both approaches. The time-series index performs competitively relative to established Federal Reserve benchmarks, with solid Granger causal predictive power across subsectors and generally clean impulse response identification. The sentiment-based index captures recession episodes reasonably well in descriptive analysis but underperforms in structural identification, reflecting the broader difficulty of extracting a consistent risk signal from raw textual data. The composite index reduces volatility but sacrifices some of the sharper identification properties of the time-series component. 
 \chapter*{Keywords}
 Risk, Monetary policy, BVAR, Financial sector
@@ -93,19 +95,7 @@ that is often not supported by firms' real performance.
 
 Given the increasing availability of data across the broader financial system, this thesis extends the frontier of analysis by offering a direct comparison of how different financial subsectors respond to changes in risk conditions. In addition to the banking sector, the analysis covers the shadow banking sector and the hedge fund sector. While sectoral heterogeneity in the risk-taking channel has been documented in the literature, most notably by Delis, Iosifidi, and Mylonidis (2020) and López Piñeros (2020), existing work focuses on heterogeneity across real economy industries via loan-level micro-data, rather than across financial intermediaries themselves. This thesis shifts the lens to the financial sector directly, examining how banking, shadow banking, and hedge funds differ in their response to aggregate risk shocks at the macro level.
 
-The shadow banking sector has become a prominent part of the U.S. economy. Despite 
-often being portrayed as one of the main underlying drivers of financial crises, this 
-sector can have a positive effect on economic health when functioning properly. Lenders 
-who face constraints under traditional banking regulations can obtain financing through 
-shadow banking, thereby supporting economic growth and welfare (Ordoñez, 2018). The 
-sector also contributes to risk diversification by purchasing and selling bundled risky 
-assets from commercial banks, such as asset-backed securities and mortgage-backed 
-securities (Culp and Neves, 2019). However, due to weaker regulatory supervision and 
-a high degree of interconnectedness, this amplifier of financial activity can spread 
-systemic risk just as effectively as it fosters growth. The hedge fund sector is included 
-because it has been separated from the shadow banking classification in the Z.1 
-Financial Accounts and occupies a structurally distinct position in the financial system 
-(Getmansky, Lee, and Lo, 2015).
+The shadow banking sector has become a prominent part of the U.S. economy. Despite often being portrayed as one of the main underlying drivers of financial crises, this sector can have a positive effect on economic health when functioning properly. To the extent that traditional banking regulation is sub-optimal, lenders who face binding constraints can obtain financing through shadow banking, thereby supporting economic growth (Ordoñez, 2018). The sector also contributes to risk diversification by purchasing and selling bundled risky assets from commercial banks, such as asset-backed securities and mortgage-backed securities (Culp and Neves, 2019). However, due to weaker regulatory supervision and a high degree of interconnectedness, this amplifier of financial activity can spread systemic risk just as effectively as it fosters growth. The hedge fund sector is included because it has been separated from the shadow banking classification in the Z.1 Financial Accounts of the United States, a quarterly publication by the Federal Reserve that tracks the balance sheets of all major sectors of the U.S. economy, and occupies a structurally distinct position in the financial system (Getmansky, Lee, and Lo, 2015).  
 
 The monetary policy dimension of the analysis is introduced through the Wu and Xia 
 (2016) shadow rate, which provides a continuous measure of the stance of monetary 
@@ -116,17 +106,9 @@ The risk channel is then identified within a hierarchical Bayesian Vector Autore
 framework using Cholesky decomposition, in which the ordering of monetary policy, risk, 
 and sectoral variables imposes a recursive structure on contemporaneous interactions.
 
-The second part of the thesis focuses on the construction and evaluation of custom risk indices. The majority of studies interested in the dynamic analysis of the risk-taking channel, such as Afanasyeva (2019) and Bruno and Shin (2015), rely on well-known risk measures such as the VIX and the Financial Stress Index. Constructing custom risk indices is motivated mainly by the desire to observe specific benefits and drawbacks of including sentiment, as well as to retain full control over the risk index features, something that is difficult to achieve with already-established risk indices. This thesis extends the traditional financial stress index methodology preferred by Federal Reserve banks, such as the STLFSI and by introducing a hierarchical two-stage principal component approach, in which variables are first grouped by their economic signal type and a group-level factor is extracted before aggregation into a final risk index. This construction is applied both to purely time-series-based variables and to a composite index that incorporates textual sentiment.  
+The second part of the thesis focuses on the construction and evaluation of custom risk indices. The majority of studies interested in the dynamic analysis of the risk-taking channel, such as Afanasyeva (2019) and Bruno and Shin (2015), rely on well-known risk measures such as the VIX and the Financial Stress Index. Constructing custom risk indices is motivated mainly by the desire to observe specific benefits and drawbacks of including sentiment, as well as to retain full control over the risk index features, something that is difficult to achieve with already-established risk indices. This thesis extends the traditional financial stress index methodology preferred by Federal Reserve banks, such as the St. Louis Fed Financial Stress Index (STLFSI), a weekly composite measure of stress in U.S. financial markets constructed from 18 data series spanning interest rates, yield spreads, and other indicators, by introducing a hierarchical two-stage principal component approach, in which variables are first grouped by their economic signal type and a group-level factor is extracted before aggregation into a final risk index. This construction is applied both to purely time-series-based variables and to a composite index that incorporates textual sentiment. 
 
-The sentiment component draws on a large body of textual data collected from 
-economically relevant sources, including Federal Reserve speeches and minutes, 
-Securities and Exchange Commission communications, congressional hearings, and global 
-news data from the GDELT project. Sentiment is extracted using two approaches: the 
-lexicon-based VADER model (Hutto and Gilbert, 2014) and the transformer-based FinBERT 
-model (Araci, 2019), which has been fine-tuned specifically for financial text. There is 
-a growing body of literature demonstrating that sentiment data can enhance forecasting 
-accuracy and provide additional explanatory power in econometric models (Nopp and 
-Hanbury, 2015; Kanzari et al., 2023; Algaba et al., 2020; Nguyen, 2025).
+The sentiment component draws on a large body of textual data collected from economically relevant sources, including Federal Reserve speeches and minutes, Securities and Exchange Commission communications, congressional hearings, and global news data from the GDELT Project, an open-access database that monitors broadcast, print, and online news media across the world in over 100 languages and constructs event-level records updated every 15 minutes. Sentiment is extracted using two approaches: the lexicon-based VADER model (Hutto and Gilbert, 2014) and the transformer-based FinBERT model (Araci, 2019), which has been fine-tuned specifically for financial text. There is a growing body of literature demonstrating that sentiment data can enhance forecasting accuracy and provide additional explanatory power in econometric models (Nopp and Hanbury, 2015; Kanzari et al., 2023; Algaba et al., 2020; Nguyen, 2025). 
 
 The predictive and explanatory power of all constructed indices is evaluated through 
 Granger causality tests, following the approach of Bisias et al. (2012). This framework 
@@ -141,7 +123,7 @@ The thesis is structured as follows. Chapter 1 presents the data sources and emp
 methodology. Chapter 2 reports the results, beginning with the dynamics of the custom 
 risk indices, followed by the Granger causality analysis, and concluding with the BVAR 
 impulse response functions organized by risk index. A concluding chapter discusses the 
-findings and their implications.
+findings and their implications. 
 
 \chapter{Data and Methodology}
 This chapter presents the data sources and empirical methodology used in the analysis. The data section is divided into dedicated subsections, each addressing a specific component of the dataset in relation to the corresponding data source used in that part of the analysis. The methodology section then introduces all models employed in the empirical work, covering factor models for dimensionality reduction, sentiment extraction approaches, and the Bayesian Vector Autoregression framework used for structural identification.
@@ -169,31 +151,29 @@ the remaining sectors. While this subsector imposed the fewest constraints on th
 research, the final variable set still had to be reduced to ensure comparability with the other two
 sectors.
 
-The broad shadow banking factor is constructed from the Federal Reserve's Financial Accounts aggregate "Other Financial Intermediaries Except Insurance Companies and Pension Funds," available through FRED under the FL80 sector classification. This aggregate covers the full range of nonbank financial intermediation activity in the U.S. financial system outside of depository institutions, insurance companies, and pension funds, encompassing money market funds, mutual funds, ABS issuers, finance companies, mortgage REITs, security brokers and dealers, holding companies, and other financial business. It therefore provides a broad and internally consistent proxy for shadow banking activity at the aggregate level, capturing entities involved in maturity transformation, wholesale funding, and credit intermediation that operate without access to central bank liquidity facilities or deposit insurance.  
+The broad shadow banking factor is constructed from the Federal Reserve's Financial Accounts aggregate "Other Financial Intermediaries Except Insurance Companies and Pension Funds," available through FRED under the FL80 sector classification. This aggregate covers the full range of nonbank financial intermediation activity in the U.S. financial system outside of depository institutions, insurance companies, and pension funds, encompassing money market funds, mutual funds, ABS issuers, finance companies, mortgage REITs, security brokers and dealers, holding companies, and other financial business. It therefore provides a broad and internally consistent proxy for shadow banking activity at the aggregate level, capturing entities involved in maturity transformation, wholesale funding, and credit intermediation that operate without access to central bank liquidity facilities or deposit insurance. However, shadow banking is an inherently elusive concept with no universally accepted definition, and this broad measure should be interpreted with care. In particular, it includes large amounts of mutual funds and other asset management vehicles that a substantial part of the literature, following narrower definitions such as those proposed by Pozsar et al. (2010) and the Financial Stability Board, would not classify as shadow banking in the classic sense, given their more limited role in maturity and liquidity transformation and lower susceptibility to run dynamics. Around 2012, the broad factor was approximately twice the size of FDIC-insured banking assets, a difference driven largely by these fund-like entities rather than by core shadow banking activity.
 
-The core shadow banking factor represents a narrower subset of the broad aggregate, focusing on the three entity types most directly associated with classic shadow banking intermediation: finance companies (L.128), mortgage real estate investment trusts (L.129), and security brokers and dealers (L.130). In terms of scale, the core factor accounts for approximately 20 percent of the total assets captured by the broad factor. Ideally, the core specification would also include issuers of asset-backed securities (L.127), which represent another major player in shadow credit intermediation, as well as money market funds (L.121), which are among the entities most susceptible to run-like dynamics. However, both were excluded due to data alignment issues that prevented consistent construction of the comparable balance sheet ratios used across all subsectors in the BVAR analysis.
-An important implication of using these sources is that the analysis is restricted to quarterly frequency, as the underlying Financial Accounts data are published only on a quarterly basis. Both factors share the same sample period beginning in 1997 Q1, allowing for direct comparison across the full estimation window.
-
-The final subsector considered is the hedge fund sector. The data are sourced from the supplementary balance sheet table for domestic hedge funds (B.101.f) in the Federal Reserve's Financial Accounts of the United States, which represents the most comprehensive standalone hedge fund series available within the Z.1 release. The structure of reporting and the available variables are broadly similar to those in the other Z.1 sector tables. However, due to the relatively recent introduction of dedicated hedge fund reporting standards, data for this subsector begin only in 2012 Q4. This represents a substantial limitation compared to the banking and shadow banking sectors, which are available from 1997 Q1. Restricting all sectors to the shorter hedge fund sample would significantly reduce the scope of the analysis and exclude the most informative risk episodes in the sample. Therefore, I retain the 1997 Q1 to 2024 Q4 window for the banking and shadow banking sectors, while reporting hedge fund results starting from 2012 Q4. Comparisons involving the hedge fund sector must be interpreted with caution, as earlier episodes such as the dot-com bubble and the Global Financial Crisis are not captured in its sample.
+The core shadow banking factor represents a narrower subset of the broad aggregate, focusing on the three entity types most directly associated with classic shadow banking intermediation: finance companies (L.128), mortgage real estate investment trusts (L.129), and security brokers and dealers (L.130). Due to data alignment constraints that prevented consistent construction of comparable balance sheet ratios, the core factor is limited to these three entity types and should therefore be interpreted as a partial measure of classic shadow banking intermediation rather than a representative proxy for the sector, capturing approximately 20 percent of the total assets covered by the broad factor. Ideally, the core specification would also include issuers of asset-backed securities (L.127), which represent another major player in shadow credit intermediation, as well as money market funds (L.121), which are among the entities most susceptible to run-like dynamics. However, both were excluded due to the same data alignment issues that prevented consistent construction of the comparable balance sheet ratios used across all subsectors in the BVAR analysis. By employing both measures jointly, this thesis allows for a robustness check: results based on the broad factor reflect a wider set of non-bank financial activities, while the core factor provides a narrower view closer to classic shadow banking risks involving credit intermediation, maturity transformation, and wholesale funding outside the regulated banking system. An important implication of using these sources is that the analysis is restricted to quarterly frequency, as the underlying Financial Accounts data are published only on a quarterly basis. Both factors share the same sample period beginning in 1997 Q1, allowing for direct comparison across the full estimation window.
 
 
-\begin{table}[H]  % forces placement HERE
+The final subsector considered is the hedge fund sector. The data are sourced from the supplementary balance sheet table for domestic hedge funds (B.101.f) in the Federal Reserve's Financial Accounts of the United States, which represents the most comprehensive standalone hedge fund series available within the Z.1 release of US financial accounts. The structure of reporting and the available variables are broadly similar to those in the other Z.1 sector tables. However, due to the relatively recent introduction of dedicated hedge fund reporting standards, data for this subsector begin only in 2012 Q4. This represents a substantial limitation compared to the banking and shadow banking sectors, which are available from 1997 Q1. Restricting all sectors to the shorter hedge fund sample would significantly reduce the scope of the analysis and exclude the most informative risk episodes in the sample. Therefore, I retain the 1997 Q1 to 2024 Q4 window for the banking and shadow banking sectors, while reporting hedge fund results starting from 2012 Q4. Comparisons involving the hedge fund sector must be interpreted with caution, as earlier episodes such as the dot-com bubble and the Global Financial Crisis are not captured in its sample. 
+
+
+\begin{table}[H]
 \centering
-\renewcommand{\arraystretch}{2.8} % vertical spacing
-\begin{tabular}{l|c} % second column centered
+\renewcommand{\arraystretch}{2.0}   % Reduced from 2.8 for better readability
+\begin{tabular}{l|c}
 \hline
 \textbf{Variable} & \textbf{Fraction} \\
 \hline
 Wholesale Funding & $\dfrac{\text{Brokered Deposits + Other Borrowed Money}}{\text{Total Assets}}$ \\
-\hline
 Liquidity Buffer  & $\dfrac{\text{Cash + Treasuries}}{\text{Total Assets}}$ \\
-\hline
 Capital Cushion   & $\dfrac{\text{Total Equity}}{\text{Total Assets}}$ \\
-\hline
-Number of Loans Issued  & -- \\
+Loan Volume       & -- \\
 \hline
 \end{tabular}
 \caption{The constructed balance sheet ratios are used in the main BVAR analysis and serve as the basis for observing impulse response reactions to risk shocks, which are discussed in detail later in the study. For each subsector, the fractions hold exactly the same variables or their closest available equivalents.}
+\label{tab:balance_sheet_ratios}
 \end{table}
 
 In Table~1.1, the variables that were consistently collected across all subsectors are presented.
@@ -206,8 +186,7 @@ Wholesale funding captures the extent to which a given subsector relies on marke
 and access to capital markets. The liquidity buffer reflects the share of balance sheet resources
 allocated to highly liquid assets, providing a measure of short-term resilience to funding shocks.
 The capital cushion serves as a proxy for leverage, indicating the degree of risk-taking behavior
-within the subsector. The number of loans as they are as it carries
-substantial informational content on its own and directly captures credit provision dynamics.
+within the subsector. The loan volume is informative as it is, since it carries substantial informational content on its own and directly captures credit provision dynamics. 
 
 This broader set of variables is designed to capture the overall behavior of each subsector when
 subject to monetary policy and risk shocks. At the same time, the selection enables internal
@@ -249,7 +228,6 @@ more suitable measure of the overall stance of monetary policy and is therefore 
 To evaluate the performance of the custom risk indices, the analysis introduces a broad set of benchmark indices spanning both traditional time-series-based measures and sentiment-based ones. This dual coverage ensures that the BVAR analysis retains its value as a contribution to the literature on the risk channel even in cases where the custom indices fail to produce clean structural identification. The full set of indices used in the analysis, along with the abbreviations adopted throughout the results and a brief description of each, is listed in the table 1.2 below.
 \begin{table}[H]
 \centering
-\caption{Financial Risk and Uncertainty Indices}
 \label{tab:risk_indices}
 
 \vspace{0.3cm}
@@ -289,39 +267,62 @@ NSI & News Sentiment Index (Shapiro et al.)
 
 \end{table} 
 
-In the majority of related studies, the STLFSI (often referred to simply as the Financial Stress Index, FSI) serves as a primary proxy for financial risk, typically alongside the VIX index. Together, these two measures provide a robust framework for analyzing risk responses. The STLFSI captures broad financial stress conditions, while the VIX represents a purely market-based measure derived from S\&P 500 option prices, reflecting forward-looking expectations of volatility.
 
-However, in this analysis, I extend the set of risk indicators by incorporating additional indices constructed by Federal Reserve Banks beyond the St. Louis Fed. In particular, I include the NFCI and KCFSI, which differ in their construction methodologies relative to the STLFSI. The NFCI can be viewed as a higher-dimensional measure, incorporating a large number of financial variables to capture a broader range of risk, credit, and leverage conditions. In contrast, the KCFSI adopts a more parsimonious approach, focusing on a smaller set of variables closely linked to financial market volatility and stress dynamics.
+In the majority of related studies, the STLFSI (Kliesen and Smith, 2010), often referred to 
+simply as the Financial Stress Index, FSI, serves as a primary proxy for financial risk, 
+typically alongside the VIX index (Whaley, 2000). Together, these two measures provide a 
+robust framework for analyzing risk responses. The STLFSI captures broad financial stress 
+conditions, while the VIX represents a purely market-based measure derived from S\&P 500 
+option prices, reflecting forward-looking expectations of volatility.
 
-In addition to financial stress indices, I incorporate two sentiment-based measures of risk. The Economic Policy Uncertainty Index is constructed using the rule-based methodology of Baker, Bloom, and Davis (2016), which identifies newspaper articles containing terms from three distinct sets simultaneously, relating to the economy, to policy, and to uncertainty, and builds the index from the scaled frequency of such articles. This approach is closer in spirit to a keyword classification of news content than to a sentiment model. The Shapiro News Sentiment Index, by contrast, applies natural language processing to extract the overall positive or negative economic tone from a broad corpus of news text, without restricting attention to policy-related content. While it provides valuable descriptive information about general shifts in economic narrative, it does not exclusively target risk or uncertainty in the same way as the EPUI.
+However, in this analysis, I extend the set of risk indicators by incorporating additional 
+indices constructed by Federal Reserve Banks beyond the St. Louis Fed. In particular, I 
+include the NFCI (Brave and Butters, 2011) and KCFSI (Hakkio and Keeton, 2009), which 
+differ in their construction methodologies relative to the STLFSI. The NFCI can be viewed 
+as a higher-dimensional measure, incorporating a large number of financial variables to 
+capture a broader range of risk, credit, and leverage conditions. In contrast, the KCFSI 
+adopts a more parsimonious approach, focusing on a smaller set of variables closely linked 
+to financial market volatility and stress dynamics.
 
-Overall, this set of risk indices provides a broad and complementary representation of financial risk and uncertainty. It enables a more comprehensive assessment of the risk channel and facilitates robustness checks within the BVAR framework, particularly when compared to the custom risk indices constructed in this study.
+In addition to financial stress indices, I incorporate two sentiment-based measures of risk. 
+The Economic Policy Uncertainty Index is constructed using the rule-based methodology of 
+Baker, Bloom, and Davis (2016), which identifies newspaper articles containing terms from 
+three distinct sets simultaneously, relating to the economy, to policy, and to uncertainty, 
+and builds the index from the scaled frequency of such articles. This approach is closer in 
+spirit to a keyword classification of news content than to a sentiment model. The Shapiro 
+News Sentiment Index (Shapiro, Sudhof, and Wilson, 2022), by contrast, applies natural 
+language processing to extract the overall positive or negative economic tone from a broad 
+corpus of news text, without restricting attention to policy-related content. While it 
+provides valuable descriptive information about general shifts in economic narrative, it does 
+not exclusively target risk or uncertainty in the same way as the EPUI.
+
+Overall, this set of risk indices provides a broad and complementary representation of 
+financial risk and uncertainty. It enables a more comprehensive assessment of the risk 
+channel and facilitates robustness checks within the BVAR framework, particularly when 
+compared to the custom risk indices constructed in this study.
 
 \subsection{Custom Risk Indices}
 In this thesis I introduce three types of risk indices. The first is a time-series-based index, constructed following a methodology similar to that employed by the Federal Reserve Banks in the development of their financial stress indices. The second type draws on textual data, which is transformed into a sentiment signal using approaches analogous to those underlying the Shapiro News Sentiment Index and the Economic Policy Uncertainty Index. The third type combines both approaches into a composite index, with the aim of leveraging the complementary signals carried by time-series financial data and textual sentiment simultaneously.
 
 \subsubsection{Time Series Based Indices}
 To construct the custom risk index, I follow the general methodology employed by the Federal Reserve Bank of St. Louis in the development of financial stress indices, which selects variables carrying a strong signal with respect to financial risk and extracts their common component through principal component analysis.
-
 This thesis extends that methodology by introducing a hierarchical factor structure. A precedent for this approach exists in the European context. Hollo, Kremer, and Lo Duca (2012) develop the Composite Indicator of Systemic Stress (CISS) for the euro area, grouping 15 financial stress measures into five market segment categories before aggregating across them while accounting for co-movement between segments. Duprey and Klaus (2015) follow a related approach in constructing the Country-Level Index of Financial Stress (CLIFS), which incorporates a comparable hierarchical aggregation step. To my knowledge, this type of structured two-stage approach has not been adopted in the construction of the main U.S. financial stress indices produced by the Federal Reserve Banks, which apply principal component analysis directly to the full variable set without an intermediate grouping stage.
+
+The hierarchical structure is preferred over applying PCA directly to the full variable set for the following reason. When variables within a group are more strongly correlated with each other than with variables from other groups, flat PCA tends to produce a first principal component dominated by the most internally correlated group, causing other dimensions of risk to be underweighted or suppressed entirely (Stock and Watson, 2002). By first extracting a single normalized factor within each signal category and then aggregating across these group-level factors, the hierarchical approach ensures that each dimension of financial risk contributes equally to the final index, regardless of differences in within-group correlation structure. This reasoning closely follows the motivation provided by Hollo, Kremer, and Lo Duca (2012) for the segmented construction of the CISS.
 
 In this thesis I apply that hierarchical logic to the U.S. context. Variables are first grouped according to the type of signal they capture, ranging from policy-related indicators to market-based measures, and the first principal component is extracted within each group. In the second stage, the first principal component of these group-level factors is taken, producing a final aggregate that captures common variation across all signal types. The resulting index reflects a broad and integrated measure of financial risk, drawing on information from multiple dimensions of the financial system. All variables included in the construction are listed below.
 
 \begin{table}[H]
 \centering
-\caption{Variables Used in Hierarchical Risk Factor Construction}
-\label{tab:hierarchical_risk_variables}
-
 \vspace{0.3cm}
 \renewcommand{\arraystretch}{1.4}
-
 \begin{tabular}{p{3cm} p{10cm}}
 \hline
 \textbf{Category} & \textbf{Variables} \\
 \hline
 
 Credit 
-& Moody’s Baa Corporate Bond Spread, \\
+& Moody's Baa Corporate Bond Spread, \\
 & ICE BofA US High Yield Spread, \\
 & ICE BofA US Corporate Bond Spread \\
 \cline{1-2}
@@ -346,6 +347,7 @@ Market
 
 \end{tabular}
 \caption{Variables Used in Hierarchical Risk Factor Construction. Variables are grouped into four categories reflecting distinct dimensions of financial risk: credit conditions, funding market stress, monetary policy stance, and broad market performance. Within each category, the first principal component is extracted via EMPCA before aggregation into the final composite index in the second stage of the hierarchical procedure.}
+\label{tab:hierarchical_risk_variables}
 \end{table}
 
 The choice of variables was straightforward, as the objective was to achieve results comparable to existing Federal Reserve risk indices. This ensures that the constructed index remains methodologically comparable to established benchmarks, while still distinguishing itself through its specific variable selection and the use of hierarchical factor extraction.
@@ -360,112 +362,84 @@ In this section I introduce the textual data collected from sources expected to 
 \caption{Distribution of Textual Data Sources Used in Custom Sentiment Index Construction. The bar chart displays the relative frequency of documents contributed by each source to the sentiment corpus, including Federal Reserve speeches and minutes, Securities and Exchange Commission communications, congressional hearings filtered to economically relevant committees, and global news data from the GDELT project.}
 \end{figure}
 
-As can be seen, the sentiment index is constructed from a diverse set of textual data sources. 
-The largest contribution comes from congressional hearings, filtered to include only economically 
-relevant committees. The second-largest source is the GDELT project, which represents one of the 
-most extensive collections of global news events. While GDELT does not provide direct access to the 
-full textual content, it offers pre-constructed indices derived from news coverage. In this analysis, 
-only economically relevant entries are selected.
+As can be seen, the sentiment index is constructed from a diverse set of textual data sources. The largest contribution comes from congressional hearings, filtered to include only economically relevant committees. The second-largest source is the GDELT project (Leetaru and Schrodt, 2013), which represents one of the most extensive collections of global news events. While GDELT does not provide direct access to the full textual content, it offers pre-constructed indices derived from news coverage. In this analysis, only economically relevant entries are selected.
 
-The remaining sources are smaller in volume but provide highly relevant economic information. These 
-include Securities and Exchange Commission (SEC) speeches, Federal Reserve minutes, and Federal 
-Reserve speeches. Although these datasets are more limited in size, they are closely aligned with 
-economic policy and institutional communication, and therefore contain strong informational content 
-for sentiment extraction. Overall, the dataset is more heavily weighted toward policy-based sources of sentiment. However, the 
-inclusion of GDELT news data helps balance this by incorporating broader media-based information. 
+The remaining sources are smaller in volume but provide highly relevant economic information. These include Securities and Exchange Commission (SEC) speeches, Federal Reserve minutes, and Federal Reserve speeches. Although these datasets are more limited in size, they are closely aligned with economic policy and institutional communication, and therefore contain strong informational content for sentiment extraction. Overall, the dataset is more heavily weighted toward policy-based sources of sentiment. However, the inclusion of GDELT news data helps balance this by incorporating broader media-based information.
 
-Initially, I intended to further expand the dataset by including textual data from platforms such as 
-Reddit and X (formerly Twitter). However, access to X data requires paid subscriptions, which are 
-beyond the scope of a master’s research budget. In the case of Reddit, although large historical 
-datasets are available through archived sources, the data collection process proved to be 
-computationally intensive given the available hardware constraints. Despite these limitations, such 
-data sources represent a promising extension and could further enhance the sentiment analysis.
+While all sources are ultimately compressed into a single time series through principal component analysis, the volume of documents per source is not inconsequential. A source with a larger number of observations produces a sentiment time series with lower measurement noise, as idiosyncratic variation in individual documents averages out more reliably across the aggregation step. Congressional hearings and GDELT, which dominate the corpus by document count, therefore contribute sentiment signals that are considerably cleaner and more stable than what would be obtained from a sparse source. This has a direct bearing on the quality of the extracted principal component, since the PCA step distills the common signal most effectively when the input series carry low individual noise. 
+
+Initially, I intended to further expand the dataset by including textual data from platforms such as Reddit and X (formerly Twitter). However, access to X data requires paid subscriptions, which are beyond the scope of a master's research budget. In the case of Reddit, although large historical datasets are available through archived sources, the data collection process proved to be computationally intensive given the available hardware constraints. Despite these limitations, such data sources represent a promising extension and could further enhance the sentiment analysis.
 
 The sentiment component of the composite index is constructed in two stages. In the first stage, sentiment scores are extracted from each of the textual sources described above and their first principal component is taken, producing a single aggregate sentiment factor that captures the common signal across all sources. In the second stage, this sentiment factor is combined with the custom time-series-based risk index, and the first principal component of these two series is extracted, yielding the final composite index. The resulting measure therefore captures both the macro-financial dynamics embedded in the time-series component and the forward-looking information carried by institutional and media sentiment, with the hierarchical PCA structure ensuring that each stage distills only the common signal before aggregation.
+
+
 
 \section{Methodology}
 In this section, I present the methodological framework and identification strategies used in this thesis. I begin with factor models for dimensionality reduction, then proceed to sentiment extraction methods, and conclude with the specification of the Bayesian VAR (BVAR) model.
 
 \subsection{Expectation Maximization Principal Component Analysis (EMPCA)}
 
-Based on prior experience with a related study on a similar theme, I choose to use the EMPCA model. This approach is both simple and powerful. Its main advantage lies in its ability to handle missing 
-data through the expectation–maximization procedure, while maintaining a linear and fully 
-interpretable structure. Unlike more complex nonlinear methods, EMPCA preserves transparency in the 
-estimation process, which is desirable in an empirical setting.
+Based on prior experience with a related empirical study (Gerát, 2025), I choose to use the EMPCA model. This approach is both simple and powerful. Its main advantage lies in its ability to handle missing data through the expectation–maximization procedure, while maintaining a linear and fully interpretable structure. Unlike more complex nonlinear methods, EMPCA preserves transparency in the estimation process, which is desirable in an empirical setting.
 
-In this thesis, EMPCA is used whenever extraction of the first principal component is required, 
-forming a core building block of the hierarchical factor construction. The EMPCA follows original
-methodology proposed by S. Roweis (1998).
+In this thesis, EMPCA is used whenever extraction of the first principal component is required, forming a core building block of the hierarchical factor construction. The EMPCA follows the original methodology proposed by Roweis (1998).
 
-Alternative approaches were also considered. In particular, the NIPALS algorithm and Dynamic Factor 
-Models (DFM) were evaluated. However, NIPALS either underperformed relative to EMPCA or produced 
-very similar results without additional benefits. Dynamic Factor Models, on the other hand, 
-encountered convergence issues when applied to datasets with low dimensionality and relatively 
-short time series. For these reasons, EMPCA is selected as the primary method throughout the thesis.
+Alternative approaches were also considered. In particular, the NIPALS algorithm (Wold, 1966) and Dynamic Factor Models (DFM) were evaluated. NIPALS, which stands for Nonlinear Iterative Partial Least Squares, is an iterative deflation-based algorithm that extracts principal components sequentially by regressing the data matrix onto a score vector and updating loadings and scores in alternating steps until convergence. It can handle missing data by restricting each update step to observed values only, making it a natural competitor to EMPCA in settings with incomplete data. However, in the datasets used in this thesis, NIPALS either underperformed relative to EMPCA or produced very similar results without additional benefits. Dynamic Factor Models, on the other hand, encountered convergence issues when applied to datasets with low dimensionality and relatively short time series. For these reasons, EMPCA is selected as the primary method throughout the thesis.
+
 
 \subsubsection*{EMPCA Model Specification}
 
-The EMPCA framework assumes that the observed data matrix \( X \in \mathbb{R}^{T \times N} \) can be represented by a low-dimensional factor structure:
+The EMPCA framework follows the formulation of Roweis (1998). The observed 
+data matrix $X \in \mathbb{R}^{T \times N}$ is assumed to admit a 
+low-dimensional factor structure:
 
 \begin{equation}
-X = W Z + \varepsilon
+X = WZ + \varepsilon
 \end{equation}
 
-where \( W \in \mathbb{R}^{T \times k} \) contains the latent factors, \( Z \in \mathbb{R}^{k \times N} \) are the factor loadings, and \( \varepsilon \) is an idiosyncratic error term.
-
-\vspace{0.3cm}
-
-The estimation proceeds via the Expectation–Maximization algorithm.
+where $W \in \mathbb{R}^{T \times k}$ contains the latent factors, 
+$Z \in \mathbb{R}^{k \times N}$ are the factor loadings, and $\varepsilon$ 
+is an idiosyncratic error term. The superscripts $(t)$ denote iteration 
+counts toward convergence, not time periods. The full data matrix $X$ is 
+fixed throughout and $W$ and $Z$ are updated iteratively until the 
+reconstruction error stabilizes.
 
 \paragraph{E-step (Expectation)}
-
-Given current estimates of loadings \( Z^{(t)} \), the latent factors are updated as:
+Given current loading estimates $Z^{(t)}$, the latent factors are updated by 
+projecting the data onto the current loading structure:
 
 \begin{equation}
-W^{(t+1)} = X Z^{(t)\top} \left( Z^{(t)} Z^{(t)\top} \right)^{-1}
+W^{(t+1)} = XZ^{(t)\top} \left(Z^{(t)}Z^{(t)\top}\right)^{-1}
 \end{equation}
-
-\textit{Step interpretation:}  
-This step estimates the latent factors \( W \) by projecting the observed data onto the current loading structure.
-
-\vspace{0.3cm}
 
 \paragraph{M-step (Maximization)}
-
-Given updated factors \( W^{(t+1)} \), the loadings are updated as:
-
-\begin{equation}
-Z^{(t+1)} = \left( W^{(t+1)\top} W^{(t+1)} \right)^{-1} W^{(t+1)\top} X
-\end{equation}
-
-\textit{Step interpretation:}  
-This step updates the factor loadings \( Z \) to best fit the observed data given the estimated latent factors.
-
-\vspace{0.3cm}
-
-\paragraph{Objective Function}
-
-The algorithm iteratively minimizes the reconstruction error:
+Given updated factors $W^{(t+1)}$, the loadings are updated by regressing 
+the data onto the current factors:
 
 \begin{equation}
-\min_{W,Z} \; \| X - W Z \|_F^2
+Z^{(t+1)} = \left(W^{(t+1)\top}W^{(t+1)}\right)^{-1} W^{(t+1)\top}X
 \end{equation}
 
-\textit{Step interpretation:}  
-The goal is to find the factor representation that best approximates the observed data in a least-squares sense.
+The two steps alternate until convergence, minimizing the reconstruction 
+error in a least-squares sense:
 
-\vspace{0.3cm}
+\begin{equation}
+\min_{W,Z} \; \|X - WZ\|_F^2
+\end{equation}
 
 \paragraph{Handling Missing Data}
-
-Let \( M \) denote a masking matrix indicating observed entries. The objective becomes:
+When entries of $X$ are missing, let $M$ denote a binary masking matrix 
+indicating observed entries. The objective is restricted to observed 
+values only:
 
 \begin{equation}
-\min_{W,Z} \; \| M \odot (X - W Z) \|_F^2
+\min_{W,Z} \; \|M \odot (X - WZ)\|_F^2
 \end{equation}
 
-\textit{Step interpretation:}  
-Only observed values contribute to the estimation, allowing EMPCA to naturally handle missing data without prior imputation.
+This allows EMPCA to handle missing data without prior imputation, with 
+each update step computed using only the available observations.
+
+
+
 
 \subsection{Granger Causality Analysis}
 
@@ -552,119 +526,112 @@ The reduced-form VAR($p$) model is given by:
 y_t = A_1 y_{t-1} + A_2 y_{t-2} + \dots + A_p y_{t-p} + \varepsilon_t,
 \end{equation}
 
-where \( y_t \in \mathbb{R}^n \) is a vector of endogenous variables, \( A_i \) are coefficient
-matrices, and \( \varepsilon_t \sim \mathcal{N}(0, \Sigma) \) is a vector of reduced-form shocks.
-
+where $y_t \in \mathbb{R}^n$ is a vector of endogenous variables, $A_i$ are coefficient
+matrices, and $\varepsilon_t \sim \mathcal{N}(0, \Sigma)$ is a vector of reduced-form shocks.
 The model can be written in compact matrix form as:
 
 \begin{equation}
 Y = X B + E,
 \end{equation}
 
-where \( Y \) is the matrix of observations, \( X \) contains lagged values of the endogenous
-variables, and \( B \) is the matrix of coefficients.
+where $Y$ is the matrix of observations, $X$ contains lagged values of the endogenous
+variables, and $B$ is the matrix of coefficients.
 
-Within the Bayesian framework, prior distributions are imposed on the parameters:
+Within the Bayesian framework, Minnesota-type prior distributions are imposed on the 
+parameters. The prior mean $B_0$ is set following the random walk assumption, placing 
+unit mass on the first own lag of each variable and zero mass on all other coefficients. 
+The prior covariance $V_0(\lambda)$ is diagonal, with elements governing how tightly 
+coefficients are shrunk toward zero. Specifically, the prior variance on the $l$-th lag 
+coefficient of variable $j$ in equation $i$ is given by:
 
 \begin{equation}
-B \sim \mathcal{N}(B_0, V_0), \quad \Sigma \sim \mathcal{IW}(S_0, \nu_0),
+\left[V_0(\lambda)\right]_{ij,l} = 
+\left(\frac{\lambda}{l}\right)^2 \cdot \frac{\sigma_i^2}{\sigma_j^2},
 \end{equation}
 
-where \( \mathcal{IW} \) denotes the inverse-Wishart distribution. These priors introduce shrinkage
-towards a structured baseline, typically associated with Minnesota-type priors, which reduce
-estimation uncertainty in small samples.
+where $\sigma_i^2$ is the residual variance of a univariate autoregression for variable 
+$i$, and $l$ is the lag order. This structure ensures that more distant lags are shrunk 
+more aggressively. The overall degree of shrinkage is controlled by the scalar 
+hyperparameter $\lambda > 0$, with smaller values implying stronger shrinkage toward 
+the prior mean. The prior on the error covariance is:
 
-The posterior distribution is obtained using Bayes' rule:
+\begin{equation}
+B \mid \lambda \sim \mathcal{N}(B_0(\lambda),\, V_0(\lambda)), 
+\quad \Sigma \sim \mathcal{IW}(S_0, \nu_0),
+\end{equation}
+
+where $\mathcal{IW}$ denotes the inverse-Wishart distribution. In the hierarchical 
+extension, following Giannone, Lenza, and Primiceri (2015), the shrinkage hyperparameter 
+$\lambda$ is itself treated as a random variable with a diffuse prior, and is estimated 
+from the data by maximizing the marginal likelihood:
+
+\begin{equation}
+\lambda \sim p(\lambda), \quad 
+\hat{\lambda} = \arg\max_{\lambda} \, p(Y \mid \lambda).
+\end{equation}
+
+This approach allows the degree of shrinkage to be determined endogenously rather than 
+fixed by the researcher, which is particularly advantageous in settings with limited 
+time series length. The posterior distribution is then obtained via Bayes' rule:
 
 \begin{equation}
 p(B, \Sigma \mid Y) \propto p(Y \mid B, \Sigma)\, p(B, \Sigma),
 \end{equation}
 
-which combines prior information with the likelihood implied by the observed data.
-
-In the hierarchical extension, hyperparameters governing the prior distribution are themselves
-treated as random variables:
-
-\begin{equation}
-\lambda \sim p(\lambda), \quad B \mid \lambda \sim \mathcal{N}(B_0(\lambda), V_0(\lambda)).
-\end{equation}
-
-This additional layer allows the degree of shrinkage to be determined endogenously, which is
-particularly advantageous when working with limited time series length.
+combining the prior with the likelihood implied by the observed data.
 
 \subsubsection{Identification via Cholesky Decomposition}
 
-To identify structural shocks, I employ a recursive identification scheme based on the Cholesky
-decomposition of the covariance matrix:
-
+To identify structural shocks, I employ a recursive identification scheme based on the 
+Cholesky decomposition of the reduced-form error covariance matrix:
 \begin{equation}
 \Sigma = P P^\top,
 \end{equation}
-
-where \( P \) is a lower triangular matrix.
-
-The structural form can be written as:
-
+where $P$ is a lower triangular matrix. The orthogonal structural shocks $u_t$ are 
+recovered from the estimated reduced-form residuals $\varepsilon_t$ via:
 \begin{equation}
-P^{-1} \varepsilon_t = u_t,
+u_t = P^{-1} \varepsilon_t,
 \end{equation}
+where the Cholesky factor $P$, and therefore the identified shocks $u_t$, depend on 
+the assumed ordering of variables in the system.
 
-where \( u_t \) represents orthogonal structural shocks.
-
-The ordering of variables plays a crucial role in this identification. Let the vector of endogenous
-variables be defined as:
-
+The ordering of variables plays a crucial role in this identification. Let the vector 
+of endogenous variables be ordered as:
 \begin{equation}
 y_t =
 \begin{bmatrix}
-MP_t \\
-Risk_t \\
-Sector_t
+Risk_t \\ MP_t \\ Sector_t
 \end{bmatrix},
 \end{equation}
-
-where \( MP_t \) denotes the monetary policy variable, \( Risk_t \) the risk index, and
-\( Sector_t \) the financial sector variable.
-
-Under this ordering, the Cholesky decomposition imposes the following structure:
-
+where $Risk_t$ denotes the risk index, $MP_t$ the monetary policy variable, and 
+$Sector_t$ the financial sector variable. Under this ordering, the Cholesky 
+decomposition imposes:
 \begin{equation}
 P =
 \begin{bmatrix}
-p_{11} & 0 & 0 \\
-p_{21} & p_{22} & 0 \\
+p_{11} & 0      & 0      \\
+p_{21} & p_{22} & 0      \\
 p_{31} & p_{32} & p_{33}
 \end{bmatrix},
 \end{equation}
+which implies that risk shocks can contemporaneously affect both monetary policy and 
+sectoral variables, while monetary policy can affect sectoral variables within the 
+same period, but not vice versa. This ordering is preferred in the main analysis 
+because placing monetary policy first produces a price puzzle, whereby a 
+contractionary monetary policy shock is followed by a counterintuitive initial 
+decline in risk rather than a rise. Ordering risk first eliminates this anomaly and 
+yields impulse responses consistent with theoretical expectations. The alternative 
+MP-first ordering is retained as a robustness check, with results reported in the 
+appendix.
 
-which implies that monetary policy shocks can contemporaneously affect both risk and sectoral
-variables, while risk can affect sectoral variables within the same period, but not vice versa.
+Both specifications are estimated to assess the robustness of the results with respect 
+to identification assumptions. Alternative identification strategies based on sign 
+restrictions were also considered, but did not yield substantially different impulse 
+responses without violating a large share of the restrictions or failing to converge 
+under underidentified or overidentified systems. This outcome is likely driven by the 
+relatively short time series and the use of Minnesota-type priors, which impose 
+substantial shrinkage and reduce the range of admissible parameter configurations.
 
-An alternative specification reverses the ordering of the first two variables:
-
-\begin{equation}
-y_t =
-\begin{bmatrix}
-Risk_t \\
-MP_t \\
-Sector_t
-\end{bmatrix},
-\end{equation}
-
-which corresponds to a different decomposition matrix:
-
-\begin{equation}
-P =
-\begin{bmatrix}
-p_{11} & 0 & 0 \\
-p_{21} & p_{22} & 0 \\
-p_{31} & p_{32} & p_{33}
-\end{bmatrix},
-\end{equation}
-
-but now with risk ordered first, allowing risk shocks to contemporaneously affect monetary policy.
-
-Both specifications are estimated to assess the robustness of the results with respect to identification assumptions. Alternative identification strategies based on sign restrictions were also considered, but did not yield substantially different impulse responses without violating a large share of the restrictions or failing to converge under underidentified or overidentified systems. This outcome is likely driven by the relatively short time series and the use of Minnesota-type priors, which impose substantial shrinkage and reduce the range of admissible parameter configurations.
 \chapter{Results}
 
 In this chapter, I present the results of this thesis across all models and estimations. I begin with the risk indices and their dynamics, documenting how each measure evolves over the sample period. This is followed by the Granger causality results, which show the predictive power of each index with respect to the sectoral factors. Finally, I present the results from the Bayesian vector autoregressions and an analysis of risk shock propagation across the economy.
@@ -717,13 +684,12 @@ During the COVID-19 pandemic, both custom indices, with and without sentiment, d
 \end{figure}
 Figure 2.3 presents a correlation matrix of all risk indices used in this analysis. As expected, the time-series-based risk indices exhibit higher correlations with the Fed benchmark indices compared to the sentiment-based ones. Among the sentiment indices, the Shapiro news sentiment index and the custom FinBERT index appear negatively correlated with the broader risk indices, while the custom VADER sentiment index shows no meaningful correlation with any of the other indices. The EPU index, due to its construction methodology, displays a slight positive correlation with the main Fed risk indices but little relationship with the custom risk indices, suggesting it captures a different type of uncertainty signal, one that appears more aligned with the Shapiro news index than with the financial stress measures.
 
-Interestingly, the three indices most correlated with the Fed shadow rate are the EPU index (negatively), the custom mixed index, and the Shapiro news index. This is a noteworthy finding, as all three carry sentiment-related information, potentially highlighting the role of sentiment dynamics in the transmission of monetary policy shocks.
+Interestingly, the three indices most correlated with the Fed shadow rate are the EPU index (negatively), the custom mixed index, and the Shapiro news index. This is a noteworthy finding, as all three carry sentiment-related information. One interpretation is that sentiment dynamics play a role in the transmission of monetary policy shocks, with changes in the policy stance propagating through expectations and media narratives. An alternative and equally plausible interpretation, however, is that the direction of causation runs the other way: monetary policy itself shapes sentiment, with tighter policy generating more negative economic tone and heightened policy uncertainty in news coverage and institutional communications. The correlation structure alone cannot distinguish between these two channels, and disentangling them is left for the impulse response analysis that follows.
 
 The following subsection presents results from Granger causality tests, which shed further light on the predictive capacity of the risk indices beyond graphical representations and simple correlation analysis.
 
 \section{Granger Causality Results}
-
-In this subsection, I present the results from Granger causality analysis, which sheds light on the relationships between risk indices and subsectors of the financial sector. This analysis allows the study to examine not only the predictive power of risk indices for subsectors, but also the reverse relationship, as well as the lag length relevant for predictive power. All results from the Granger causality analysis are presented in Table 2.1 below.
+In this subsection, I present the results from Granger causality analysis, which sheds light on the relationships between risk indices and subsectors of the financial sector. The Granger causality tests are conducted between each risk index and the composite sectoral factor for each subsector. Each sectoral factor is the first principal component extracted from the four balance sheet variables defined in Table 1.1: wholesale funding, the liquidity buffer, the capital cushion, and loan volume, where each variable is measured as the corresponding ratio or its closest available equivalent across subsectors. This analysis allows the study to examine not only the predictive power of risk indices for subsectors, but also the reverse relationship, as well as the lag length relevant for predictive power. All results from the Granger causality analysis are presented in Table 2.1 below.
 
 \begin{table}[H]
 \centering
@@ -1239,7 +1205,6 @@ following Uhlig (2005) or external instruments, represent natural extensions of
 the current framework.
 
 \chapter{Conclusion}
-\addcontentsline{toc}{chapter}{Conclusion}
 
 This thesis set out to address two central questions: how the response to a risk shock
 differs across financial subsectors, and whether traditional risk measures can be
@@ -1360,9 +1325,9 @@ the spirit of Romer and Romer (2004), represent natural robustness checks and
 could yield additional insight into the mechanisms through which monetary policy
 transmits to financial sector risk-taking.
 
-\section{Appendix} 
 
-\subsection{PCA details} 
+\chapter{Appendix}
+\section{PCA details} 
 
 \begin{table}[H]
 \centering
@@ -1477,7 +1442,7 @@ transmits to financial sector risk-taking.
 }
 \end{table}
 
-\subsection{BVAR metrics}
+\section{BVAR metrics}
 
 \begin{table}[H]
 \centering
@@ -1966,5 +1931,103 @@ transmits to financial sector risk-taking.
 \end{tabular}%
 }
 \end{table}
+
+
+\section{Additional BVAR Impulse Response Functions}
+
+\subsection{EPUI sentiment index}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{pics/EPUI_shadow_to_risk.pdf}
+    \caption{Impulse response of the EPUI to a shadow rate shock. Shaded bands represent 68\% and 90\% posterior credible intervals. Identification via Cholesky decomposition, $p = 3$ lags.}
+    \label{fig:app_irf_shadow_to_epui}
+\end{figure}
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/EPUI_risk_to_banking.pdf}
+    \vspace{0.3em}
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/EPUI_risk_to_shadow.pdf}
+    \vspace{0.3em}
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/EPUI_risk_to_shadow_core.pdf}
+\end{figure}
+\begin{figure}[H]
+    \vspace*{0pt}
+    \centering
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/EPUI_risk_to_hedge.pdf}
+    \caption{Impulse responses of sectoral variables to a EPUI shock. Top: Banking sector. Second: Shadow banking sector (broad). Third: Shadow banking sector (core). Bottom: Hedge fund sector. Shaded bands represent 68\% and 90\% posterior credible intervals. Identification via Cholesky decomposition, $p = 3$ lags.}
+    \label{fig:app_irf_sectors_to_epui}
+\end{figure}
+
+\subsection{KCFSI sentiment index}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{pics/KCFSI_shadow_to_risk.pdf}
+    \caption{Impulse response of the KCFSI to a shadow rate shock. Shaded bands represent 68\% and 90\% posterior credible intervals. Identification via Cholesky decomposition, $p = 3$ lags.}
+    \label{fig:app_irf_shadow_to_kcfsi}
+\end{figure}
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/KCFSI_risk_to_banking.pdf}
+    \vspace{0.3em}
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/KCFSI_risk_to_shadow.pdf}
+    \vspace{0.3em}
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/KCFSI_risk_to_shadow_core.pdf}
+\end{figure}
+\begin{figure}[H]
+    \vspace*{0pt}
+    \centering
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/KCFSI_risk_to_hedge.pdf}
+    \caption{Impulse responses of sectoral variables to a KCFSI shock. Top: Banking sector. Second: Shadow banking sector (broad). Third: Shadow banking sector (core). Bottom: Hedge fund sector. Shaded bands represent 68\% and 90\% posterior credible intervals. Identification via Cholesky decomposition, $p = 3$ lags.}
+    \label{fig:app_irf_sectors_to_kcfsi}
+\end{figure}
+
+\subsection{NFCI Index}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{pics/NFCI_shadow_to_risk.pdf}
+    \caption{Impulse response of the NFCI to a shadow rate shock. Shaded bands represent 68\% and 90\% posterior credible intervals. Identification via Cholesky decomposition, $p = 3$ lags.}
+    \label{fig:app_irf_shadow_to_nfci}
+\end{figure}
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/NFCI_risk_to_banking.pdf}
+    \vspace{0.3em}
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/NFCI_risk_to_shadow.pdf}
+    \vspace{0.3em}
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/NFCI_risk_to_shadow_core.pdf}
+\end{figure}
+\begin{figure}[H]
+    \vspace*{0pt}
+    \centering
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/NFCI_risk_to_hedge.pdf}
+    \caption{Impulse responses of sectoral variables to a NFCI shock. Top: Banking sector. Second: Shadow banking sector (broad). Third: Shadow banking sector (core). Bottom: Hedge fund sector. Shaded bands represent 68\% and 90\% posterior credible intervals. Identification via Cholesky decomposition, $p = 3$ lags.}
+    \label{fig:app_irf_sectors_to_nfci}
+\end{figure}
+
+\subsection{Sentiment VADER Index}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{pics/SENTIMENT_VADER_flipped_shadow_to_risk.pdf}
+    \caption{Impulse response of the Sentiment VADER index to a shadow rate shock. Shaded bands represent 68\% and 90\% posterior credible intervals. Identification via Cholesky decomposition, $p = 3$ lags.}
+    \label{fig:app_irf_shadow_to_vader}
+\end{figure}
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/SENTIMENT_VADER_flipped_risk_to_banking.pdf}
+    \vspace{0.3em}
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/SENTIMENT_VADER_flipped_risk_to_shadow.pdf}
+    \vspace{0.3em}
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/SENTIMENT_VADER_flipped_risk_to_shadow_core.pdf}
+\end{figure}
+\begin{figure}[H]
+    \vspace*{0pt}
+    \centering
+    \includegraphics[width=\textwidth, height=0.32\textheight, keepaspectratio]{pics/SENTIMENT_VADER_flipped_risk_to_hedge.pdf}
+    \caption{Impulse responses of sectoral variables to a Sentiment VADER shock. Top: Banking sector. Second: Shadow banking sector (broad). Third: Shadow banking sector (core). Bottom: Hedge fund sector. Shaded bands represent 68\% and 90\% posterior credible intervals. Identification via Cholesky decomposition, $p = 3$ lags.}
+    \label{fig:app_irf_sectors_to_vader}
+\end{figure}
+
+
+
 
 \end{document}
