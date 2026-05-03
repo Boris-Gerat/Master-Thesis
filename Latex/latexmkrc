@@ -1,0 +1,14 @@
+# .latexmkrc — put this in your thesis folder
+
+$pdf_mode = 1;                        # produce PDF
+$pdflatex = 'pdflatex -interaction=nonstopmode -synctex=1 %O %S';
+$continuous_mode = 1;                 # keep watching for changes
+
+# Skim as viewer with auto-refresh
+$pdf_previewer = 'open -a Skim';
+
+# tell latexmk about extra generated files to clean
+@generated_exts = ('synctex.gz', 'xmpdata', 'fls');
+
+# don't stop on warnings — only stop on actual errors
+$warnings_as_errors = 0;

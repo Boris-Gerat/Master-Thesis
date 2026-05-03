@@ -1,0 +1,37 @@
+\contentsline {chapter}{List of Tables}{vii}{section*.10}%
+\contentsline {chapter}{List of Figures}{ix}{section*.12}%
+\contentsline {chapter}{Acronyms}{xiii}{section*.14}%
+\contentsline {chapter}{\numberline {1}Data and Methodology}{4}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Data}{4}{section.1.1}%
+\contentsline {subsection}{\numberline {1.1.1}Financial Sector Variables}{4}{subsection.1.1.1}%
+\contentsline {subsection}{\numberline {1.1.2}Monetary Policy Variable}{8}{subsection.1.1.2}%
+\contentsline {subsection}{\numberline {1.1.3}Benchmark Risk Indices}{8}{subsection.1.1.3}%
+\contentsline {subsection}{\numberline {1.1.4}Custom Risk Indices}{12}{subsection.1.1.4}%
+\contentsline {subsubsection}{Time Series Based Indices}{12}{section*.18}%
+\contentsline {subsubsection}{Sentiment Based Indecies}{14}{section*.20}%
+\contentsline {section}{\numberline {1.2}Methodology}{16}{section.1.2}%
+\contentsline {subsection}{\numberline {1.2.1}Expectation Maximization Principal Component Analysis (EMPCA)}{17}{subsection.1.2.1}%
+\contentsline {paragraph}{E-step (Expectation)}{18}{section*.23}%
+\contentsline {paragraph}{M-step (Maximization)}{18}{section*.24}%
+\contentsline {paragraph}{Handling Missing Data}{18}{section*.25}%
+\contentsline {subsection}{\numberline {1.2.2}Granger Causality Analysis}{18}{subsection.1.2.2}%
+\contentsline {subsection}{\numberline {1.2.3}Text-to-Sentiment Models}{19}{subsection.1.2.3}%
+\contentsline {subsection}{\numberline {1.2.4}Bayesian VAR}{20}{subsection.1.2.4}%
+\contentsline {subsubsection}{Identification via Cholesky Decomposition}{22}{section*.27}%
+\contentsline {chapter}{\numberline {2}Results}{24}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Custom risk index dynamics}{24}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Granger Causality Results}{30}{section.2.2}%
+\contentsline {section}{\numberline {2.3}BVAR results}{33}{section.2.3}%
+\contentsline {section}{\numberline {2.4}STLFSI risk index}{34}{section.2.4}%
+\contentsline {section}{\numberline {2.5}VIX risk index}{37}{section.2.5}%
+\contentsline {section}{\numberline {2.6}NSI (Shapiro) risk index}{40}{section.2.6}%
+\contentsline {section}{\numberline {2.7}Sentiment FinBERT risk index}{44}{section.2.7}%
+\contentsline {section}{\numberline {2.8}Custom Index}{48}{section.2.8}%
+\contentsline {section}{\numberline {2.9}Custom Mix}{52}{section.2.9}%
+\contentsline {chapter}{\numberline {3}Discussion}{55}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Risk Index Construction and Evaluation}{55}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Granger Causality and Sectoral Predictability}{57}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Impulse Response Analysis and Subsectoral Heterogeneity}{58}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Implications and Limitations}{60}{section.3.4}%
+\contentsline {chapter}{Conclusion}{62}{chapter*.50}%
+\contentsline {chapter}{Shrnut\'{i}}{64}{chapter*.51}%

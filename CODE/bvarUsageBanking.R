@@ -108,7 +108,7 @@ for (risk_idx in RISK_INDICES) {
 
       sign_restr     = NULL,
       run_cholesky   = TRUE,
-      cholesky_order = c(display_name, "Shadow",   # ← display name
+      cholesky_order = c("Shadow",display_name,    # ← display name
                          "Bank_WholeSaleFunding", "Bank_LiquidityBuffer",
                          "Bank_CapitalCushion", "Bank_CILoans"),
 

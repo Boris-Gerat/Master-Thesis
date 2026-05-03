@@ -1,0 +1,19 @@
+[0] Config.pm:328> INFO - This is Biber 2.21
+[0] Config.pm:331> INFO - Logfile is 'build/Thesis_TEST.blg'
+[31] biber-darwin:342> INFO - === Sat May  2, 2026, 00:03:01
+[39] Biber.pm:421> INFO - Reading 'build/Thesis_TEST.bcf'
+[79] Biber.pm:999> INFO - Using all citekeys in bib section 0
+[89] Biber.pm:4487> INFO - Processing section 0
+[93] Biber.pm:4678> INFO - Looking for bibtex file 'thesis_references.bib' for section 0
+[95] bibtex.pm:1713> INFO - LaTeX decoding ...
+[112] bibtex.pm:1519> INFO - Found BibTeX data source 'thesis_references.bib'
+[249] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[249] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[249] Biber.pm:4307> INFO - Sorting list 'apa/apasortcite//global/global/global' of type 'entry' with template 'apa' and locale 'en-US'
+[249] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
+[294] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[294] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[294] Biber.pm:4307> INFO - Sorting list 'apa/global//global/global/global' of type 'entry' with template 'apa' and locale 'en-US'
+[294] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
+[315] bbl.pm:676> INFO - Writing 'build/Thesis_TEST.bbl' with encoding 'UTF-8'
+[336] bbl.pm:779> INFO - Output to build/Thesis_TEST.bbl
